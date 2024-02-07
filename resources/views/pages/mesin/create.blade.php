@@ -56,7 +56,7 @@
 @endif
 
 
-    <form action="/mesin/create" method="POST">
+<form action="/mesin/create" method="POST" enctype="multipart/form-data">
 
         @csrf
         <div class="mb-3">
@@ -126,6 +126,14 @@
             <textarea id="kt_docs_tinymce_basic" name="spesifikasi" class="tox-target">{{ old('spesifikasi') }}</textarea>
 
         </div>
+
+        <div class="mb-3">
+        <label for="mesin_image" class="form-label">Gambar Mesin</label>
+        <input type="file" class="form-control @error('mesin_image') is-invalid @enderror" id="mesin_image" name="mesin_image">
+        @error('mesin_image')
+        <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
 
 
         <div class="container-fluid">

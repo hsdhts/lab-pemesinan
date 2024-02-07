@@ -8,6 +8,7 @@
     <th>Tolerance</th>
     <th>Data</th>
     <th>Validation Data</th>
+    <th>Last Protocol</th>
     <th>Aksi</th>
 
 @endsection
@@ -44,6 +45,7 @@ columns: [
 {data: 'nama_mesin', name: 'nama_mesin'},
 {data: 'inspection_item', name: 'inspection_item'},
 {data: 'tolerance', name: 'tolerance'},
+{data: 'data', name: 'data'},
 {data: 'validation_data', name: 'validation_data'},
 {data: 'last_protocol', name: 'last_protocol'},
 {data: 'aksi', name: 'aksi', orderable: false, searchable: false},

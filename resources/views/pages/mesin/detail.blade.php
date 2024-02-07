@@ -18,6 +18,12 @@
                     <td>{{ $mesin->nama_mesin }}</td>
                 </tr>
                 <tr>
+                    <td><b>Gambar Mesin</b></td>
+                    <td>
+             <img src="{{ asset('storage/' . $mesin->mesin_image) }}" alt="Gambar Mesin" style="max-width: 200px;">
+            </td>
+                </tr>
+                <tr>
                     <td><b>Kategori</b></td>
                     <td>{{ $mesin->kategori->nama_kategori }}</td>
                 </tr>

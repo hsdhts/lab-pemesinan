@@ -20,7 +20,7 @@ class CreateProtocolsTable extends Migration
             $table->string('inspection_item');
             $table->string('tolerance');
             $table->string('data');
-            $table->enum('validation_data', ['baik', 'sedang', 'buruk']);
+            $table->enum('validation_data', ['Good', 'Not Good']);
             $table->date('last_protocol');
             $table->timestamps();
             $table->softDeletes();

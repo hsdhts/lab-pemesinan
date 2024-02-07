@@ -25,6 +25,7 @@ class CreateMesinsTable extends Migration
             $table->string('kode_mesin', 6)->nullable();
             $table->string('nomor_seri', 50)->nullable();
             $table->foreignId('user_id')->default(1);
+            $table->String('mesin_image')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

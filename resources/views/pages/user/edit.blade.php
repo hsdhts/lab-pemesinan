@@ -14,7 +14,7 @@
         @error('username')
         <div class="invalid-feedback">
             {{ $message }}
-        </div>
+        </div>  
         @enderror
     </div>
 

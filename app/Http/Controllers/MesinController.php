@@ -8,6 +8,8 @@ use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage; 
+
 
 
 class MesinController extends Controller
@@ -72,9 +74,14 @@ class MesinController extends Controller
             'tipe_mesin' => 'nullable|max:40',
             'kode_mesin' => 'nullable|max:6',
             'nomor_seri' => 'nullable|max:50',
-            'spesifikasi' => 'nullable|not_regex:/\'/i'
+            'spesifikasi' => 'nullable|not_regex:/\'/i',
+            'mesin_image' => 'image|file|max:1024'
         ]);
 
+
+        if($request ->hasFile('mesin_image')) {
+            $validData['mesin_image'] = $request -> file('mesin_image')->storePublicly('mesin_images', 'public');
+        }
 
         $m = Mesin::create($validData);
 
@@ -82,7 +89,7 @@ class MesinController extends Controller
         $mesin = Mesin::with(['maintenance',  'kategori'])->find($m->id);
 
         $kategori = Kategori::all(); 
-        Cache::put('mesin', $mesin, now()->addMinutes(30));
+        // Cache::put('mesin', $mesin, now()->addMinutes(30));
         return view('pages.maintenance.select_template', ['mesin' => $mesin, 'kategori' => $kategori]);
     }
 
@@ -118,13 +125,23 @@ class MesinController extends Controller
             'tipe_mesin' => 'nullable|max:40',
             'kode_mesin' => 'nullable|max:6',
             'nomor_seri' => 'nullable|max:50',
-            'spesifikasi' => 'nullable|not_regex:/\'/i'
+            'spesifikasi' => 'nullable|not_regex:/\'/i',
+            'mesin_image' => 'image|file|max:1024'
         ]);
     
         $mesin = Mesin::findOrFail($dataValid['id']);
-        $mesin->update($dataValid);
-    
-        return redirect('/mesin')->with('edit', 'p');
+
+    if ($request->hasFile('mesin_image')) {
+        // Hapus gambar lama (jika ada) sebelum menyimpan yang baru
+        Storage::disk('public')->delete($mesin->mesin_image);
+
+        // Simpan gambar baru
+        $dataValid['mesin_image'] = $request->file('mesin_image')->storePublicly('mesin_images', 'public');
+    }
+
+    $mesin->update($dataValid);
+
+    return redirect('/mesin')->with('edit', 'p');
     }
     public function destroy(Request $request){
         

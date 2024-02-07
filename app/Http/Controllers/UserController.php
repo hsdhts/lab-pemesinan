@@ -60,41 +60,35 @@ class UserController extends Controller
         return view('pages.user.akun');
     }
 
-    public function update_akun(Request $request){
-        
-
+    public function update_akun(Request $request)
+    {
         $data_valid = $request->validate([
             'id' => 'required|numeric',
             'username' => 'required',
             'nama' => 'required',
-            'avatar' => 'image|file|max:1024'
+            'avatar' => 'image|file|max:1024',
         ]);
-
-
-        if($request->avatar){
-            //nek request dono avatar e
-            $data_valid['foto'] = $request->file('avatar')->store('foto-profil');
-            if(auth()->user()->foto !== null){
-                Storage::delete(auth()->user()->foto);
+    
+        if ($request->hasFile('avatar')) {
+            $data_valid['foto'] = $request->file('avatar')->storePublicly('foto-profil', 'public');
+    
+            // Hapus foto lama jika ada
+            if (auth()->user()->foto !== null) {
+                Storage::disk('public')->delete(auth()->user()->foto);
             }
-
-        }elseif($request->avatar_remove){
-            // nek ora ono avatar dan ono permintaan dihapus
-
-            Storage::delete(auth()->user()->foto);
+        } elseif ($request->avatar_remove) {
+            // Hapus foto lama
+            if (auth()->user()->foto !== null) {
+                Storage::disk('public')->delete(auth()->user()->foto);
+            }
             $data_valid['foto'] = null;
         }
-
-
-       
-
-
-
-        User::find($data_valid['id'])->update($data_valid);        
-
+    
+        User::find($data_valid['id'])->update($data_valid);
+    
         return redirect('/akun');
-
     }
+    
 
 
 
@@ -119,8 +113,6 @@ class UserController extends Controller
     }
 
     public function index(Request $request){
-        
-        //gawekke nganggo datatable ben penak
 
         if($request->ajax()){
             $user = User::query();

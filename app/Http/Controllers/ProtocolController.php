@@ -54,7 +54,7 @@ class ProtocolController extends Controller
             'inspection_item' => 'required',
             'tolerance' => 'required',
             'data' => 'required',
-            'validation_data' => 'required|in:baik,sedang,buruk',
+            'validation_data' => 'required|in:Good, Not Good',
             'last_protocol' => 'required|date'
         ]);
 
@@ -84,7 +84,7 @@ class ProtocolController extends Controller
             'inspection_item' => 'required',
             'tolerance' => 'required',
             'data' => 'required',
-            'validation_data' => 'required|in:baik,sedang,buruk',
+            'validation_data' => 'required|in:Good,Not Good',
             'last_protocol' => 'required|date'
         ]);
 

@@ -70,9 +70,8 @@
     <button class="btn btn-primary btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Validation Data</button>
     <ul class="dropdown-menu"> 
       <li><hr class="dropdown-divider"></li>                                  
-      <li><a class="dropdown-item" onclick="setSatuan('baik')">Baik</a></li>
-      <li><a class="dropdown-item" onclick="setSatuan('sedang')">Sedang</a></li>
-      <li><a class="dropdown-item" onclick="setSatuan('buruk')">Buruk</a></li>
+      <li><a class="dropdown-item" onclick="setSatuan('Good')">Baik</a></li>
+      <li><a class="dropdown-item" onclick="setSatuan('Not Good')">Not Good</a></li>
     </ul>
     <input type="text" class="form-control bagian_form @error('validation_data') is-invalid @enderror" aria-label="validation data" name="validation_data" value="{{ old('validation_data') }}" id="validation_data" readonly>
     @error('validation_data')    
