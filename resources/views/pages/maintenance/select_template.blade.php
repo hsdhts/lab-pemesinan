@@ -42,7 +42,7 @@
 
 @section('content_right')
 
-@canany(['supervisor','admin'])
+@canany(['superadmin','admin'])
 <h1 class="text-center my-3">Pilih Template</h1>
 
 <form action="/maintenance/form/pilih/kirim/" method="post">

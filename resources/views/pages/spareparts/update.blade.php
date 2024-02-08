@@ -3,7 +3,7 @@
 
 @section('konten')
 
-<form action="/sparepart/update/" method="post">
+<form action="/sparepart/update/" method="post" enctype="multipart/form-data">
 
 @method('put')
 @csrf
@@ -18,6 +18,14 @@
     <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>    
+
+<div class="mb-3">
+        <label for="sparepart_image" class="form-label">Gambar Sparepart</label>
+        <input type="file" class="form-control @error('sparepart_image') is-invalid @enderror" id="sparepart_image" name="sparepart_image">
+        @error('sparepart_image')
+        <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+</div>
 
 <div class="mb-3">
     <label for="sparepart" class="form-label">Nama Sparepart</label>

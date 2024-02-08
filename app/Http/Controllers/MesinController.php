@@ -16,40 +16,25 @@ class MesinController extends Controller
 {
     //
     public function index(Request $request){
-        
-    
+        if($request->ajax()){
+            $mesin = Mesin::with(['user']);
 
-    if($request->ajax()){
-        
-        $mesin = Mesin::with(['kategori',  'user']);
+            return DataTables::of($mesin)
+                ->editColumn('nama_mesin', function($m){
+                    return '<a class="text-dark" href="/mesin/detail/' . $m->id . '">' . $m->nama_mesin . '</a>';
+                })
+                ->editColumn('user', function(Mesin $mesin){
+                    return $mesin->user->nama;
+                })
+                ->addColumn('aksi', function($m){
+                    return view('partials.tombolAksiMesin', ['editPath' => '/mesin/edit/', 'id'=> $m->id, 'deletePath' => '/mesin/destroy/' ]);
+                })
+                ->rawColumns(['nama_mesin','aksi'])
+                ->addIndexColumn()
+                ->toJson();
+        }
 
-        return DataTables::of($mesin)
-        ->editColumn('nama_mesin', function($m){
-            return '<a class="text-dark" href="/mesin/detail/' . $m->id . '">' . $m->nama_mesin . '</a>';
-        })
-        ->editColumn('kategori', function(Mesin $mesin){
-            if(isset($mesin->kategori)){
-                return $mesin->kategori->nama_kategori;
-            }else{
-                return "Tak Terkategori";
-            }
-        })
-        ->editColumn('user', function(Mesin $mesin){
-            return $mesin->user->nama;
-        })
-        
-        ->addColumn('aksi', function($m){
-            return view('partials.tombolAksiMesin', ['editPath' => '/mesin/edit/', 'id'=> $m->id, 'deletePath' => '/mesin/destroy/' ]);
-        })
-        ->rawColumns(['nama_mesin','aksi'])
-        ->addIndexColumn()
-        ->toJson();
-    }
-    //return $mesin;  
-    return view('pages.mesin.index', ['halaman' => 'Mesin',
-      'link_to_create' => '/mesin/create'
-    
-    ]);
+        return view('pages.mesin.index', ['halaman' => 'Mesin', 'link_to_create' => '/mesin/create']);
     }
 
 
@@ -65,8 +50,6 @@ class MesinController extends Controller
     }
 
     public function tambah(Request $request){
-    
-
         $validData = $request->validate([
             'nama_mesin' => 'required|max:255',
             'no_asset' => 'nullable|max:25',
@@ -78,19 +61,15 @@ class MesinController extends Controller
             'mesin_image' => 'image|file|max:1024'
         ]);
 
-
-        if($request ->hasFile('mesin_image')) {
-            $validData['mesin_image'] = $request -> file('mesin_image')->storePublicly('mesin_images', 'public');
+        if($request->hasFile('mesin_image')) {
+            $validData['mesin_image'] = $request->file('mesin_image')->storePublicly('mesin_images', 'public');
         }
 
         $m = Mesin::create($validData);
 
-        //return redirect()->intended('/maintenance/form/pilih/')->with('tambah', 'p');
-        $mesin = Mesin::with(['maintenance',  'kategori'])->find($m->id);
+        $mesin = Mesin::with(['maintenance'])->find($m->id);
 
-        $kategori = Kategori::all(); 
-        // Cache::put('mesin', $mesin, now()->addMinutes(30));
-        return view('pages.maintenance.select_template', ['mesin' => $mesin, 'kategori' => $kategori]);
+        return redirect('/mesin')->with('tambah', 'p');
     }
 
 

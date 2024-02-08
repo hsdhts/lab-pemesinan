@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Sparepart;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage; 
+
 
 class SparepartController extends Controller
 {
@@ -46,10 +49,15 @@ class SparepartController extends Controller
         
         $dataValid = $request->validate([
             'item_number' => 'required|numeric|unique:spareparts,item_number',
+            'sparepart_image' => 'image|file|max:1024',
             'nama_sparepart' => 'required',
             'jumlah' => 'required|numeric',
             'deskripsi' => 'required|string',
         ]);
+
+        if($request ->hasFile('sparepart_image')) {
+            $validData['sparepart_image'] = $request -> file('sparepart_image')->storePublicly('sparepart_images', 'public');
+        }
 
         Sparepart::create($dataValid);
 
@@ -71,20 +79,31 @@ class SparepartController extends Controller
     }
 
 
-    public function update(Request $request){
-    
+    public function update(Request $request)
+    {
         $dataValid = $request->validate([
-            'item_number' => 'required|numeric|unique:spareparts,item_number',
+            'item_number' => 'required|numeric|unique:spareparts,item_number,' . $request->id_old,
+            'sparepart_image' => 'image|file|max:1024',
             'nama_sparepart' => 'required',
             'jumlah' => 'required|numeric',
             'deskripsi' => 'required|string',
         ]);
 
-        Sparepart::findOrFail($request->id_old)->update($dataValid);
+        $sparepart = Sparepart::find($request->id_old);
+
+        if ($request->hasFile('sparepart_image')) {
+            // Hapus gambar lama (jika ada) sebelum menyimpan yang baru
+            Storage::disk('public')->delete($sparepart->sparepart_image);
+
+            // Simpan gambar baru
+            $dataValid['sparepart_image'] = $request->file('sparepart_image')->storePublicly('sparepart_images', 'public');
+        }
+
+        $sparepart->update($dataValid);
 
         return redirect('/sparepart')->with('edit', 'p');
-        
     }
+
 
     public function destroy(Request $request){  
         $dataValid = $request->validate([

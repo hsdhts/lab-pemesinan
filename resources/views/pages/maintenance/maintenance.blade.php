@@ -85,7 +85,7 @@
         </tr>
     </table>
 
-    @canany(['supervisor', 'admin'])
+    @canany(['superadmin', 'admin'])
           <form action="/mesin/maintenance/create/" method="post">
             @csrf
             <input type="hidden" name="mesin_id" value="{{ $mesin->id }}">
@@ -172,7 +172,7 @@
         <td class="fw-bold fs-1">{{ $m->nama_maintenance }}</td>
 
         <td class="text-end">
-            @canany(['supervisor', 'admin'])
+            @canany(['superadmin', 'admin'])
 
             <form action="/mesin/maintenance/delete/" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
                 @method('delete')

@@ -14,50 +14,51 @@ use App\Models\Sparepart;
 class MaintenanceController extends Controller
 {
     //
-    public function update(){
-        
+    public function update()
+    {
         $setup = collect(Cache::pull('setup'));
         $mesin = collect(Cache::pull('mesin'));
-
-
+    
         $objectJadwal = new JadwalController();
-
-        Mesin::find($mesin['id'])->update(['kategori_id' => $mesin['kategori_id']]);
-
-        if(collect($mesin->get('maintenance'))->isNotEmpty()){
+    
+        // Cek apakah objek Mesin ditemukan
+        $mesinObj = Mesin::find($mesin->get('id'));
+        if (!$mesinObj) {
+            return redirect()->back()->with('error', 'Mesin not found.');
+        }
+    
+        $mesinObj->update(['kategori_id' => $mesin->get('kategori_id')]);
+    
+        // Pengecekan apakah $mesin->get('maintenance') adalah sebuah koleksi
+        if (is_array($mesin->get('maintenance')) && !empty($mesin->get('maintenance'))) {
             Maintenance::where('mesin_id', $mesin->get('id'))->delete();
         }
-            foreach($setup as $s){
-                $maintenance = Maintenance::create([
-                    'nama_maintenance' => $s->get('nama_setup'),
-                    'mesin_id' => $mesin->get('id'),
-                    'periode' => $s->get('periode'),
-                    'satuan_periode' => $s->get('satuan_periode'),
-                    'start_date' => Carbon::parse($s->get('start_date')),
-                    'warna' => $s->get('warna')
+    
+        foreach ($setup as $s) {
+            $maintenance = Maintenance::create([
+                'nama_maintenance' => $s->get('nama_setup'),
+                'mesin_id' => $mesin->get('id'),
+                'periode' => $s->get('periode'),
+                'satuan_periode' => $s->get('satuan_periode'),
+                'start_date' => Carbon::parse($s->get('start_date')),
+                'warna' => $s->get('warna')
+            ]);
+    
+            foreach ($s->get('setupForm') as $form) {
+                Form::create([
+                    'maintenance_id' => $maintenance->id,
+                    'nama_form' => $form->get('nama_setup_form'),
+                    'syarat' => $form->get('syarat_setup_form'),
                 ]);
-                foreach($s->get('setupForm') as $form){
-                    Form::create([
-                        'maintenance_id' => $maintenance['id'],
-                        'nama_form' => $form->get('nama_setup_form'),
-                        'syarat' => $form->get('syarat_setup_form'),
-                    ]);
-                }
-                $objectJadwal->create_jadwal($maintenance->id);
-
-
             }
-        
-        return redirect('/jadwal/'. $mesin['id']);
-
+    
+            $objectJadwal->create_jadwal($maintenance->id);
+        }
+    
+        return redirect('/jadwal/' . $mesin->get('id'));
     }
-
-
-  
-
-
-   
-
+    
+    
 
 
     public function maintenance_mesin($id){

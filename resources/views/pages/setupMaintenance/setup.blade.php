@@ -479,7 +479,7 @@
     <tr class="table-primary">
         <td class="fw-bold fs-2">{{ $nama_kategori }}</td>
         <td class="text-end">
-            @canany(['supervisor', 'admin'])
+            @canany(['superadmin', 'admin'])
 
             <form action="/kategori/destroy" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
                 @method("delete")
@@ -532,7 +532,7 @@
             <td>{{ $s->satuan_periode }}</td>
             <td><span style="color: {{ $s->warna }};" class="bg-white px-2 rounded-2">{{ $s->warna }}</span></td>
             <td>
-                @canany(['supervisor', 'admin'])
+                @canany(['superadmin', 'admin'])
                     <!-- panggil modal -->
                 <button class="btn btn-sm btn-primary py-0 text-nowrap d-inline"  data-bs-toggle="modal" data-bs-target="#kt_modal_2" onclick="setEdit({{ $s->id }}, {{ $s->kategori_id }},'{{ $s->nama_setup_maintenance }}', {{ $s->periode }}, '{{ $s->satuan_periode }}', '{{ $s->warna }}')">
                         <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen055.svg-->
@@ -598,7 +598,7 @@
                             <td>{{ $f->nama_setup_form }}</td>
                             <td>{{ $f->syarat }}</td>
                             <td>
-                                @canany(['supervisor', 'admin'])
+                                @canany(['superadmin', 'admin'])
                                 <button onclick="editSetupForm({{ $f->id }}, '{{ $f->nama_setup_form }}', '{{ $f->syarat }}')" data-bs-toggle="modal" data-bs-target="#kt_modal_5" class="btn text-primary p-0 m-0">Edit</button>&nbsp;|
                                 <form action="/setupForm/delete/" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
                                     @csrf
