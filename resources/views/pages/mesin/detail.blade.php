@@ -39,11 +39,8 @@
                     <td><b>Coolant Motor</b></td>
                     <td>{{ $mesin->nomor_seri }}</td>
                 </tr>
-                <tr>
-                    <td><b>PIC</b></td>
-                    <td>{{ $mesin->user->nama }}</td>
-                </tr>
                 
+             
                
             </table>
 

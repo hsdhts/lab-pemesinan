@@ -30,7 +30,6 @@
 														<th class="min-w-150px">Maintenance</th>
 														<th class="min-w-140px">Mesin</th>
 														<th class="min-w-120px">Tanggal</th>
-														<th class="min-w-120px">PIC</th>
 														<th class="min-w-120px">Status</th>
 														<th class="min-w-100px">Aksi</th>
 													</tr>
@@ -127,7 +126,6 @@
 														<th class="min-w-150px">Maintenance</th>
 														<th class="min-w-140px">Mesin</th>
 														<th class="min-w-120px">Tanggal</th>
-														<th class="min-w-120px">PIC</th>
 														<th class="min-w-120px">Status</th>
 														<th class="min-w-100px">Aksi</th>
 													</tr>
@@ -150,7 +148,6 @@
 															<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ Illuminate\Support\Carbon::parse($h->tanggal_rencana)->format('d/m/Y') }}</span>
 														</td>
 														
-														<td class="text-dark fw-bolder fs-6">{{ $h->maintenance->mesin->user->nama }}</td>
 														<td>
                                                             @if($h->status == 1)
                                                                 <span class="badge badge-light-danger">Belum Dikerjakan</span>
@@ -226,7 +223,6 @@
 														<th class="min-w-120px">Kode Mesin</th>
 														<th class="min-w-120px">Nomor Seri</th>
 														<th class="min-w-120px">Kategori</th>
-														<th class="min-w-120px">PIC</th>
 													</tr>
 												</thead>
 												<!--end::Table head-->
@@ -253,7 +249,8 @@
 															<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $m->kategori->nama_kategori }}</span>
 														</td>
 
-														<td class="text-dark fw-bolder fs-6">{{ $m->user->nama }}</td>
+													
+
 								
 													</tr>
 

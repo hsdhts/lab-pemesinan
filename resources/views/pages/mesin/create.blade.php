@@ -99,8 +99,7 @@
             @enderror
         </div>
           
-
-        <div class="mb-4">
+        <!-- <div class="mb-4">
         <label for="pic" class="form-label">Person In Charge (PIC)</label>
          <select class="form-select @error('user_id') is-invalid @enderror" id="pic" aria-label="Pilihan untuk PIC" value="{{ old('user_id') }}" name="user_id">
             <option value="" selected> -- Pilih PIC -- </option>
@@ -113,8 +112,8 @@
           @error('user_id')    
           <div class="invalid-feedback">{{ $message }}</div>
           @enderror
-        </div>
-          
+        </div>   -->
+
         <div class="mb-3">
             <label for="spesifikasi" class="form-label">Spesifikasi (opsional)</label>
             <p>Isian tidak boleh mengandung karakter petik (") maupun (')</p>
@@ -134,6 +133,8 @@
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
+
+       
 
 
         <div class="container-fluid">

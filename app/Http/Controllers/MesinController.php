@@ -15,28 +15,31 @@ use Illuminate\Support\Facades\Storage;
 class MesinController extends Controller
 {
     //
-    public function index(Request $request){
-        if($request->ajax()){
-            $mesin = Mesin::with(['user']);
-
+    public function index(Request $request) {
+        if ($request->ajax()) {
+            $mesin = Mesin::with(['kategori', 'user']);
+    
             return DataTables::of($mesin)
-                ->editColumn('nama_mesin', function($m){
-                    return '<a class="text-dark" href="/mesin/detail/' . $m->id . '">' . $m->nama_mesin . '</a>';
+                ->addColumn('nama_mesin', function ($mesin) {
+                    return '<a class="text-dark" href="/mesin/detail/' . $mesin->id . '">' . $mesin->nama_mesin . '</a>';
                 })
-                ->editColumn('user', function(Mesin $mesin){
-                    return $mesin->user->nama;
+                ->addColumn('user', function (Mesin $mesin) {
+                    return $mesin->user ? $mesin->user->nama : ''; // Periksa apakah user tidak null
                 })
-                ->addColumn('aksi', function($m){
-                    return view('partials.tombolAksiMesin', ['editPath' => '/mesin/edit/', 'id'=> $m->id, 'deletePath' => '/mesin/destroy/' ]);
+                ->addColumn('kategori', function (Mesin $mesin) {
+                    return $mesin->kategori ? $mesin->kategori->nama_kategori : 'Tak Terkategori'; // Periksa apakah kategori tidak null
                 })
-                ->rawColumns(['nama_mesin','aksi'])
+                ->addColumn('aksi', function ($mesin) {
+                    return view('partials.tombolAksiMesin', ['editPath' => '/mesin/edit/', 'id' => $mesin->id, 'deletePath' => '/mesin/destroy/']);
+                })
+                ->rawColumns(['nama_mesin', 'aksi'])
                 ->addIndexColumn()
                 ->toJson();
         }
-
+    
         return view('pages.mesin.index', ['halaman' => 'Mesin', 'link_to_create' => '/mesin/create']);
     }
-
+    
 
     public function create(){
     
@@ -53,7 +56,6 @@ class MesinController extends Controller
         $validData = $request->validate([
             'nama_mesin' => 'required|max:255',
             'no_asset' => 'nullable|max:25',
-            'user_id' => 'required|numeric',
             'tipe_mesin' => 'nullable|max:40',
             'kode_mesin' => 'nullable|max:6',
             'nomor_seri' => 'nullable|max:50',
@@ -82,16 +84,15 @@ class MesinController extends Controller
 
     public function edit($id){
         $mesin = Mesin::findOrFail($id);
-        $kategori = Kategori::all();
         $user = User::all();
     
         return view('pages.mesin.update', [
             'halaman' => 'Mesin',
             'mesin' => $mesin,
-            'kategori' => $kategori,
             'user' => $user
         ]);
     }
+    
     
 
 
@@ -100,7 +101,6 @@ class MesinController extends Controller
             'id' => 'required|numeric',
             'nama_mesin' => 'required|max:255',
             'no_asset' => 'nullable|max:25',
-            'user_id' => 'required|numeric',
             'tipe_mesin' => 'nullable|max:40',
             'kode_mesin' => 'nullable|max:6',
             'nomor_seri' => 'nullable|max:50',
@@ -133,7 +133,5 @@ class MesinController extends Controller
         return redirect('/mesin')->with('hapus', 'p');
 
     }
-
-
    
 }

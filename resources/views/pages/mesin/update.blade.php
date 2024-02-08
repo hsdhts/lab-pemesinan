@@ -100,21 +100,20 @@
             @enderror
         </div>
         
+        <!-- <div class="mb-4">
+        <label for="pic" class="form-label">Person In Charge (PIC)</label>
+         <select class="form-select @error('user_id') is-invalid @enderror" id="pic" aria-label="Pilihan untuk PIC" value="{{ old('user_id') }}" name="user_id">
+            <option value="" selected> -- Pilih PIC -- </option>
 
-        <div class="mb-4">
-    <label for="pic" class="form-label">Person In Charge (PIC)</label>
-    <select class="form-select @error('user_id') is-invalid @enderror" id="pic" aria-label="Pilihan untuk PIC" name="user_id">
-        <option value="" disabled>Pilih User</option>
-
-        @foreach ($user as $u)
-            <option value="{{ $u->id }}" {{ $mesin->user_id == $u->id ? 'selected' : '' }}>{{ $u->nama }}</option>
-        @endforeach
-    </select>
-    @error('user_id')    
-        <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>
-
+            @foreach ($user as $u)
+            <option value="{{ $u->id }}">{{ $u->nama }}</option>
+            @endforeach
+            
+          </select>
+          @error('user_id')    
+          <div class="invalid-feedback">{{ $message }}</div>
+          @enderror
+        </div> -->
 
         <div class="mb-3">
             <label for="spesifikasi" class="form-label">Spesifikasi (opsional)</label>
@@ -136,6 +135,7 @@
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
         </div>
+
 
             
             <a href="/mesin">
