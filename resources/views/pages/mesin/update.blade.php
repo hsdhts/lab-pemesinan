@@ -61,61 +61,46 @@
 
         <div class="mb-3">
             <label for="mesin" class="form-label">Nama Mesin</label>
-            <input type="text" class="form-control @error('nama_mesin') is-invalid @enderror" id="mesin" placeholder="Nama Mesin" value="{{ old('nama_mesin', $mesin->nama_mesin) }}" name="nama_mesin">
+            <input type="text" class="form-control @error('nama_mesin') is-invalid @enderror" id="mesin" placeholder="Nama Mesin" value="{{ old('nama_mesin') }}" name="nama_mesin">
             @error('nama_mesin')    
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
-
-        <div class="mb-3">
-            <label for="no_asset" class="form-label">Serial No.</label>
-            <input type="text" class="form-control @error('no_asset') is-invalid @enderror" id="no_asset" placeholder="Serial Number" value="{{ old('no_asset', $mesin->no_asset) }}" name="no_asset">
-            @error('no_asset')    
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
         
-        <div class="mb-3">
-            <label for="tipe_mesin" class="form-label">Tipe Mesin</label>
-            <input type="text" class="form-control @error('tipe_mesin') is-invalid @enderror" id="tipe_mesin" placeholder="Tipe Mesin" value="{{ old('tipe_mesin', $mesin->tipe_mesin) }}" name="tipe_mesin">
-            @error('tipe_mesin')    
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
 
         <div class="mb-3">
             <label for="kode_mesin" class="form-label">Kode Mesin</label>
-            <input type="text" class="form-control @error('kode_mesin') is-invalid @enderror" id="kode_mesin" placeholder="Kode Mesin" value="{{ old('kode_mesin', $mesin->kode_mesin) }}" name="kode_mesin">
+            <input type="text" class="form-control @error('kode_mesin') is-invalid @enderror" id="kode_mesin" placeholder="Kode Mesin" value="{{ old('kode_mesin') }}" name="kode_mesin">
             @error('kode_mesin')    
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 
-        
         <div class="mb-3">
-            <label for="nomor_seri" class="form-label">Coolant Motor</label>
-            <input type="text" class="form-control @error('nomor_seri') is-invalid @enderror" id="nomor_seri" placeholder="Coolant Motor" value="{{ old('nomor_seri', $mesin->nomor_seri) }}" name="nomor_seri">
-            @error('nomor_seri')    
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-        
-        <!-- <div class="mb-4">
-        <label for="pic" class="form-label">Person In Charge (PIC)</label>
-         <select class="form-select @error('user_id') is-invalid @enderror" id="pic" aria-label="Pilihan untuk PIC" value="{{ old('user_id') }}" name="user_id">
-            <option value="" selected> -- Pilih PIC -- </option>
-
-            @foreach ($user as $u)
-            <option value="{{ $u->id }}">{{ $u->nama }}</option>
-            @endforeach
-            
-          </select>
-          @error('user_id')    
-          <div class="invalid-feedback">{{ $message }}</div>
-          @enderror
-        </div> -->
+    <label for="tanggal_pembelian" class="form-label">Tanggal Pembelian</label>
+    <input type="date" class="form-control @error('tanggal_pembelian') is-invalid @enderror" id="sparepart" placeholder="Tanggal Pembelian" value="{{ old('tanggal_pembelian') }}" name="tanggal_pembelian">
+    @error('tanggal_pembelian')    
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div> 
 
         <div class="mb-3">
+        <label for="mesin_image" class="form-label">Gambar Mesin</label>
+        <input type="file" class="form-control @error('mesin_image') is-invalid @enderror" id="mesin_image" name="mesin_image">
+        @error('mesin_image')
+        <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+        <div class="mb-3">
+        <label for="nameTag_image" class="form-label">Name Tag Mesin</label>
+        <input type="file" class="form-control @error('nameTag_image') is-invalid @enderror" id="nameTag_image" name="nameTag_image">
+        @error('mesin_image')
+        <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="mb-3">
             <label for="spesifikasi" class="form-label">Spesifikasi (opsional)</label>
             <p>Isian tidak boleh mengandung karakter petik (") maupun (')</p>
             <p class="text-danger">
@@ -127,14 +112,6 @@
 
         </div>
 
-
-        <div class="mb-3">
-        <label for="mesin_image" class="form-label">Gambar Mesin</label>
-        <input type="file" class="form-control @error('mesin_image') is-invalid @enderror" id="mesin_image" name="mesin_image">
-        @error('mesin_image')
-        <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-        </div>
 
 
             

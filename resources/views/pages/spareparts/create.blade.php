@@ -44,7 +44,7 @@
 
 <div class="mb-3">
     <label for="deskripsi" class="form-label">Deskripsi</label>
-    <input type="textr" class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" placeholder="Deskripsi" value="{{ old('deskripsi') }}" name="deskripsi">
+    <input type="text" class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" placeholder="Deskripsi" value="{{ old('deskripsi') }}" name="deskripsi">
     @error('jumlah')    
     <div class="invalid-feedback">{{ $message }}</div>
     @enderror

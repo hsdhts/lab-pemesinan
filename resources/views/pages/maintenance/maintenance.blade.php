@@ -75,8 +75,8 @@
             <td>{{ $mesin->nama_mesin }}</td>
         </tr>
         <tr>
-            <td><b>Nomor Asset</b></td>
-            <td>{{ $mesin->no_asset }}</td>
+            <td><b>Kode Mesin</b></td>
+            <td>{{ $mesin->kode_mesin }}</td>
         </tr>
        
         <tr>

@@ -17,27 +17,31 @@
                     <td><b>Nama</b></td>
                     <td>{{ $mesin->nama_mesin }}</td>
                 </tr>
+
+                <tr>
+                    <td><b>Kode Mesin</b></td>
+                    <td>{{ $mesin->kode_mesin }}</td>
+                </tr>
+                <tr>
+
+                <tr>
+                    <td><b>Tanggal Pembelian</b></td>
+                    <td>{{ $mesin->tanggal_pembelian }}</td>
+                </tr>
+                <tr> 
+
                 <tr>
                     <td><b>Gambar Mesin</b></td>
                     <td>
              <img src="{{ asset('storage/' . $mesin->mesin_image) }}" alt="Gambar Mesin" style="max-width: 200px;">
             </td>
                 </tr>
+
                 <tr>
-                    <td><b>Kategori</b></td>
-                    <td>{{ $mesin->kategori->nama_kategori }}</td>
-                </tr>
-                <tr>
-                    <td><b>Tipe Mesin</b></td>
-                    <td>{{ $mesin->tipe_mesin }}</td>
-                </tr>
-                <tr>
-                    <td><b>Kode Mesin</b></td>
-                    <td>{{ $mesin->kode_mesin }}</td>
-                </tr>
-                <tr>
-                    <td><b>Coolant Motor</b></td>
-                    <td>{{ $mesin->nomor_seri }}</td>
+                    <td><b>Name Tag Mesin</b></td>
+                    <td>
+             <img src="{{ asset('storage/' . $mesin->nameTag_image) }}" alt="Gambar Name Tag" style="max-width: 200px;">
+            </td>
                 </tr>
                 
              

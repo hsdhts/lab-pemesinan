@@ -74,20 +74,12 @@
         <td>{{ $mesin->nama_mesin }}</td>
     </tr>
     <tr>
-        <td><b>Nomor Asset</b></td>
-        <td>{{ $mesin->no_asset }}</td>
-    </tr>
-    <tr>
-        <td><b>Tipe Mesin</b></td>
-        <td>{{ $mesin->tipe_mesin }}</td>
-    </tr>
-    <tr>
       <td><b>Kode Mesin</b></td>
       <td>{{ $mesin->kode_mesin }}</td>
     </tr>
     <tr>
-      <td><b>Nomor Seri</b></td>
-      <td>{{ $mesin->nomor_seri }}</td>
+      <td><b>Tanggal Pembelian </b></td>
+      <td>{{ $mesin->tanggal_pembelian }}</td>
     </tr>
 
     <tr>

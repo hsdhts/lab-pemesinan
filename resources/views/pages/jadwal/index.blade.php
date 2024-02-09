@@ -9,37 +9,29 @@
 
 @section('content_left')
 <table class="table table-row-dashed table-row-gray-400 gs-1">
-  <tr>
-      <td><b>Nama Mesin</b></td>
-      <td>{{ $mesin->nama_mesin }}</td>
-  </tr>
-  <tr>
-      <td><b>Nomor Asset</b></td>
-      <td>{{ $mesin->no_asset }}</td>
-  </tr>
-  <tr>
-    <td><b>Tipe Mesin</b></td>
-    <td>{{ $mesin->tipe_mesin }}</td>
-</tr>
-<tr>
-  <td><b>Kode Mesin</b></td>
-  <td>{{ $mesin->kode_mesin }}</td>
-</tr>
-<tr>
-  <td><b>Nomor Seri</b></td>
-  <td>{{ $mesin->nomor_seri }}</td>
-</tr>
+  <<tr>
+        <td><b>Nama Mesin</b></td>
+        <td>{{ $mesin->nama_mesin }}</td>
+    </tr>
+    <tr>
+      <td><b>Kode Mesin</b></td>
+      <td>{{ $mesin->kode_mesin }}</td>
+    </tr>
+    <tr>
+      <td><b>Tanggal Pembelian </b></td>
+      <td>{{ $mesin->tanggal_pembelian }}</td>
+    </tr>
 
-  <tr>
-      <td><b>Kategori</b></td>
-      <td>{{ $mesin->kategori->nama_kategori }}</td>
-  </tr>
-  <tr>
-    <td colspan="2">
-      <b>Spesifikasi</b><br>
-      {!! $mesin->spesifikasi !!}
-    </td>
-  </tr>
+    <tr>
+        <td><b>Kategori</b></td>
+        <td>{{ $mesin->kategori->nama_kategori }}</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <b>Spesifikasi</b><br>
+        {!! $mesin->spesifikasi !!}
+      </td>
+    </tr>
 </table>
 @endsection
 

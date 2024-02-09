@@ -4,8 +4,7 @@
     <th>No</th>
     <th>Mesin</th>
     <th>Gambar Mesin</th>
-    <!-- <th>PIC</th> -->
-    <th>Serial No.</th>
+    <th>Name Tag</th>
     <th>Aksi</th>
 @endsection
 
@@ -39,8 +38,15 @@
                     return '<img src="{{ asset('storage') }}/'+data+'" alt="Gambar Mesin" style="max-width: 100px; max-height: 100px; cursor: pointer;" onclick="setModalImage(\'' + data + '\', \'gambarMesinModal\')">';
                 }
             },
-            // {data: 'user', name: 'user.nama'},
-            { data: 'no_asset', name: 'no_asset' },
+
+            {
+                data: 'nameTag_image',
+                name: 'nameTag_image',
+                render: function(data, type, full, meta) {
+                    return '<img src="{{ asset('storage') }}/'+data+'" alt="Gambar Name Tag" style="max-width: 100px; max-height: 100px; cursor: pointer;" onclick="setModalImage(\'' + data + '\', \'gambarMesinModal\')">';
+                }
+            },
+           
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false },
         ]
     });

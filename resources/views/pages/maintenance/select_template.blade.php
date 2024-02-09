@@ -11,8 +11,8 @@
         <td>{{ $mesin['nama_mesin'] }}</td>
     </tr>
     <tr>
-        <td><b>Nomor Asset</b></td>
-        <td>{{ $mesin['no_asset'] }}</td>
+        <td><b>Kode Mesin</b></td>
+        <td>{{ $mesin['kode_mesin'] }}</td>
     </tr>
  
     <tr>
@@ -22,7 +22,6 @@
 </table>
 
  
-
     <a href="/mesin" class="btn btn-dark container-fluid mt-12">
         <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr046.svg-->
         <span class="svg-icon svg-icon-muted svg-icon-3">

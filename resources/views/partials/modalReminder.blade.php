@@ -219,14 +219,12 @@
 												<thead>
 													<tr class="fw-bolder text-muted">
 														<th class="min-w-140px">Mesin</th>
-														<th class="min-w-120px">Tipe Mesin</th>
 														<th class="min-w-120px">Kode Mesin</th>
-														<th class="min-w-120px">Nomor Seri</th>
+														<th class="min-w-120px">Tanggal Pembelian</th>
 														<th class="min-w-120px">Kategori</th>
 													</tr>
 												</thead>
 												<!--end::Table head-->
-												<!--begin::Table body-->
 												<tbody>
 												
 
@@ -235,22 +233,17 @@
 														<td>
 															<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $m->nama_mesin }}</span>
 														</td>
-														<td>
-															<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $m->tipe_mesin }}</span>
-														</td>
+														
 														<td>
 															<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $m->kode_mesin }}</span>
 														</td>
 														<td>
-															<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $m->nomor_seri }}</span>
+															<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $m->tanggal_pembelian }}</span>
 														</td>
 														
 														<td>
 															<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $m->kategori->nama_kategori }}</span>
 														</td>
-
-													
-
 								
 													</tr>
 

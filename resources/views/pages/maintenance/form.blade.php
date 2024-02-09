@@ -443,8 +443,8 @@
             <td>{{ $mesin->get('nama_mesin') }}</td>
         </tr>
         <tr>
-            <td><b>Nomor Asset</b></td>
-            <td>{{ $mesin->get('no_asset') }}</td>
+            <td><b>Kode Mesin</b></td>
+            <td>{{ $mesin->get('kode_mesin') }}</td>
         </tr>
      
         <tr>
