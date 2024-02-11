@@ -1,40 +1,34 @@
-# Gunakan PHP sebagai base image
-FROM php:8.2-apache
+FROM php:8.1-cli-alpine
 
-# Set working directory di dalam container
-WORKDIR /var/www/html
+RUN apk --no-cache add \
+    zip \
+    unzip \
+    curl \
+    libzip-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev
 
-# Install dependensi yang diperlukan untuk Laravel
-RUN apt-get update && \
-    apt-get install -y libzip-dev zip unzip && \
-    docker-php-ext-configure zip --with-libzip && \
-    docker-php-ext-install zip pdo_mysql
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Download dan install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN docker-php-ext-install pdo_mysql gd zip
 
-# Copy composer.json dan composer.lock ke dalam container
-COPY composer.json composer.lock ./
+ENV APP_HOME /app
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Install dependensi PHP menggunakan Composer
-RUN composer install --no-scripts --no-autoloader
-
-# Copy seluruh proyek Laravel ke dalam container
+WORKDIR $APP_HOME
 COPY . .
 
-# Generate autoloader dan jalankan script Laravel lainnya
-RUN composer dump-autoload && \
-    php artisan optimize
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Set environment untuk Laravel
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-ENV APP_KEY=base64:E4pgWm0uMcpFuDpJpWqPL+Z4Uhw2IhBAqkuIXmk/XDE=
-
-# Konfigurasi Apache
-RUN sed -i -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
+RUN mkdir -p storage/framework/sessions \
+    && mkdir -p storage/framework/views \
+    && mkdir -p storage/framework/cache \
+    && mkdir -p storage/logs \
+    && chmod -R 775 storage
 
 # Expose port 8080
 EXPOSE 8080
 
-# CMD untuk menjalankan server Apache
-CMD ["apache2-foreground"]
+# Atur perintah default untuk menjalankan server PHP built-in
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
