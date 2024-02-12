@@ -1,0 +1,27 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"  # Map port 8080 dari container ke port 8080 pada host
+    volumes:
+      - .:/app  # Mount direktori saat ini ke dalam container di direktori /app
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: 'test_1'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: ''
+      MYSQL_ROOT_PASSWORD: ''
+    ports:
+      - "3306:3306"  
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
