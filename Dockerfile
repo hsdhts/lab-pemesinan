@@ -19,7 +19,7 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 WORKDIR $APP_HOME
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer update && composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN mkdir -p storage/framework/sessions \
     && mkdir -p storage/framework/views \
