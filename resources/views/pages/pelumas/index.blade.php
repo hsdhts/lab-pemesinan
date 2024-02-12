@@ -15,7 +15,6 @@
 
 @section('data')
 <script>
-			//makan bang
     $('#tabelTemplate').DataTable({
       
       columnDefs: [

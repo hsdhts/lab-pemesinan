@@ -53,7 +53,7 @@
 </div>
 <div class="mb-3">
     <label for="sparepart" class="form-label">Pelumasan Terakhir</label>
-    <input type="date" class="form-control @error('pelumasan_terakhir') is-invalid @enderror" id="sparepart" placeholder="Nama Sparepart" value="{{ old('pelumasan_terakhir') }}" name="pelumasan_terakhir">
+    <input type="date" class="form-control @error('pelumasan_terakhir') is-invalid @enderror" id="pelumasan_terakhir" placeholder="Nama Sparepart" value="{{ old('pelumasan_terakhir') }}" name="pelumasan_terakhir">
     @error('pelumasan_terakhir')    
     <div class="invalid-feedback">{{ $message }}</div>
     @enderror

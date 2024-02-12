@@ -55,10 +55,7 @@ class MesinController extends Controller
     public function tambah(Request $request){
         $validData = $request->validate([
             'nama_mesin' => 'required|max:255',
-            // 'no_asset' => 'nullable|max:25',
-            // 'tipe_mesin' => 'nullable|max:40',
             'kode_mesin' => 'nullable|max:6',
-            // 'nomor_seri' => 'nullable|max:50',
             'spesifikasi' => 'nullable|not_regex:/\'/i',
             'tanggal_pembelian' => 'nullable|max:50',
             'mesin_image' => 'image|file|max:1024',
@@ -107,10 +104,7 @@ class MesinController extends Controller
         $dataValid = $request->validate([
             'id' => 'required|numeric',
             'nama_mesin' => 'required|max:255',
-            // 'no_asset' => 'nullable|max:25',
-            // 'tipe_mesin' => 'nullable|max:40',
             'kode_mesin' => 'nullable|max:6',
-            // 'nomor_seri' => 'nullable|max:50',
             'spesifikasi' => 'nullable|not_regex:/\'/i',
             'tanggal_pembelian' => 'nullable|max:50',
             'mesin_image' => 'image|file|max:1024',

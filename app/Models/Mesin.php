@@ -17,9 +17,7 @@ class Mesin extends Model
 
     protected $dates = ['deleted_at'];
     
-    
     protected $guarded = ['id'];
-
 
     public function kategori() {
         return $this->belongsTo(Kategori::class);
@@ -37,7 +35,5 @@ class Mesin extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-
-
 
 }

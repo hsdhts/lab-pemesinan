@@ -95,7 +95,7 @@
         <div class="mb-3">
         <label for="nameTag_image" class="form-label">Name Tag Mesin</label>
         <input type="file" class="form-control @error('nameTag_image') is-invalid @enderror" id="nameTag_image" name="nameTag_image">
-        @error('mesin_image')
+        @error('nameTag_image')
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>

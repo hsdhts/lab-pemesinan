@@ -26,6 +26,15 @@ class UserSeeder extends Seeder
         ]);
      
         User::create([
+            'username' => 'husada',
+            'nama' => 'Husadahts',
+            'level' => 'Mahasiswa',
+            'password' => bcrypt('1234'),
+            'last_login' => Carbon::parse('17-12-2023 23:34:45'),
+        ]);
+     
+
+        User::create([
             'username' => 'admin',
             'nama' => 'Just Admin',
             'level' => 'Admin',

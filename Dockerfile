@@ -27,8 +27,6 @@ RUN mkdir -p storage/framework/sessions \
     && mkdir -p storage/logs \
     && chmod -R 775 storage
 
-# Expose port 8080
 EXPOSE 8080
 
-# Atur perintah default untuk menjalankan server PHP built-in
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
