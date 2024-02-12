@@ -5,9 +5,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"  # Map port 8080 dari container ke port 8080 pada host
+      - "8080:8080"  
     volumes:
-      - .:/app  # Mount direktori saat ini ke dalam container di direktori /app
+      - .:/app 
     depends_on:
       - mysql
 
