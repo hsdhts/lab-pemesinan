@@ -124,6 +124,24 @@
                         
                         </div>
                     </div>
+                    <div class="input-group mb-3">
+
+                        <span class="form-label float-start">End Date</span>
+                        <div class="input-group date">
+                            <input type="text" class="form-control @error('end_date') is-invalid @enderror clear-form" id="tanggal_end" value="{{ old('end_date') }}" name="end_date" readonly>
+                            <button class="btn btn-secondary @error('end_date') is-invalid @enderror" type="button">
+                                <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
+                                <span class="svg-icon svg-icon-muted svg-icon-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
+                                        <path opacity="0.3" d="M19 3.40002C18.4 3.40002 18 3.80002 18 4.40002V8.40002H14V4.40002C14 3.80002 13.6 3.40002 13 3.40002C12.4 3.40002 12 3.80002 12 4.40002V8.40002H8V4.40002C8 3.80002 7.6 3.40002 7 3.40002C6.4 3.40002 6 3.80002 6 4.40002V8.40002H2V4.40002C2 3.80002 1.6 3.40002 1 3.40002C0.4 3.40002 0 3.80002 0 4.40002V19.4C0 20 0.4 20.4 1 20.4H19C19.6 20.4 20 20 20 19.4V4.40002C20 3.80002 19.6 3.40002 19 3.40002ZM18 10.4V13.4H14V10.4H18ZM12 10.4V13.4H8V10.4H12ZM12 15.4V18.4H8V15.4H12ZM6 10.4V13.4H2V10.4H6ZM2 15.4H6V18.4H2V15.4ZM14 18.4V15.4H18V18.4H14Z" fill="black"/>
+                                        <path d="M19 0.400024H1C0.4 0.400024 0 0.800024 0 1.40002V4.40002C0 5.00002 0.4 5.40002 1 5.40002H19C19.6 5.40002 20 5.00002 20 4.40002V1.40002C20 0.800024 19.6 0.400024 19 0.400024Z" fill="black"/>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                        </button>
+                        
+                        </div>
+                    </div>
 
 
                     <div class="my-5">
@@ -228,6 +246,24 @@
                         <span class="form-label float-start">Start Date</span>
                         <div class="input-group date">
                             <input type="text" class="form-control clear-form" id="edit_tanggal_form" name="start_date" readonly>
+                            <button class="btn btn-secondary" type="button">
+                                <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
+                                <span class="svg-icon svg-icon-muted svg-icon-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
+                                        <path opacity="0.3" d="M19 3.40002C18.4 3.40002 18 3.80002 18 4.40002V8.40002H14V4.40002C14 3.80002 13.6 3.40002 13 3.40002C12.4 3.40002 12 3.80002 12 4.40002V8.40002H8V4.40002C8 3.80002 7.6 3.40002 7 3.40002C6.4 3.40002 6 3.80002 6 4.40002V8.40002H2V4.40002C2 3.80002 1.6 3.40002 1 3.40002C0.4 3.40002 0 3.80002 0 4.40002V19.4C0 20 0.4 20.4 1 20.4H19C19.6 20.4 20 20 20 19.4V4.40002C20 3.80002 19.6 3.40002 19 3.40002ZM18 10.4V13.4H14V10.4H18ZM12 10.4V13.4H8V10.4H12ZM12 15.4V18.4H8V15.4H12ZM6 10.4V13.4H2V10.4H6ZM2 15.4H6V18.4H2V15.4ZM14 18.4V15.4H18V18.4H14Z" fill="black"/>
+                                        <path d="M19 0.400024H1C0.4 0.400024 0 0.800024 0 1.40002V4.40002C0 5.00002 0.4 5.40002 1 5.40002H19C19.6 5.40002 20 5.00002 20 4.40002V1.40002C20 0.800024 19.6 0.400024 19 0.400024Z" fill="black"/>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                        </button>
+                        
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+
+                        <span class="form-label float-start">End Date</span>
+                        <div class="input-group date">
+                            <input type="text" class="form-control clear-form" id="edit_end" name="end_date" readonly>
                             <button class="btn btn-secondary" type="button">
                                 <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
                                 <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -559,7 +595,7 @@
             </form>
 
 
-            <button class="btn btn-sm btn-dark text-nowrap d-inline" data-bs-toggle="modal" data-bs-target="#kt_modal_2" onclick="setEdit({{ $loop->index }}, '{{ $s->get('nama_setup') }}', {{ $s->get('periode') }}, '{{ $s->get('satuan_periode') }}', '{{ Illuminate\Support\Carbon::parse($s->get('start_date'))->format('d-m-Y') }}', '{{ $s->get('warna') }}')">
+            <button class="btn btn-sm btn-dark text-nowrap d-inline" data-bs-toggle="modal" data-bs-target="#kt_modal_2" onclick="setEdit({{ $loop->index }}, '{{ $s->get('nama_setup') }}', {{ $s->get('periode') }}, '{{ $s->get('satuan_periode') }}', '{{ Illuminate\Support\Carbon::parse($s->get('start_date'))->format('d-m-Y') }}', '{{ Illuminate\Support\Carbon::parse($s->get('end_date'))->format('d-m-Y') }}', '{{ $s->get('warna') }}')">
                 <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen055.svg-->
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path opacity="0.3" fill-rule="evenodd" clip-rule="evenodd" d="M2 4.63158C2 3.1782 3.1782 2 4.63158 2H13.47C14.0155 2 14.278 2.66919 13.8778 3.04006L12.4556 4.35821C11.9009 4.87228 11.1726 5.15789 10.4163 5.15789H7.1579C6.05333 5.15789 5.15789 6.05333 5.15789 7.1579V16.8421C5.15789 17.9467 6.05333 18.8421 7.1579 18.8421H16.8421C17.9467 18.8421 18.8421 17.9467 18.8421 16.8421V13.7518C18.8421 12.927 19.1817 12.1387 19.7809 11.572L20.9878 10.4308C21.3703 10.0691 22 10.3403 22 10.8668V19.3684C22 20.8218 20.8218 22 19.3684 22H4.63158C3.1782 22 2 20.8218 2 19.3684V4.63158Z" fill="white"/>
@@ -610,6 +646,23 @@
 
 
                         {{ Illuminate\Support\Carbon::parse($s->get('start_date'))->formatLocalized('%d %B %Y') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>End Date</b>
+                    </td>
+                    <td>
+                        <b>:</b>
+                    </td>
+                    <td>
+@php
+    setlocale(LC_ALL, 'IND');
+
+@endphp
+
+
+                        {{ Illuminate\Support\Carbon::parse($s->get('end_date'))->formatLocalized('%d %B %Y') }}
                     </td>
                 </tr>
                 <tr>
@@ -719,12 +772,13 @@ function setEditSatuan(periode) {
     document.getElementById('edit_satuan_periode').value = periode;
     }
 
-function setEdit(index, nama_setup_maintenance, periode, satuan_periode, start_date, warna){
+function setEdit(index, nama_setup_maintenance, periode, satuan_periode, start_date, end_date, warna){
     document.getElementById('edit_index').value = index;
     document.getElementById('edit_maintenance_form').value = nama_setup_maintenance;
     document.getElementById('edit_periode_form').value = periode;
     document.getElementById('edit_satuan_periode').value = satuan_periode;
     document.getElementById('edit_tanggal_form').value = start_date;
+    document.getElementById('edit_end').value = end_date;
     document.getElementById('edit_warna').value = warna;
     }    
 
@@ -756,7 +810,13 @@ $('.input-group.date').datepicker({
     autoclose: true,
     todayHighlight: true
 });
-
+$('.input-group.finish').datepicker({
+    format: "dd-mm-yyyy",
+    todayBtn: "linked",
+    language: "id",
+    autoclose: true,
+    todayHighlight: true
+});
 
     </script>
 @endsection

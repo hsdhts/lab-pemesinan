@@ -94,6 +94,7 @@ class SetupMesinController extends Controller
                 'periode' => $item->periode,
                 'satuan_periode' => $item->satuan_periode,
                 'start_date' => now()->format('d-m-Y'),
+                'end_date' => now()->format('d-m-Y'),
                 'warna' => $item->warna,
            
 
@@ -143,6 +144,7 @@ class SetupMesinController extends Controller
             'periode' => 'required|numeric|min:1',
             'satuan_periode' => 'required',
             'start_date' => 'required|date_format:d-m-Y',
+            'end_date' => 'required|date_format:d-m-Y',
             'warna' => 'required'
         ]);
 
@@ -174,6 +176,7 @@ class SetupMesinController extends Controller
             'periode' => 'required|numeric|min:1',
             'satuan_periode' => 'required',
             'start_date' => 'required|date_format:d-m-Y',
+            'end_date' => 'required|date_format:d-m-Y',
             'warna' => 'required'
         ]));
 

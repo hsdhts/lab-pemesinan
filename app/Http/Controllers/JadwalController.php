@@ -46,10 +46,11 @@ class JadwalController extends Controller
     
 
     $maintenance = Maintenance::find($id_maintenance);
-    $tahun = Carbon::now()->year;
     
 
     $waktu = Carbon::parse($maintenance->start_date, 7);
+    $waktu1 = Carbon::parse($maintenance->end_date, 7);
+    $tahun = $waktu1;
     //echo "Awalnya adalah " . $waktu->format('d-m-Y') . "<br>";
 
     $periode = $maintenance->periode;
@@ -59,7 +60,7 @@ class JadwalController extends Controller
 
     switch ($satuan_periode) {
         case 'Jam':
-            while($waktu->year === $tahun){
+            while($waktu <= $tahun){
                 //echo $waktu->format('d-m-Y') . "<br>";
         
                 $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
@@ -68,7 +69,7 @@ class JadwalController extends Controller
             }            
             break;
         case 'Hari':
-            while($waktu->year === $tahun){
+            while($waktu <= $tahun){
                 //echo $waktu->format('d-m-Y') . "<br>";
         
                 //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
@@ -80,7 +81,7 @@ class JadwalController extends Controller
             break;
 
         case 'Minggu':
-                while($waktu->year === $tahun){
+                while($waktu <= $tahun){
                     //echo $waktu->format('d-m-Y') . "<br>";
             
                     //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
@@ -92,7 +93,7 @@ class JadwalController extends Controller
             break;
 
         case 'Bulan':
-                while($waktu->year === $tahun){
+                while($waktu <= $tahun){
                     //echo $waktu->format('d-m-Y') . "<br>";
             
                     //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
@@ -103,7 +104,7 @@ class JadwalController extends Controller
                 break;
         
         case 'Tahun':
-            while($waktu->year === $tahun){
+            while($waktu <= $tahun){
                 //echo $waktu->format('d-m-Y') . "<br>";
         
                 //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);

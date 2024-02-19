@@ -43,6 +43,7 @@ class UpdateMaintenanceController extends Controller
                'periode' => $item->periode,
                'satuan_periode' => $item->satuan_periode,
                'start_date' => $item->start_date,
+               'end_date' => $item->end_date,
                'warna' => $item->warna,
                
                'setupForm' => $item->form->map(function($i) {
@@ -80,6 +81,7 @@ class UpdateMaintenanceController extends Controller
                     'periode' => $s->get('periode'),
                     'satuan_periode' => $s->get('satuan_periode'),
                     'start_date' => Carbon::parse($s->get('start_date')),
+                    'end_date' => Carbon::parse($s->get('end_date')),
                     'warna' => $s->get('warna')
                 ]);
                 foreach($s->get('setupForm') as $form){
@@ -114,6 +116,7 @@ class UpdateMaintenanceController extends Controller
                     'periode' => $s->get('periode'),
                     'satuan_periode' => $s->get('satuan_periode'),
                     'start_date' => Carbon::parse($s->get('start_date')),
+                    'end_date' => Carbon::parse($s->get('end_date')),
                     'warna' => $s->get('warna')
                 ]);
                 foreach($s->get('setupForm') as $form){

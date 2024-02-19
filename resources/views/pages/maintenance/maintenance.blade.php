@@ -241,6 +241,23 @@
                 </tr>
                 <tr>
                     <td>
+                        <b>End Date</b>
+                    </td>
+                    <td>
+                        <b>:</b>
+                    </td>
+                    <td>
+@php
+    setlocale(LC_ALL, 'IND');
+
+@endphp
+
+
+                        {{ Illuminate\Support\Carbon::parse($m->end_date)->formatLocalized('%d %B %Y') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         <b>Warna</b>
                     </td>
                     <td>
@@ -342,6 +359,7 @@ $('.input-group.date').datepicker({
     autoclose: true,
     todayHighlight: true
 });
+
 
 
     </script>

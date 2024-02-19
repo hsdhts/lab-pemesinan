@@ -41,6 +41,7 @@ class MaintenanceController extends Controller
                 'periode' => $s->get('periode'),
                 'satuan_periode' => $s->get('satuan_periode'),
                 'start_date' => Carbon::parse($s->get('start_date')),
+                'end_date' => Carbon::parse($s->get('end_date')),
                 'warna' => $s->get('warna')
             ]);
     
@@ -89,12 +90,13 @@ class MaintenanceController extends Controller
             'periode' => 'required|numeric',
             'satuan_periode' => 'required',
             'start_date' => 'required|date_format:d-m-Y',
+            'end_date' => 'required|date_format:d-m-Y',
             'warna' => 'required'
         ]);
 
 
         $data_valid['start_date'] = Carbon::parse($data_valid['start_date']);
-
+        $data_valid['end_date'] = Carbon::parse($data_valid['end_date']);
         $maintenance = Maintenance::create($data_valid);
 
         $objectJadwal->create_jadwal($maintenance->id);
