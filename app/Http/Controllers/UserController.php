@@ -133,7 +133,6 @@ class UserController extends Controller
 
     public function create(){
         
-
         return view('pages.user.create', ['halaman' => 'User']);
     }
 
@@ -143,8 +142,11 @@ class UserController extends Controller
             'username' => 'required',
             'nama' => 'required',
             'level' => 'required',
+            'password' => 'required'
 
         ]);
+
+        $data_valid['password'] = bcrypt($data_valid['password']);
 
         User::create($data_valid);
 
@@ -166,7 +168,6 @@ class UserController extends Controller
             'username' => 'required',
             'nama' => 'required',
             'level' => 'required',
-
         ]);
 
         User::find($data_valid['id'])->update($data_valid);

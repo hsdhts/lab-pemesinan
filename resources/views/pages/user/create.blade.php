@@ -26,6 +26,16 @@
     </div>
 
     <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="password" id="password" value="{{ old('password') }}" name="password">
+        @error('password')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+        @enderror
+    </div>
+
+    <div class="mb-4">
     <label for="level" class="form-label @error('level') is-invalid @enderror">Level / Role</label>
     <select id="level" value="{{ old('level') }}" name="level" class="form-select">
         <option value="" selected> --- Pilih Role --- </option>
