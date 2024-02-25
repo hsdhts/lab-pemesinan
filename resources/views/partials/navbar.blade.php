@@ -5,7 +5,6 @@
 		
     
     <!--begin::Menu-->
-    <!-- ISINE NAVBAR MULAI SEKO KENE -->
 		<div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch" id="kt_page_loading_basic" data-kt-menu="true">
 			
 			<div class="menu-item me-lg-1">
@@ -107,19 +106,6 @@
 							<span class="menu-title">Kategori</span>
 						</a>
 					</div>
-					<!-- <div class="menu-item">
-						<a class="menu-link py-3" href="/ruang" title="Daftar semua ruangan dan tempat" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-							<span class="menu-icon">
-                                <span class="svg-icon svg-icon-2">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path opacity="0.3" d="M18.0624 15.3454L13.1624 20.7453C12.5624 21.4453 11.5624 21.4453 10.9624 20.7453L6.06242 15.3454C4.56242 13.6454 3.76242 11.4452 4.06242 8.94525C4.56242 5.34525 7.46242 2.44534 11.0624 2.04534C15.8624 1.54534 19.9624 5.24525 19.9624 9.94525C20.0624 12.0452 19.2624 13.9454 18.0624 15.3454ZM13.0624 10.0453C13.0624 9.44534 12.6624 9.04534 12.0624 9.04534C11.4624 9.04534 11.0624 9.44534 11.0624 10.0453V13.0453H13.0624V10.0453Z" fill="black"/>
-                                        <path d="M12.6624 5.54531C12.2624 5.24531 11.7624 5.24531 11.4624 5.54531L8.06241 8.04531V12.0453C8.06241 12.6453 8.46241 13.0453 9.06241 13.0453H11.0624V10.0453C11.0624 9.44531 11.4624 9.04531 12.0624 9.04531C12.6624 9.04531 13.0624 9.44531 13.0624 10.0453V13.0453H15.0624C15.6624 13.0453 16.0624 12.6453 16.0624 12.0453V8.04531L12.6624 5.54531Z" fill="black"/>
-                                    </svg>
-                                </span>
-							</span>
-							<span class="menu-title">Ruang</span>
-						</a>
-					</div> -->
 					
 				</div>
 			</div>
@@ -134,7 +120,7 @@
 			@endcan
 		
 			
-			@can('manager')
+			@can( 'admin')
 			<div class="menu-item me-lg-1">
 				<a class="menu-link py-3" href="/approve">
 					<span class="menu-title">Laporan Pekerjaan</span>

@@ -12,11 +12,8 @@
                 </div>
                 <!--end::Close-->
             </div>
-
             <div class="modal-body">
-
-                								<!--begin::Tables Widget 13-->
-					
+                								
 									<!--begin::Body-->
 									<div class="card-body py-3">
 										<!--begin::Table container-->
@@ -34,8 +31,6 @@
 														<th class="min-w-100px">Aksi</th>
 													</tr>
 												</thead>
-												<!--end::Table head-->
-												<!--begin::Table body-->
 												<tbody>
 
 												
@@ -130,8 +125,6 @@
 														<th class="min-w-100px">Aksi</th>
 													</tr>
 												</thead>
-												<!--end::Table head-->
-												<!--begin::Table body-->
 												<tbody>
 													
 
