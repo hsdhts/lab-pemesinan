@@ -19,11 +19,8 @@ class CreateMesinsTable extends Migration
             $table->id();
             $table->string('nama_mesin');
             $table->foreignId('kategori_id')->default(1);
-            // $table->string('no_asset', 25)->nullable();
             $table->text('spesifikasi')->nullable();
-            // $table->string('tipe_mesin', 40)->nullable();
             $table->string('kode_mesin', 6)->nullable();
-            // $table->string('nomor_seri', 50)->nullable();
             $table->date('tanggal_pembelian')->nullable();
             $table->foreignId('user_id')->default(1);
             $table->String('mesin_image')->nullable();
