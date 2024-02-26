@@ -77,11 +77,11 @@
             <td>Nama Mesin</td><td>{{ $jadwal->maintenance->mesin->nama_mesin }}</td><td>Jenis Pekerjaan</td><td>{{ $jadwal->maintenance->nama_maintenance }}</td>
         </tr>
         <tr>
-            <td>Type Mesin</td><td>{{ $jadwal->maintenance->mesin->tipe_mesin }}</td><td>Lama Pekerjaan</td><td>{{ $jadwal->lama_pekerjaan }}</td>
+            <td>Kode Mesin</td><td>{{ $jadwal->maintenance->mesin->kode_mesin}}</td><td>Lama Pekerjaan</td><td>{{ $jadwal->lama_pekerjaan }}</td>
         </tr>
 
         <tr>
-            <td>Kode Mesin</td><td>{{ $jadwal->maintenance->mesin->kode_mesin }}</td><td>Personel</td><td>{{ $jadwal->personel }}</td>
+            <td>spesifikasi</td><td>{{ $jadwal->maintenance->mesin->spesifikasi }}</td><td>Personel</td><td>{{ $jadwal->personel }}</td>
         </tr>
     </table>
 
