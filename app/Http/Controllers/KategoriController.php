@@ -10,19 +10,6 @@ class KategoriController extends Controller
     //
     public function index(){
 
-        /*
-        if($request->ajax()){
-            
-            $kategori = Kategori::query();
-            return DataTables::of($kategori)
-            ->addColumn('aksi', function($k){
-                return view('partials.tombolAksiKategori', ['k' => $k]);
-            })->addIndexColumn()
-            ->toJson();
-
-        }
-        */  
-
         $kategori = Kategori::with(['setupMaintenance', 'setupForm'])->where('id', '>', 1)->get()->sortDesc();
 
         return view('pages.kategori.index', ['halaman' => 'Kategori', 'kategori' => $kategori]);

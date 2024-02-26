@@ -24,7 +24,7 @@
     }    
     @endphp
 
-    <title>PTM Laboratorium @if($halaman != ''): {{$halaman}} @endif</title>
+    <title>TM Laboratorium @if($halaman != ''): {{$halaman}} @endif</title>
   </head>
   <body>
     <header class="navbar navbar-expand-sm navbar-dark bg-primary container-fluid sticky-top">

@@ -103,10 +103,10 @@ Route::put('/ruang/update', [RuangController::class, 'update'])->middleware('adm
 Route::delete('/ruang/destroy', [RuangController::class, 'destroy'])->middleware('admin');
 
 
-Route::get('/approve', [JadwalApproveController::class, 'index'])->middleware('auth')->middleware('manager')->middleware('bukan admin');
-Route::post('/approve/jadwal', [JadwalApproveController::class, 'approve'])->middleware('manager')->middleware('bukan admin');
-Route::put('/approve/jadwal/tetap', [JadwalApproveController::class, 'approve_tetap'])->middleware('manager')->middleware('bukan admin');
-Route::put('/approve/jadwal/ubah', [JadwalApproveController::class, 'approve_ubah'])->middleware('manager')->middleware('bukan admin');
+Route::get('/approve', [JadwalApproveController::class, 'index'])->middleware('auth')->middleware('manager')->middleware('admin');
+Route::post('/approve/jadwal', [JadwalApproveController::class, 'approve'])->middleware('manager')->middleware('admin');
+Route::put('/approve/jadwal/tetap', [JadwalApproveController::class, 'approve_tetap'])->middleware('manager')->middleware('admin');
+Route::put('/approve/jadwal/ubah', [JadwalApproveController::class, 'approve_ubah'])->middleware('manager')->middleware('admin');
 
 
 
@@ -163,8 +163,8 @@ Route::post('/sparepart/jadwal/', [JadwalSparepartController::class, 'tambah_spa
 Route::delete('/sparepart/jadwal/delete/', [JadwalSparepartController::class, 'hapus_sparepart'])->middleware('teknisi');
 
 
-Route::get('/jadwal/{id}', [JadwalController::class, 'index'])->middleware('auth')->middleware('teknisi');
-Route::get('/jadwal/detail/{id}', [JadwalController::class, 'detail'])->middleware('auth')->middleware('superadmin');
+Route::get('/jadwal/{id}', [JadwalController::class, 'index'])->middleware('auth');
+Route::get('/jadwal/detail/{id}', [JadwalController::class, 'detail'])->middleware('auth');
 Route::put('/jadwal/update/', [JadwalController::class, 'update'])->middleware('teknisi')->middleware('bukan admin');
 Route::put('/jadwal/update_alasan/', [JadwalController::class, 'update_with_alasan'])->middleware('teknisi')->middleware('bukan admin');
 Route::post('/jadwal/update_alasan_batal/', [JadwalController::class, 'update_with_alasan_batal'])->middleware('teknisi')->middleware('bukan admin');
