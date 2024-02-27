@@ -66,7 +66,7 @@ class UserController extends Controller
             'id' => 'required|numeric',
             'username' => 'required',
             'nama' => 'required',
-            'avatar' => 'image|file|max:1024',
+            'avatar' => 'image|file|max:3072',
         ]);
     
         if ($request->hasFile('avatar')) {

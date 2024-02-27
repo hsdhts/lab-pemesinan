@@ -58,8 +58,8 @@ class MesinController extends Controller
             'kode_mesin' => 'nullable|max:6',
             'spesifikasi' => 'nullable|not_regex:/\'/i',
             'tanggal_pembelian' => 'nullable|max:50',
-            'mesin_image' => 'image|file|max:1024',
-            'nameTag_image' => 'image|file|max:1024',
+            'mesin_image' => 'image|file|max:3072',
+            'nameTag_image' => 'image|file|max:3072',
 
         ]);
 

@@ -48,7 +48,7 @@ class SparepartController extends Controller
     public function tambah(Request $request){
         $dataValid = $request->validate([
             'item_number' => 'required|numeric|unique:spareparts,item_number',
-            'sparepart_image' => 'image|file|max:1024',
+            'sparepart_image' => 'image|file|max:3072',
             'nama_sparepart' => 'required',
             'jumlah' => 'required|numeric',
             'deskripsi' => 'required|string',
