@@ -16,7 +16,7 @@ Preview Maintenance
 
 ![Lab Pemesinan](/public/assets/preview/maintenance.png)
 
-Preview Rent Working Report | Superadmin & Admin
+Preview Working Report | Superadmin & Admin
 
 ![Lab Pemesinan](/public/assets/preview/working_report.png)
 
