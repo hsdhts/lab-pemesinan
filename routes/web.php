@@ -44,7 +44,6 @@ Route::put('/user/akun/update/', [UserController::class, 'update_akun'])->middle
 Route::put('/user/akun/update/password/', [UserController::class, 'ganti_password'])->middleware('auth');
 
 
-
 Route::get('/user/all/', [UserController::class, 'index'])->middleware('auth')->middleware('superadmin');
 Route::get('/user/create/', [UserController::class, 'create'])->middleware('auth')->middleware('superadmin');
 Route::post('/user/store/', [UserController::class, 'store'])->middleware('superadmin');
@@ -126,9 +125,7 @@ Route::post('/maintenance/form/create/', [SetupMesinController::class, 'create_m
 Route::post('/maintenance/form/update/', [SetupMesinController::class, 'update_maintenance_form'])->middleware('mahasiswa');
 Route::post('/maintenance/form/delete/', [SetupMesinController::class, 'delete_maintenance_form'])->middleware('mahasiswa');
 
-
 //Route::post('/maintenance/action/create/', [MaintenanceController::class, 'maintenance_add']);
-
 
 Route::get('/sparepart', [SparepartController::class, 'index'])->middleware('auth')->middleware('teknisi');
 Route::get('/sparepart/create', [SparepartController::class, 'create'])->middleware('auth')->middleware('admin');
@@ -179,13 +176,8 @@ Route::post('/laporan/inspeksi', [LaporanController::class, 'laporan_general_ins
 Route::post('/laporan/maintenance', [LaporanController::class, 'laporan_maintenance'])->middleware('mahasiswa');
 Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_rencana_realisasi'])->middleware('mahasiswa');
 
-/*
 
-Route::get('/test', [LaporanController::class, 'laporan_rencana_realisasi']);
-Route::post('/test', [HomeController::class, 'test2']);
-Route::get('/test_load', [SetupMesinController::class, 'select_template']);
-Route::get('/test/calendar', [HomeController::class, 'tes_kalender']);
-Route::get('/test/pdf', [HomeController::class, 'test_pdf']);
-
-*/
-
+Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
+Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');

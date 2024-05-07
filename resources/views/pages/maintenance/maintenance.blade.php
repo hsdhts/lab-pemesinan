@@ -213,7 +213,7 @@
             <table class="table g-1">
                 <tr>
                     <td>
-                        <b>Periode</b>
+                        <b>Estimasi Waktu</b>
                     </td>
                     <td>
                         <b>:</b>
@@ -222,6 +222,19 @@
                         {{ $m->periode }}&nbsp;{{ $m->satuan_periode }}
                     </td>
                 </tr>
+                @if ($m->start_time != null && $m->end_time != null)
+                    <tr>
+                        <td>
+                            <b>Jam Maintenance</b>
+                        </td>
+                        <td>
+                            <b>:</b>
+                        </td>
+                        <td>
+                            {{ $m->start_time }} - {{ $m->end_time }}
+                        </td>
+                    </tr>
+                @endif
                 <tr>
                     <td>
                         <b>Start Date</b>
@@ -230,12 +243,10 @@
                         <b>:</b>
                     </td>
                     <td>
-@php
-    setlocale(LC_ALL, 'IND');
+                        @php
+                            setlocale(LC_ALL, 'IND');
 
-@endphp
-
-
+                        @endphp
                         {{ Illuminate\Support\Carbon::parse($m->start_date)->formatLocalized('%d %B %Y') }}
                     </td>
                 </tr>
@@ -247,12 +258,10 @@
                         <b>:</b>
                     </td>
                     <td>
-@php
-    setlocale(LC_ALL, 'IND');
+                        @php
+                            setlocale(LC_ALL, 'IND');
 
-@endphp
-
-
+                        @endphp
                         {{ Illuminate\Support\Carbon::parse($m->end_date)->formatLocalized('%d %B %Y') }}
                     </td>
                 </tr>
@@ -273,38 +282,6 @@
         <td></td>
     </tr>
 
-    
-    <tr><td colspan="2"><h2>Form :</h2></td></tr>
-    <tr>
-        
-        @if($form->where('maintenance_id', $m->id)->isNotEmpty())
-        
-        <td colspan="2">
-            <table class="table align-middle table-row-dashed table-row-gray-400">
-                    <tr class="fw-bolder border-bottom border-gray-600 fs-4">
-                        <th>Nama Form</th>
-                        <th>Syarat</th>
-                        
-                    </tr>        
-
-                @foreach ($form->where('maintenance_id', $m->id) as $f)
-                <tr>
-                    <td>{{ $f->nama_form }}</td>
-                    <td>{{ $f->syarat }}</td>
-                    
-            </tr>
-            
-            @endforeach
-
-        </table>
-    </td>
-          
-                
-        
-        
-        @else
-        <td colspan="2">(kosong)</td>
-        @endif
     </tr>
     
     

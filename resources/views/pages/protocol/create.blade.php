@@ -7,8 +7,6 @@
 
 @csrf
 <div class="container-lg mt-5">
-    
-    
 
 <div class="mb-4">
     <label for="pic" class="form-label">Nama Mesin</label>
@@ -82,7 +80,7 @@
 
 <div class="mb-3">
     <label for="last_protocol" class="form-label">Protocol Terakhir</label>
-    <input type="date" class="form-control @error('last_protocol') is-invalid @enderror" id="last_protocol" placeholder="Nama Sparepart" value="{{ old('last_protocol') }}" name="last_protocol">
+    <input type="date" class="form-control @error('last_protocol') is-invalid @enderror" id="last_protocol" placeholder="Protocol Terakhir" value="{{ old('last_protocol') }}" name="last_protocol">
     @error('last_protocol')    
     <div class="invalid-feedback">{{ $message }}</div>
     @enderror

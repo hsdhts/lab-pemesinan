@@ -83,11 +83,17 @@
                 
 			</div>
 
-
+			@can( 'admin')
+			<div class="menu-item me-lg-1">
+				<a class="menu-link py-3" href="/approve">
+					<span class="menu-title">Laporan Pekerjaan</span>
+				</a> 
+			</div>
+			@endcan
 
             <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
 				<span class="menu-link py-3">
-					<span class="menu-title">Atribut</span>
+					<span class="menu-title">Data Lainnya</span>
 					<span class="menu-arrow d-lg-none"></span>
 				</span>
 				<div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
@@ -103,7 +109,7 @@
                                     </svg>
                                 </span>
 							</span>
-							<span class="menu-title">Kategori</span>
+							<span class="menu-title">Pengkategorian Mesin</span>
 						</a>
 					</div>
 					
@@ -120,18 +126,18 @@
 			@endcan
 		
 			
-			@can( 'admin')
+			<!-- @can( 'admin')
 			<div class="menu-item me-lg-1">
 				<a class="menu-link py-3" href="/approve">
 					<span class="menu-title">Laporan Pekerjaan</span>
 				</a> 
 			</div>
-			@endcan
+			@endcan -->
 
 			@canany(['manager', 'admin'])
 			<div class="menu-item me-lg-1">
 				<a class="menu-link py-3" href="/update_tahunan">
-					<span class="menu-title">Update Tahunan</span>
+					<span class="menu-title">Pembaruan</span>
 				</a> 
 			</div>
 			@endcanany

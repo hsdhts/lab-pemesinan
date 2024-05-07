@@ -13,8 +13,6 @@
 
 @endsection
 
-
-
 @section('data')
 <script>
 			//makan bang
@@ -50,7 +48,7 @@ columns: [
 {data: 'last_protocol', name: 'last_protocol'},
 {data: 'aksi', name: 'aksi', orderable: false, searchable: false},
         ]
-
+        
     });
   
 

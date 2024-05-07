@@ -16,9 +16,9 @@ class CreateSparepartsTable extends Migration
         Schema::create('spareparts', function (Blueprint $table) {
             $table->id();
             $table->String('sparepart_image');
-            $table->String('item_number')->unique();
             $table->String('nama_sparepart');
             $table->integer('jumlah');
+            $table->date('estimasi')->nullable();
             $table->String('deskripsi');
             $table->softDeletes();
             $table->timestamps();

@@ -19,9 +19,9 @@ License: For each use you must have a valid license purchased only from above li
     }    
     @endphp
 
-    <title>TM Laboratorium @if($halaman != ''): {{$halaman}} @endif</title>
+    <title>Laboratorium TM @if($halaman != ''): {{$halaman}} @endif</title>
 		<base href="../">
-		<title>TM Laboratorium - {{ $halaman }}</title>
+		<title>Laboratorium TM - {{ $halaman }}</title>
 		<meta name="description" content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 94,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
 		<meta name="keywords" content="Metronic, bootstrap, bootstrap 5, Angular, VueJs, React, Laravel, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,6 +43,7 @@ License: For each use you must have a valid license purchased only from above li
 		<link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="\assets\bootstrap-datepicker-1.9.0\css\bootstrap-datepicker.standalone.min.css">
+		 <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
 		<!--end::Global Stylesheets Bundle-->
 		
 		<script src="\assets\sweetAlert\sweetalert2.all.min.js"></script>
@@ -71,9 +72,9 @@ License: For each use you must have a valid license purchased only from above li
 							<!--end::Aside mobile toggle-->
 							<!--begin::Logo-->
 							<div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0 me-lg-15">
-								<a class="py-3 text-decoration-none" href="/">
+								<a class="py-3 text-decoration-none" href="/home">
 									<div class="me-lg-1">
-											<span class="display-6">TM Laboratorium</span>
+											<span class="display-6">Laboratorium TM</span>
 									</div>
 								</a> 
 								<!--
@@ -211,6 +212,7 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
 		<script src="\assets\bootstrap-datepicker-1.9.0\js\bootstrap-datepicker.min.js"></script>
 		<script src="\assets\bootstrap-datepicker-1.9.0\locales\bootstrap-datepicker.id.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 		<!-- Mengko tambahi yield ng kene gawe custom-->
 
 		@yield('customJs')

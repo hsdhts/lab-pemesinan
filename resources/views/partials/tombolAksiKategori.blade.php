@@ -2,9 +2,6 @@
     Edit
 </button>
 
-
-
-
 <form action="/kategori/destroy" method="post" onSubmit="return hapus(this);" style ='display:inline-block;'>
  @method('delete')
  @csrf

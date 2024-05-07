@@ -3,9 +3,6 @@
     Edit
 </button>
 
-
-
-
 <form action="/ruang/destroy" method="post" onSubmit="return hapus(this);" style ='display:inline-block;'>
  @method('delete')
  @csrf
