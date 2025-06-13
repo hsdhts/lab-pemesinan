@@ -23,14 +23,65 @@ class HomeController extends Controller
     public function index(){
 
         if(Auth::user()->level != 'Mahasiswa'){
-            $terlambat = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])->where('status', '<', 3)->where('tanggal_rencana', '<', now(7)->toDateString())->get()->sortBy('tanggal_rencana');
-            $hari_ini = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])->where('status', '<', 3)->where('tanggal_rencana', now(7)->toDateString())->get()->sortBy('tanggal_rencana');
+            $terlambat = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])
+                            ->where('status', '<', 3)
+                            ->where(function ($query) {
+                                $query->whereDate('tanggal_rencana', '<', now(7)->toDateString())
+                                    ->orWhere(function ($query) {
+                                        $query->whereDate('tanggal_rencana', now(7)->toDateString())
+                                            ->whereHas('maintenance',function($value) {
+                                                $value->where('end_time', '<', now(7)->toTimeString());
+                                            });
+                                    });
+                            })
+                            ->get()
+                            ->sortBy('tanggal_rencana');
+
+            $hari_ini = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])
+                        ->where('status', '<', 3)
+                        ->where(function ($query) {
+                            $query->whereDate('tanggal_rencana', now(7)->toDateString())
+                                ->orWhere(function ($query) {
+                                    $query->whereDate('tanggal_rencana', now(7)->toDateString())
+                                        ->whereHas('maintenance', function ($query) {
+                                            $query->where('end_time', now(7)->toTimeString())
+                                                ->orWhereNull('end_time');
+                                        });
+                                });
+                        })
+                        ->get();
+
             $seminggu = Mesin::with(['kategori',  'user'])->get();
             $sebulan = User::where('users.level', '!=', 'Superadmin')->get();
         }else{
             $user_id = Auth::user()->id;
-            $terlambat = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])->whereRelation('maintenance.mesin','user_id', $user_id)->where('status', '<', 3)->where('tanggal_rencana', '<', now(7)->toDateString())->get()->sortBy('tanggal_rencana');
-            $hari_ini = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])->whereRelation('maintenance.mesin','user_id', $user_id)->where('status', '<', 3)->where('tanggal_rencana', now(7)->toDateString())->get()->sortBy('tanggal_rencana');
+            $terlambat = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])
+                                ->whereRelation('maintenance.mesin','user_id', $user_id)
+                                ->where('status', '<', 3)
+                                ->where(function ($query) {
+                                $query->whereDate('tanggal_rencana', '<', now(7)->toDateString())
+                                        ->orWhere(function ($query) {
+                                            $query->whereDate('tanggal_rencana', now(7)->toDateString())
+                                                ->whereHas('maintenance',function($value) {
+                                                    $value->where('end_time', '<', now(7)->toTimeString());
+                                                });
+                                        });
+                                })
+                                ->get()->sortBy('tanggal_rencana');
+            $hari_ini = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])
+                                ->whereRelation('maintenance.mesin','user_id', $user_id)
+                                ->where('status', '<', 3)
+                                ->where(function ($query) {
+                                    $query->whereDate('tanggal_rencana', now(7)->toDateString())
+                                        ->orWhere(function ($query) {
+                                            $query->whereDate('tanggal_rencana', now(7)->toDateString())
+                                                ->whereHas('maintenance', function ($query) {
+                                                    $query->where('end_time', now(7)->toTimeString())
+                                                        ->orWhereNull('end_time');
+                                                });
+                                        });
+                                })
+                                ->get()->sortBy('tanggal_rencana');
             $seminggu = Mesin::with(['kategori',  'user'])->get();
             $sebulan = User::where('users.level', '!=', 'Superadmin')->get();
         }

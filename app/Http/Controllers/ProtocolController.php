@@ -6,6 +6,7 @@ use App\Models\Protocol;
 use App\Models\Mesin;
 use App\Models\Sparepart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class ProtocolController extends Controller
@@ -22,16 +23,26 @@ class ProtocolController extends Controller
                     return $protocol->sparepart->nama_sparepart;
                 })
                 ->addColumn('aksi', function ($p) {
-                    return view('partials.tombolAksi', ['editPath' => '/protocol/edit/', 'id' => $p->id, 'deletePath' => '/protocol/destroy/']);
+                    if (Auth::user()->level === 'Superadmin') {
+                        return view('partials.tombolAksi', ['editPath' => '/protocol/edit/', 'id' => $p->id, 'deletePath' => '/protocol/destroy/']);
+                    } else {
+                        return '-';
+                    }
                 })
                 ->rawColumns(['aksi'])
                 ->addIndexColumn()
                 ->toJson();
         }
 
+        $checkBtn = '';
+        if (Auth::user()->level === 'Admin') {
+            $checkBtn = 'd-none';
+        }
+
         return view('pages.protocol.index', [
             'halaman' => 'Protocol',
-            'link_to_create' => '/protocol/create'
+            'link_to_create' => '/protocol/create',
+            'checkBtn' => $checkBtn
         ]);
     }
 

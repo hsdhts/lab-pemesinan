@@ -8,14 +8,6 @@
 @csrf
 <div class="container-lg mt-5">
     
-    
-<div class="mb-3">
-    <label for="id" class="form-label">Item Number</label>
-    <input type="text" class="form-control @error('item_number') is-invalid @enderror" id="item_number" placeholder="item number" value="{{ old('item_number') }}" name="item_number">
-    @error('item_number')    
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>    
 
 <div class="mb-3">
         <label for="sparepart_image" class="form-label">Gambar Sparepart</label>
@@ -49,8 +41,6 @@
     <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>
-
-
 
 
         <a href="/sparepart">

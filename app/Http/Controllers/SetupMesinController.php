@@ -105,20 +105,20 @@ class SetupMesinController extends Controller
                         'syarat_setup_form' => $i->syarat,
                         'value' => $i->value,
                     ]);
-                    }) 
+                }) 
             ]);
-            });
+        });
 
 
-            $mesin = collect(Cache::get('mesin'));
-            $mesin['kategori_id'] = $data_valid['id'];
+        $mesin = collect(Cache::get('mesin'));
+        $mesin['kategori_id'] = $data_valid['id'];
 
-            $mesin['kategori'] = Kategori::find($data_valid['id'])->toArray();
-            //dd($mesin);
-            //dd($a->get('a'));
-            Cache::forget('attach');
-            Cache::put('setup', $setup, now()->addMinutes(30));
-            Cache::put('mesin', $mesin, now()->addMinutes(30));
+        $mesin['kategori'] = Kategori::find($data_valid['id'])->toArray();
+        //dd($mesin);
+        //dd($a->get('a'));
+        Cache::forget('attach');
+        Cache::put('setup', $setup, now()->addMinutes(30));
+        Cache::put('mesin', $mesin, now()->addMinutes(30));
 
 
         return redirect('/maintenance/form/pilih/');
@@ -134,25 +134,33 @@ class SetupMesinController extends Controller
     }
 
     public function create_maintenance(Request $request){
-        
         $setup = collect(Cache::get('setup'));
         
-
-        //dd($request);
-        $data_valid = $request->validate([
-            'nama_setup' => 'required',
-            'periode' => 'required|numeric|min:1',
-            'satuan_periode' => 'required',
-            'start_date' => 'required|date_format:d-m-Y',
-            'end_date' => 'required|date_format:d-m-Y',
-            'warna' => 'required'
-        ]);
-
-
+        if ($request->satuan_periode === 'Jam') {
+            $data_valid = $request->validate([
+                'nama_setup' => 'required',
+                'periode' => 'required|numeric|min:1',
+                'satuan_periode' => 'required',
+                'start_date' => 'required|date_format:d-m-Y',
+                'end_date' => 'required|date_format:d-m-Y',
+                'warna' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+            ]);
+        } else {
+            $data_valid = $request->validate([
+                'nama_setup' => 'required',
+                'periode' => 'required|numeric|min:1',
+                'satuan_periode' => 'required',
+                'start_date' => 'required|date_format:d-m-Y',
+                'end_date' => 'required|date_format:d-m-Y',
+                'warna' => 'required',
+            ]);
+        }
+        
         $data_valid['setupForm'] = collect([]);
-
+        
         $setup->push(collect($data_valid));
-
 
         $mesin = collect(Cache::get('mesin'));
         $attach = collect(Cache::get('attach'));
@@ -170,15 +178,29 @@ class SetupMesinController extends Controller
 
         $setup = collect(Cache::get('setup'));
 
-        $data_valid = collect($request->validate([
-            'index' => 'required|numeric',
-            'nama_setup' => 'required',
-            'periode' => 'required|numeric|min:1',
-            'satuan_periode' => 'required',
-            'start_date' => 'required|date_format:d-m-Y',
-            'end_date' => 'required|date_format:d-m-Y',
-            'warna' => 'required'
-        ]));
+        if ($request->satuan_periode === 'Jam') {
+            $data_valid = collect($request->validate([
+                'index' => 'required|numeric',
+                'nama_setup' => 'required',
+                'periode' => 'required|numeric|min:1',
+                'satuan_periode' => 'required',
+                'start_date' => 'required|date_format:d-m-Y',
+                'end_date' => 'required|date_format:d-m-Y',
+                'warna' => 'required',
+                'start_time' => 'required',
+                'end_time' => 'required',
+            ]));
+        } else {
+            $data_valid = collect($request->validate([
+                'index' => 'required|numeric',
+                'nama_setup' => 'required',
+                'periode' => 'required|numeric|min:1',
+                'satuan_periode' => 'required',
+                'start_date' => 'required|date_format:d-m-Y',
+                'end_date' => 'required|date_format:d-m-Y',
+                'warna' => 'required'
+            ]));
+        }
 
         $index_maintenance = $data_valid['index'];
 

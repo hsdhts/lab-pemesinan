@@ -14,6 +14,8 @@
     <link href="/DataTables/FixedColumns-4.3.0/css/fixedColumns.bootstrap5.min.css" rel="stylesheet">
     <link href="/DataTables/Responsive-2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
     <link href="/DataTables/RowReorder-1.4.1/css/rowReorder.bootstrap5.min.css" rel="stylesheet">
+   
+    
      
     <!--Tulung mengko downloadke popper.js... butuh iki soale-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -24,11 +26,11 @@
     }    
     @endphp
 
-    <title>TM Laboratorium @if($halaman != ''): {{$halaman}} @endif</title>
+    <title>Laboratorium App @if($halaman != ''): {{$halaman}} @endif</title>
   </head>
   <body>
     <header class="navbar navbar-expand-sm navbar-dark bg-primary container-fluid sticky-top">
-            <a class="navbar-brand" style="outline: none;" href="/"><div class="h3 fw-normal d-inline mx-3">PMMT<p class="d-inline header-5 fw-light">eknik</p></div></a>
+            <a class="navbar-brand" style="outline: none;" href="/"><div class="h3 fw-normal d-inline mx-3"><p class="d-inline header-5 fw-light">eknik</p></div></a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -74,6 +76,7 @@
         <script src="/DataTables/Responsive-2.5.0/js/dataTables.responsive.min.js"></script>
         <script src="/DataTables/Responsive-2.5.0/js/responsive.bootstrap5.js"></script>
         <script src="/DataTables/RowReorder-1.4.1/js/dataTables.rowReorder.min.js"></script>
+        
 
        
        <script>

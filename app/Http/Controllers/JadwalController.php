@@ -218,9 +218,6 @@ class JadwalController extends Controller
 
     }
 
-
-
-
     public function submit($request, $data_valid) {
 
         

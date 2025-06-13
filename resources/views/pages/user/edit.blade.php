@@ -19,6 +19,16 @@
     </div>
 
     <div class="mb-4">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="email" value="{{ old('email', $user->email) }}" name="email">
+        @error('email')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>  
+        @enderror
+    </div>
+
+    <div class="mb-4">
         <label for="nama" class="form-label">Nama</label>
         <input type="text" class="form-control @error('nama') is-invalid @enderror" placeholder="nama" id="nama" value="{{ old('nama', $user->nama) }}" name="nama">
         @error('nama')

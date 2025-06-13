@@ -11,13 +11,7 @@
     
 <input type="hidden" name="id_old" value="{{ old('id_old', $sparepart->id) }}">
     
-<div class="mb-3">
-    <label for="id" class="form-label">Item Number</label>
-    <input type="text" class="form-control @error('item_number') is-invalid @enderror" id="item_number" placeholder="item number" value="{{ old('item_number', $sparepart->item_number) }}" name="item_number">
-    @error('item_number')    
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>    
+
 
 <div class="mb-3">
         <label for="sparepart_image" class="form-label">Gambar Sparepart</label>

@@ -23,9 +23,7 @@ class User extends Authenticatable
     ];
     */
 
-    protected $guarded = [
-        'id'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -55,7 +53,8 @@ class User extends Authenticatable
     }
 
 
-    public function mesin(){
+    public function mesin()
+    {
         return $this->hasMany(Mesin::class);
     }
 }

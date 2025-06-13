@@ -186,10 +186,6 @@
 
             @endforeach
 
-
-
-    
-
         </tbody>
 </table>
 
@@ -258,7 +254,6 @@
                 <form action="/approve/jadwal" method="POST">
                     @csrf
                     <input type="hidden" name="jadwal_id" id='jadwal_id'>
-                    <button type="submit" class="btn btn-primary">Approve Pekerjaan</button>
                 </form>
             </div>
         </div>

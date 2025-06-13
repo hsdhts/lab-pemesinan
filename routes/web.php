@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JadwalApproveController;
@@ -39,10 +39,15 @@ Route::get('/login', [UserController::class, 'login'])->name('login')->middlewar
 Route::post('/logout', [UserController::class, 'logout'])->middleware('auth');
 Route::post('/masuk', [UserController::class, 'masuk'])->middleware('guest');
 
+Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('forgot.password')->middleware(['guest']);
+Route::post('/forgot-password/send', [ForgotPasswordController::class, 'sendVerificationToken'])->name('forgot.sendVerificationToken')->middleware(['guest']);
+Route::get('/forgot-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('forgot.showResetPasswordForm')->middleware(['guest']);
+Route::post('/forgot-password/update', [ForgotPasswordController::class, 'updatePassword'])->name('forgot.updatePassword')->middleware(['guest']);
+
+
 Route::get('/akun', [UserController::class, 'akun'])->middleware('auth');
 Route::put('/user/akun/update/', [UserController::class, 'update_akun'])->middleware('auth');
 Route::put('/user/akun/update/password/', [UserController::class, 'ganti_password'])->middleware('auth');
-
 
 
 Route::get('/user/all/', [UserController::class, 'index'])->middleware('auth')->middleware('superadmin');
@@ -135,7 +140,7 @@ Route::get('/sparepart/create', [SparepartController::class, 'create'])->middlew
 Route::post('/sparepart/create', [SparepartController::class, 'tambah'])->middleware('admin');
 Route::get('/sparepart/edit/{id}', [SparepartController::class, 'edit'])->middleware('auth')->middleware('admin');
 Route::put('/sparepart/update', [SparepartController::class, 'update'])->middleware('admin');
-Route::delete('/sparepart/destroy', [SparepartController::class, 'destroy'])->middleware('admin');    
+Route::delete('/sparepart/destroy', [SparepartController::class, 'destroy'])->middleware('admin');
 
 
 Route::get('/pelumas', [PelumasController::class, 'index'])->middleware('auth')->middleware('teknisi');
@@ -143,7 +148,7 @@ Route::get('/pelumas/create', [PelumasController::class, 'create'])->middleware(
 Route::post('/pelumas/create', [PelumasController::class, 'tambah'])->middleware('admin');
 Route::get('/pelumas/edit/{id}', [PelumasController::class, 'edit'])->middleware('auth')->middleware('admin');
 Route::put('/pelumas/update', [PelumasController::class, 'update'])->middleware('admin');
-Route::delete('/pelumas/destroy', [PelumasController::class, 'destroy'])->middleware('admin');   
+Route::delete('/pelumas/destroy', [PelumasController::class, 'destroy'])->middleware('admin');
 
 
 Route::get('/protocol', [ProtocolController::class, 'index'])->middleware('auth')->middleware('teknisi');
@@ -151,7 +156,7 @@ Route::get('/protocol/create', [ProtocolController::class, 'create'])->middlewar
 Route::post('/protocol/create', [ProtocolController::class, 'tambah'])->middleware('admin');
 Route::get('/protocol/edit/{id}', [ProtocolController::class, 'edit'])->middleware('auth')->middleware('admin');
 Route::put('/protocol/update', [ProtocolController::class, 'update'])->middleware('admin');
-Route::delete('/protocol/destroy', [ProtocolController::class, 'destroy'])->middleware('admin');   
+Route::delete('/protocol/destroy', [ProtocolController::class, 'destroy'])->middleware('admin');
 /*
 diilangin, diganti pake model jadwal biasa
 Route::get('/sparepart/maintenance/{id}', [MaintenanceController::class, 'tampil_sparepart']);
@@ -178,14 +183,3 @@ Route::get('/laporan', [LaporanController::class, 'index'])->middleware('auth')-
 Route::post('/laporan/inspeksi', [LaporanController::class, 'laporan_general_inspection'])->middleware('mahasiswa');
 Route::post('/laporan/maintenance', [LaporanController::class, 'laporan_maintenance'])->middleware('mahasiswa');
 Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_rencana_realisasi'])->middleware('mahasiswa');
-
-/*
-
-Route::get('/test', [LaporanController::class, 'laporan_rencana_realisasi']);
-Route::post('/test', [HomeController::class, 'test2']);
-Route::get('/test_load', [SetupMesinController::class, 'select_template']);
-Route::get('/test/calendar', [HomeController::class, 'tes_kalender']);
-Route::get('/test/pdf', [HomeController::class, 'test_pdf']);
-
-*/
-

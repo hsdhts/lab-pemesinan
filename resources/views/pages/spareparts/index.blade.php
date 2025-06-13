@@ -2,7 +2,6 @@
 
 @section('tableHead')
     <th>No</th>
-    <th>Item Number</th>
     <th>Gambar Sparepart</th>
     <th>Sparepart</th>
     <th>Jumlah</th>
@@ -40,7 +39,6 @@
         ajax: "/sparepart",
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'item_number', name: 'item_number' },
             {
                 data: 'sparepart_image',
                 name: 'sparepart_image',

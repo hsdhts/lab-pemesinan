@@ -7,8 +7,6 @@
 
 @csrf
 <div class="container-lg mt-5">
-    
-    
 
 <div class="mb-4">
     <label for="pic" class="form-label">Nama Mesin</label>

@@ -64,7 +64,7 @@
 <body>
     
     <h4 class="judul">LAPORAN PENYELESAIAN PEKERJAAN</h4>
-    <h6 class="judul">Pendidikan Teknik Mesin, Universitas Sriwijaya</h6>
+    <h6 class="judul">Laboratorium Management PS POM</h6>
     <table class="tabel1">
 
         @php
