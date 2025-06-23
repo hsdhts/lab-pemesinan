@@ -2,7 +2,7 @@
 <html lang="en">
 	<!--begin::Head-->
 	<head><base href="../../../">
-		<title>Laboratorium PTM - Login</title>
+		<title>Laboratorium TM - Login</title>
 		<meta name="description" content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 94,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
 		<meta name="keywords" content="Metronic, bootstrap, bootstrap 5, Angular, VueJs, React, Laravel, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,12 +32,12 @@
 				<!--begin::Content-->
 				<div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
 					<!--begin::Logo-->
-					<h1 class="mb-10 text-primary display-3">PTM Lab</h1>
+					<h1 class="mb-10 text-primary display-3">Laboratorium</h1>
 					<!--end::Logo-->
 					<!--begin::Wrapper-->
 					<div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
 
-						
+
 						<!--begin::Form-->
 						<form class="form w-100" action="/masuk" method="POST">
 							<!--begin::Heading-->
@@ -46,7 +46,7 @@
 								<!--begin::Title-->
 								<h1 class="text-dark mb-3">LOGIN</h1>
 								<!--end::Title-->
-								
+
 							</div>
 							<!--begin::Heading-->
 
@@ -128,7 +128,7 @@
 									<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 								</button>
 								<!--end::Submit button-->
-								
+
 							</div>
 							<!--end::Actions-->
 						</form>
@@ -137,7 +137,7 @@
 					<!--end::Wrapper-->
 				</div>
 				<!--end::Content-->
-				
+
 			</div>
 			<!--end::Authentication - Sign-in-->
 		</div>

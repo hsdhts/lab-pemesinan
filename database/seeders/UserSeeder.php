@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         //
-    
+
         User::create([
             'username' => 'mahasiswa',
             'nama' => 'Mahasiswa',
@@ -24,15 +24,15 @@ class UserSeeder extends Seeder
             'password' => bcrypt('1234'),
             'last_login' => Carbon::parse('17-12-2023 23:34:45'),
         ]);
-     
+
         User::create([
             'username' => 'mahasiswa1',
             'nama' => 'Aku Mahasiswa',
-            'level' => 'Mahasiswa',
             'password' => bcrypt('1234'),
+            'level' => 'Mahasiswa',
             'last_login' => Carbon::parse('17-12-2023 23:34:45'),
         ]);
-    
+
         User::create([
             'username' => 'admin',
             'nama' => 'Just Admin',

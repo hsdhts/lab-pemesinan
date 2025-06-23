@@ -6,16 +6,16 @@ use App\Models\Sparepart;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Storage;
 
 
 class SparepartController extends Controller
 {
     //
     public function index(Request $request){
-        
+
         if($request->ajax()){
-            
+
             $parts = Sparepart::query();
             return DataTables::of($parts)
 
@@ -35,14 +35,14 @@ class SparepartController extends Controller
             'halaman' => 'Spareparts',
             'link_to_create' => '/sparepart/create',
             'spareparts' => $spareparts,
-       
-            
+
+
         ]);
-        
+
     }
 
     public function create(){
-        
+
 
         return view('pages.spareparts.create', [
             'halaman' => 'Spareparts'
@@ -57,16 +57,16 @@ class SparepartController extends Controller
             'estimasi' => 'nullable',
             'deskripsi' => 'required|string',
         ]);
-    
+
         if($request->hasFile('sparepart_image')) {
             $dataValid['sparepart_image'] = $request->file('sparepart_image')->storePublicly('sparepart_images', 'public');
         }
-    
+
         Sparepart::create($dataValid);
-    
+
         return redirect('/sparepart')->with('tambah', 'p');
     }
-    
+
     public function update(Request $request)
     {
         $dataValid = $request->validate([
@@ -76,26 +76,26 @@ class SparepartController extends Controller
             'estimasi' => 'nullable',
             'deskripsi' => 'required|string',
         ]);
-    
+
         $sparepart = Sparepart::find($request->id_old);
-    
+
         if ($request->hasFile('sparepart_image')) {
             // Hapus gambar lama (jika ada) sebelum menyimpan yang baru
             Storage::disk('public')->delete($sparepart->sparepart_image);
-    
+
             // Simpan gambar baru
             $dataValid['sparepart_image'] = $request->file('sparepart_image')->storePublicly('sparepart_images', 'public');
         }
-    
+
         $sparepart->update($dataValid);
-    
+
         return redirect('/sparepart')->with('edit', 'p');
     }
-    
-   
+
+
 
     public function edit($id){
-    
+
         $sparepart = Sparepart::findOrFail($id);
 
 
@@ -107,7 +107,7 @@ class SparepartController extends Controller
 
     }
 
-    public function destroy(Request $request){  
+    public function destroy(Request $request){
         $dataValid = $request->validate([
             'id' => 'required|numeric',
         ]);

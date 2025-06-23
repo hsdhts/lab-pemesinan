@@ -20,6 +20,8 @@ use App\Http\Controllers\SetupMaintenanceController;
 use App\Http\Controllers\UpdateDbController;
 use App\Http\Controllers\UpdateMaintenanceController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\KernelHydroCycloneController;
+use App\Http\Controllers\HydroCycloneLossesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -132,7 +134,7 @@ Route::get('/sparepart/create', [SparepartController::class, 'create'])->middlew
 Route::post('/sparepart/create', [SparepartController::class, 'tambah'])->middleware('admin');
 Route::get('/sparepart/edit/{id}', [SparepartController::class, 'edit'])->middleware('auth')->middleware('admin');
 Route::put('/sparepart/update', [SparepartController::class, 'update'])->middleware('admin');
-Route::delete('/sparepart/destroy', [SparepartController::class, 'destroy'])->middleware('admin');    
+Route::delete('/sparepart/destroy', [SparepartController::class, 'destroy'])->middleware('admin');
 
 
 Route::get('/pelumas', [PelumasController::class, 'index'])->middleware('auth')->middleware('teknisi');
@@ -140,7 +142,7 @@ Route::get('/pelumas/create', [PelumasController::class, 'create'])->middleware(
 Route::post('/pelumas/create', [PelumasController::class, 'tambah'])->middleware('admin');
 Route::get('/pelumas/edit/{id}', [PelumasController::class, 'edit'])->middleware('auth')->middleware('admin');
 Route::put('/pelumas/update', [PelumasController::class, 'update'])->middleware('admin');
-Route::delete('/pelumas/destroy', [PelumasController::class, 'destroy'])->middleware('admin');   
+Route::delete('/pelumas/destroy', [PelumasController::class, 'destroy'])->middleware('admin');
 
 
 Route::get('/protocol', [ProtocolController::class, 'index'])->middleware('auth')->middleware('teknisi');
@@ -148,7 +150,7 @@ Route::get('/protocol/create', [ProtocolController::class, 'create'])->middlewar
 Route::post('/protocol/create', [ProtocolController::class, 'tambah'])->middleware('admin');
 Route::get('/protocol/edit/{id}', [ProtocolController::class, 'edit'])->middleware('auth')->middleware('admin');
 Route::put('/protocol/update', [ProtocolController::class, 'update'])->middleware('admin');
-Route::delete('/protocol/destroy', [ProtocolController::class, 'destroy'])->middleware('admin');   
+Route::delete('/protocol/destroy', [ProtocolController::class, 'destroy'])->middleware('admin');
 /*
 diilangin, diganti pake model jadwal biasa
 Route::get('/sparepart/maintenance/{id}', [MaintenanceController::class, 'tampil_sparepart']);
@@ -178,6 +180,24 @@ Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_re
 
 
 Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
-Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
+Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
 Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
 Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+
+
+Route::get('/kernel-hydrocyclone', [KernelHydroCycloneController::class, 'index'])->middleware('auth')->middleware('teknisi');
+Route::get('/kernel-hydrocyclone/create', [KernelHydroCycloneController::class, 'create'])->middleware('auth')->middleware('admin');
+Route::post('/kernel-hydrocyclone/create', [KernelHydroCycloneController::class, 'store'])->middleware('admin');
+Route::get('/kernel-hydrocyclone/show/{id}', [KernelHydroCycloneController::class, 'show'])->middleware('auth');
+Route::get('/kernel-hydrocyclone/edit/{id}', [KernelHydroCycloneController::class, 'edit'])->middleware('auth')->middleware('admin');
+Route::put('/kernel-hydrocyclone/update', [KernelHydroCycloneController::class, 'update'])->middleware('admin');
+Route::delete('/kernel-hydrocyclone/destroy', [KernelHydroCycloneController::class, 'destroy'])->middleware('admin');
+
+
+Route::get('/hydrocyclone-losses', [HydroCycloneLossesController::class, 'index'])->middleware('auth')->middleware('teknisi');
+Route::get('/hydrocyclone-losses/create', [HydroCycloneLossesController::class, 'create'])->middleware('auth')->middleware('admin');
+Route::post('/hydrocyclone-losses/create', [HydroCycloneLossesController::class, 'store'])->middleware('admin');
+Route::get('/hydrocyclone-losses/show/{id}', [HydroCycloneLossesController::class, 'show'])->middleware('auth');
+Route::get('/hydrocyclone-losses/edit/{id}', [HydroCycloneLossesController::class, 'edit'])->middleware('auth')->middleware('admin');
+Route::put('/hydrocyclone-losses/update', [HydroCycloneLossesController::class, 'update'])->middleware('admin');
+Route::delete('/hydrocyclone-losses/destroy', [HydroCycloneLossesController::class, 'destroy'])->middleware('admin');

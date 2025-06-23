@@ -6,7 +6,7 @@
 
     <style>
         @page{
-            margin-left: 2.5cm; 
+            margin-left: 2.5cm;
         }
         html{
             font-family: Arial, Helvetica, sans-serif;
@@ -39,7 +39,7 @@
           margin: 5px auto;
         }
         .detailPekerjaan p{
-            margin-top: 5px; 
+            margin-top: 5px;
             margin-bottom: 5px;
             font-size: 8pt;
         }
@@ -62,9 +62,9 @@
 
 </head>
 <body>
-    
+
     <h4 class="judul">LAPORAN PENYELESAIAN PEKERJAAN</h4>
-    <h6 class="judul">Pendidikan Teknik Mesin, Universitas Sriwijaya</h6>
+    <h6 class="judul">Teknik Mesin, Universitas Sriwijaya</h6>
     <table class="tabel1">
 
         @php
@@ -107,7 +107,7 @@
         <tr>
             <th>Sparepart</th><th>Jumlah</th>
         </tr>
-        
+
 
         @foreach ($sparepart as $s)
 
@@ -115,7 +115,7 @@
                 <td>{{ $s->nama_sparepart }}</td><td>{{ $s->pivot->jumlah }}</td>
             </tr>
         @endforeach
-     
+
         @if($sparepart->isEmpty())
             <tr>
                 <td style="padding: 10px; text-align: center;" colspan="2">Tidak Ada Penggunaan Spareparts</td>

@@ -8,30 +8,30 @@
 
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/custom-design/custom-design.css" rel="stylesheet">
-    
+
     <link href="/DataTables/DataTables-1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="/DataTables/Buttons-2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
     <link href="/DataTables/FixedColumns-4.3.0/css/fixedColumns.bootstrap5.min.css" rel="stylesheet">
     <link href="/DataTables/Responsive-2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
     <link href="/DataTables/RowReorder-1.4.1/css/rowReorder.bootstrap5.min.css" rel="stylesheet">
-   
-    
-     
+
+
+
     <!--Tulung mengko downloadke popper.js... butuh iki soale-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 
     @php
     if (!isset($halaman)) {
         $halaman = '';
-    }    
+    }
     @endphp
 
-    <title>Laboratorium TM @if($halaman != ''): {{$halaman}} @endif</title>
+    <title>Laboratorium @if($halaman != ''): {{$halaman}} @endif</title>
   </head>
   <body>
     <header class="navbar navbar-expand-sm navbar-dark bg-primary container-fluid sticky-top">
             <a class="navbar-brand" style="outline: none;" href="/"><div class="h3 fw-normal d-inline mx-3"><p class="d-inline header-5 fw-light">eknik</p></div></a>
-            
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -50,10 +50,10 @@
                 <li class="nav-item">
                   <a class="nav-link @if($halaman == 'Spareparts') active @endif" href="#">Spareparts</a>
                 </li>
-               
+
               </ul>
             </div>
-        
+
     </header>
 
 
@@ -76,12 +76,12 @@
         <script src="/DataTables/Responsive-2.5.0/js/dataTables.responsive.min.js"></script>
         <script src="/DataTables/Responsive-2.5.0/js/responsive.bootstrap5.js"></script>
         <script src="/DataTables/RowReorder-1.4.1/js/dataTables.rowReorder.min.js"></script>
-        
+
        <script>
           $(document).ready(function() {
             $('#tabelTemplate').DataTable({
               columnDefs: [
-      
+
         {
           class:'all',
           target: 1
@@ -92,9 +92,9 @@
           target:[-1,-2]
         }
     ],
-    
+
     responsive: true
-    
+
             });
           });
 
