@@ -16,12 +16,12 @@ License: For each use you must have a valid license purchased only from above li
 		@php
     if (!isset($halaman)) {
         $halaman = '';
-    }    
+    }
     @endphp
 
-    <title>Laboratorium TM @if($halaman != ''): {{$halaman}} @endif</title>
+    <title>Maintenance @if($halaman != ''): {{$halaman}} @endif</title>
 		<base href="../">
-		<title>Laboratorium TM - {{ $halaman }}</title>
+		<title>Maintenace - {{ $halaman }}</title>
 		<meta name="description" content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 94,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
 		<meta name="keywords" content="Metronic, bootstrap, bootstrap 5, Angular, VueJs, React, Laravel, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -45,7 +45,7 @@ License: For each use you must have a valid license purchased only from above li
 		<link rel="stylesheet" href="\assets\bootstrap-datepicker-1.9.0\css\bootstrap-datepicker.standalone.min.css">
 		 <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
 		<!--end::Global Stylesheets Bundle-->
-		
+
 		<script src="\assets\sweetAlert\sweetalert2.all.min.js"></script>
 		@include('partials.customJs')
 	</head>
@@ -74,9 +74,9 @@ License: For each use you must have a valid license purchased only from above li
 							<div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0 me-lg-15">
 								<a class="py-3 text-decoration-none" href="/home">
 									<div class="me-lg-1">
-											<span class="display-6">Laboratorium TM</span>
+											<span class="display-6">Maintenance</span>
 									</div>
-								</a> 
+								</a>
 								<!--
 								<a href="../../demo1/dist/index.html">
 									<img alt="Logo" src="assets/media/logos/logo-1.svg" class="h-20px h-lg-30px" />
@@ -100,7 +100,7 @@ License: For each use you must have a valid license purchased only from above li
 
 							</div>
 							<!--end::Wrapper-->
-							
+
 						</div>
 						<!--end::Container-->
 					</div>
@@ -110,7 +110,7 @@ License: For each use you must have a valid license purchased only from above li
 
 					<!--begin::Content-->
 	<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-					
+
 		<!--begin::Toolbar-->
 		<div class="toolbar" id="kt_toolbar">
 			<!--begin::Container-->
@@ -145,8 +145,8 @@ License: For each use you must have a valid license purchased only from above li
 				<!--end::Page title-->
 			<!--begin::Actions-->
 			<div class="d-flex align-items-center py-1">
-											
-											
+
+
 		<!--begin::Button-->
 		@if(isset($link_to_create) && Gate::allows('admin'))
 		<a href="{{ $link_to_create }}" class="btn btn-sm btn-primary"data-bs-target="#kt_modal_create_app" id="kt_toolbar_primary_button">
@@ -160,26 +160,26 @@ License: For each use you must have a valid license purchased only from above li
 				</svg>
 			</span>
 				<!--end::Svg Icon-->
-			
+
 			 <span>Tambah</span>
-			</a> 
+			</a>
 			@endif
 		<!--end::Button-->
-		
-		
+
+
 					</div>
 					<!--end::Actions-->
 				</div>
 				<!--end::Container-->
 			</div>
 			<!--end::Toolbar-->
-		
+
 		<div class="container-xxl">
 
 		@yield('konten')
-				
+
 		</div>
-	
+
 		<!--begin::Scrolltop-->
 		<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
 			<!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
@@ -217,7 +217,7 @@ License: For each use you must have a valid license purchased only from above li
 
 		@yield('customJs')
 
-		
+
 		<!--end::Page Custom Javascript-->
 		<!--end::Javascript-->
 	</body>
