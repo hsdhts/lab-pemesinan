@@ -29,7 +29,7 @@
         <!--begin::Title-->
         <h4 class="mb-2 text-light">Error</h4>
         <!--end::Title-->
-        
+
         <!--begin::Content-->
         <span>Terjadi kesalahan, mohon cek kembali isian form. Beberapa form tidak boleh dikosongi</span>
         <br>
@@ -46,7 +46,7 @@
     <!--begin::Close-->
     <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
         <span class="svg-icon svg-icon-2x svg-icon-light">
-            <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen034.svg-->   
+            <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen034.svg-->
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
             <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="black"/>
             <rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="black"/>
@@ -84,10 +84,10 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/kategori/create" method="POST">
+            <form action="/stasiun/create" method="POST">
             @csrf
             <div class="modal-body">
-            
+
                     <div class="mb-3">
                         <label for="kategori_form" class="form-label float-start">Nama Kategori</label>
                         <input type="text" class="form-control clear-form" id="kategori_form" name="nama_kategori">
@@ -151,11 +151,11 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/kategori/setupMaintenance/create" method="POST">
+            <form action="/stasiun/setupMaintenance/create" method="POST">
             @csrf
             <div class="modal-body">
                 <input type="hidden" name="kategori_id" class="clear-form" id="create_kategori_id">
-            
+
                     <div class="mb-3">
                         <label for="setup_maintenance_form" class="form-label float-start">Nama Maintenance</label>
                         <input type="text" class="form-control clear-form" id="setup_maintenance_form" value="{{ old('nama_setup_maintenance') }}" name="nama_setup_maintenance">
@@ -168,7 +168,7 @@
 
                     <div class="input-group mb-3">
                         <button class="btn btn-primary btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Satuan</button>
-                        <ul class="dropdown-menu"> 
+                        <ul class="dropdown-menu">
                           <li><a class="dropdown-item" onclick="setSatuan('Jam')">Jam</a></li>
                           <li><a class="dropdown-item" onclick="setSatuan('Hari')">Hari</a></li>
                           <li><a class="dropdown-item" onclick="setSatuan('Minggu')">Minggu</a></li>
@@ -177,7 +177,7 @@
 
                         </ul>
                         <input type="text" class="form-control clear-form" aria-label="Satuan" name="satuan_periode" value="{{ old('satuan_periode') }}" id="satuan_periode" readonly>
-                      
+
                     </div>
 
                         <div class="my-5">
@@ -243,7 +243,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/kategori/setupMaintenance/edit" method="POST">
+            <form action="/stasiun/setupMaintenance/edit" method="POST">
                 @method('PUT')
                 @csrf
             <div class="modal-body">
@@ -260,7 +260,7 @@
 
                     <div class="input-group mb-3">
                         <button class="btn btn-primary btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Satuan</button>
-                        <ul class="dropdown-menu"> 
+                        <ul class="dropdown-menu">
                           <li><a class="dropdown-item" onclick="setEditSatuan('Jam')">Jam</a></li>
                           <li><a class="dropdown-item" onclick="setEditSatuan('Hari')">Hari</a></li>
                           <li><a class="dropdown-item" onclick="setEditSatuan('Minggu')">Minggu</a></li>
@@ -269,7 +269,7 @@
 
                         </ul>
                         <input type="text" class="form-control clear-form" aria-label="Satuan" name="satuan_periode" value="{{ old('satuan_periode') }}" id="edit_satuan_periode" readonly>
-                      
+
                     </div>
 
                     <div class="my-5">
@@ -338,17 +338,17 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/kategori/update" method="POST">
+            <form action="/stasiun/update" method="POST">
                 @method('put')
                 @csrf
             <div class="modal-body">
-            
+
                     <input type="hidden" name="id" id="edit_for_kategori_id">
                     <div class="mb-3">
                         <label for="kategori_form" class="form-label float-start">Edit Kategori</label>
                         <input type="text" class="form-control clear-form" id="edit_kategori_form" name="nama_kategori">
                     </div>
-                    
+
 
             </div>
 
@@ -392,13 +392,13 @@
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Setup Form</h5>
 
-               
+
             </div>
 
-            <form action="/kategori/setupForm/create/" method="POST">
+            <form action="/stasiun/setupForm/create/" method="POST">
                 @csrf
             <div class="modal-body">
-            
+
                     <input type="hidden" name="setup_maintenance_id" id="create_setup_maintenance_id">
                     <div class="mb-3">
                         <label for="create_form_form" class="form-label float-start">Nama Form</label>
@@ -467,11 +467,11 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/kategori/setupForm/edit/" method="POST">
+            <form action="/stasiun/setupForm/edit/" method="POST">
                 @method('put')
                 @csrf
             <div class="modal-body">
-            
+
                     <input type="hidden" name="id" id="edit_setup_form_id">
                     <div class="mb-3">
                         <label for="edit_form_form" class="form-label float-start">Nama Form</label>
@@ -545,14 +545,14 @@
 
 @section('content_right')
 <table class="table gs-7 align-middle">
-    
+
 
     @foreach ($kategori as $k)
     <tr class="table-primary">
         <td class="fw-bold fs-2"><a class="link-dark" href="/setupMaintenance/{{ $k->id }}">{{ $k->nama_kategori }}</a></td>
         <td class="text-end">
             @canany(['supervisor', 'admin'])
-            <form action="/kategori/destroy" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
+            <form action="/stasiun/destroy" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
                     @method("delete")
                     @csrf
                     <input type="hidden" name="id" value="{{ $k->id }}">
@@ -573,7 +573,7 @@
                     </svg>
             <!--end::Svg Icon-->
             </button>
-            
+
             <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#kt_modal_2" onclick="setKategoriId({{ $k->id }})">
             <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen035.svg-->
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
@@ -589,7 +589,7 @@
     </tr>
     <tr>
         @if($k->setupMaintenance->isNotEmpty())
-        
+
         <td colspan="2">
             <table class="table fs-5 align-middle">
 
@@ -612,9 +612,9 @@
                             <!--end::Svg Icon-->
                             <span>Edit</span>
                         </button>
-                        
-                        
-                        <form action="/kategori/setupMaintenance/destroy" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
+
+
+                        <form action="/stasiun/setupMaintenance/destroy" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
                             @method("delete")
                             @csrf
                             <input type="hidden" name="id" value="{{ $s->id }}">
@@ -632,7 +632,7 @@
                             </button>
                         </form>
 
-                        
+
                         <button class="btn btn-sm btn-warning text-dark py-0 text-nowrap d-inline"  data-bs-toggle="modal" data-bs-target="#kt_modal_5" onclick="createSetupForm({{ $s->id }})">
 
                             <span class="svg-icon-3">
@@ -642,9 +642,9 @@
                                     <rect x="6.01041" y="10.9247" width="12" height="2" rx="1" fill="black"/>
                                 </svg>
                             </span>
-        
-        
-                            
+
+
+
                             <span>Form</span>
                         </button>
 
@@ -653,16 +653,16 @@
                 </tr>
                 <tr>
                     <td colspan="5">
-                        
-                        
+
+
                    @if ($k->setupForm->where('setup_maintenance_id', $s->id)->isNotEmpty())
-                   
+
                    <table class="table table-row-dashed table-row-gray-400 gs-7 g-1">
                         <tr class="fw-bolder text-gray-800">
                             <th>Nama Form</th>
                             <th>Syarat</th>
                             <th>Aksi</th>
-                        
+
                         </tr>
                         @foreach ($k->setupForm->where('setup_maintenance_id', $s->id) as $f)
                         <tr>
@@ -670,24 +670,24 @@
                             <td>{{ $f->syarat }}</td>
                             <td>
                                 @canany(['supervisor', 'admin'])                                <button onclick="editSetupForm({{ $f->id }}, '{{ $f->nama_setup_form }}', '{{ $f->syarat }}')" data-bs-toggle="modal" data-bs-target="#kt_modal_6" class="btn text-primary p-0 m-0">Edit</button>&nbsp;|&nbsp;
-                                <form action="/kategori/setupForm/delete/" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
+                                <form action="/stasiun/setupForm/delete/" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" name="id" value="{{ $f->id }}">
                                     <button class="btn text-danger p-0 m-0">Hapus</button>
                                 </form>
                                 @else
-                                 - 
+                                 -
                                 @endcanany
                             </td>
-                        
+
                         </tr>
                         @endforeach
-                        
-                    
-      
+
+
+
                     </table>
-                   
+
                    @else
 
                    <p>*kosong*</p>
@@ -697,20 +697,20 @@
 
                     </td>
                 </tr>
-                
+
                 @endforeach
             </table>
         </td>
-    
-    
+
+
         @else
                 <td>(kosong)</td>
         @endif
     </tr>
-            
+
     @endforeach
 
-    
+
 @endsection
 
 

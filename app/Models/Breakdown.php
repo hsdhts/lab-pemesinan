@@ -2,19 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Breakdown extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
-
-    protected $casts = [
-        'tanggal_kejadian' => 'datetime',
-        'tanggal_selesai' => 'datetime'
-    ];
 
     public function mesin()
     {
@@ -23,8 +18,6 @@ class Breakdown extends Model
 
     public function spareparts()
     {
-        return $this->belongsToMany(Sparepart::class, 'breakdown_sparepart')
-                    ->withPivot(['jumlah'])
-                    ->withTimestamps();
+        return $this->belongsToMany(Sparepart::class)->withPivot('jumlah');
     }
 }

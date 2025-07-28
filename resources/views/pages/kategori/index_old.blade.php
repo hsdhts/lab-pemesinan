@@ -39,7 +39,7 @@
     <!--begin::Close-->
     <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
         <span class="svg-icon svg-icon-2x svg-icon-light">
-            <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen034.svg-->   
+            <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen034.svg-->
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
         <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="black"/>
         <rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="black"/>
@@ -53,14 +53,14 @@
 <!--end::Alert-->
 @endif
 
-<form action="/kategori/create" method="POST" class="row g-3 justify-content-center">
+<form action="/stasiun/create" method="POST" class="row g-3 justify-content-center">
 
     @csrf
-  
+
     <div class="col-auto">
         <label for="inputKategori" class="visually-hidden">Kategori</label>
         <input type="text" class="form-control" id="inputKategori" name="nama_kategori">
-       
+
       </div>
       <div class="col-auto">
         <button type="submit" class="btn btn-primary mb-3">
@@ -102,7 +102,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/kategori/update" method="POST">
+            <form action="/stasiun/update" method="POST">
             @csrf
             @method('PUT')
             <div class="modal-body">
@@ -183,13 +183,13 @@
 <script>
 			//makan bang
     $('#tabelTemplate').DataTable({
-      
+
 pageLength: 25,
 responsive: true,
 processing: true,
 dom:'<"top"lf>rtip<"bottom"><"clear">',
 serverSide: true,
-ajax: "/kategori",
+ajax: "/stasiun",
 columns: [
 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
 {data: 'nama_kategori', name: 'nama_kategori'},
@@ -198,7 +198,7 @@ columns: [
 ]
 
     });
-  
+
 
 </script>
 @endsection
@@ -210,12 +210,12 @@ columns: [
             document.getElementById('idKategori').innerHTML = id;
             document.getElementById('idKategori_input').value = id;
             document.getElementById('namaKategori').innerHTML = kategori;
-            
+
         }
 
     function clearValue() {
         document.getElementById('kategori_form').value = "";
     }
-    
+
 </script>
 @endsection

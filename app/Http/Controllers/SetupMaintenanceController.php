@@ -11,8 +11,8 @@ class SetupMaintenanceController extends Controller
     //
 
     public function setup($id){
-        
-        
+
+
         $kategori = Kategori::with(['setupMaintenance', 'setupForm'])->find($id);
         $nama_kategori = $kategori->nama_kategori;
 
@@ -27,7 +27,7 @@ class SetupMaintenanceController extends Controller
     }
 
     private function create($request){
-    
+
         $dataValid = $request->validate([
             'kategori_id' => 'required|numeric',
             'nama_setup_maintenance' => 'required',
@@ -43,7 +43,7 @@ class SetupMaintenanceController extends Controller
 
 
     private function delete($request){
-        
+
         $dataValid = $request->validate([
             'id' => 'required|numeric',
         ]);
@@ -64,7 +64,7 @@ class SetupMaintenanceController extends Controller
     }
 
     public function createPadaSetup(Request $request){
-    
+
         $this->create($request);
         return redirect('/setupMaintenance/' . $request->kategori_id)->with('tambah', 'p');
     }
@@ -86,19 +86,19 @@ class SetupMaintenanceController extends Controller
     public function createPadaKategori(Request $request){
         $this->create($request);
 
-        return redirect('/kategori')->with('tambah', 'p');
+        return redirect('/stasiun')->with('tambah', 'p');
     }
 
     public function editPadaKategori(Request $request){
         $this->edit($request);
 
-        return redirect('/kategori')->with('edit', 'p');
+        return redirect('/stasiun')->with('edit', 'p');
     }
 
     public function hapusPadaKategori(Request $request){
         $this->delete($request);
 
-        return redirect('/kategori')->with('hapus', 'p');
+        return redirect('/stasiun')->with('hapus', 'p');
     }
 
 

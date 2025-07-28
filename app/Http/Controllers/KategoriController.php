@@ -16,18 +16,18 @@ class KategoriController extends Controller
     }
 
     public function create(Request $request){
-        
+
         $dataValid = $request->validate([
             'nama_kategori' => 'required|max:100|unique:kategoris'
         ]);
 
         $kategoriBaru = Kategori::create($dataValid);
 
-        return redirect('/setupMaintenance/' . $kategoriBaru->id);   
+        return redirect('/setupMaintenance/' . $kategoriBaru->id);
     }
 
     private function update($request){
-            
+
         $dataValid = $request->validate([
             'id' => 'required',
             'nama_kategori' => 'required|max:100|unique:kategoris'
@@ -44,7 +44,7 @@ class KategoriController extends Controller
             ]);
         Kategori::destroy($dataValid);
 
-        return redirect('/kategori')->with('hapus', 'p');
+        return redirect('/stasiun')->with('hapus', 'p');
     }
 
 
@@ -53,7 +53,7 @@ class KategoriController extends Controller
 
         $this->update($request);
 
-        return redirect('/kategori')->with('edit', 'p');
+        return redirect('/stasiun')->with('edit', 'p');
     }
 
     public function updateOnSetup(Request $request) {

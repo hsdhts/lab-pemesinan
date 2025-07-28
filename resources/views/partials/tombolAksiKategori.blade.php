@@ -2,7 +2,7 @@
     Edit
 </button>
 
-<form action="/kategori/destroy" method="post" onSubmit="return hapus(this);" style ='display:inline-block;'>
+<form action="/stasiun/destroy" method="post" onSubmit="return hapus(this);" style ='display:inline-block;'>
  @method('delete')
  @csrf
  <input type="hidden" name="id" value="{{ $k->id }}">
@@ -16,4 +16,4 @@
  <!--end::Svg Icon-->
 <span>Hapus</span>
 </button>
-</form>                
+</form>

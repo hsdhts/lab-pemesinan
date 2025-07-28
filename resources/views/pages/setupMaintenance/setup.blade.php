@@ -38,7 +38,7 @@
             @csrf
             <div class="modal-body">
                 <input type="hidden" name="kategori_id" value="{{ $id }}">
-            
+
                     <div class="mb-3">
                         <label for="setup_maintenance_form" class="form-label float-start">Nama Maintenance</label>
                         <input type="text" class="form-control clear-form" id="setup_maintenance_form" value="{{ old('nama_setup_maintenance') }}" name="nama_setup_maintenance">
@@ -51,7 +51,7 @@
 
                     <div class="input-group mb-3">
                         <button class="btn btn-primary btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Satuan</button>
-                        <ul class="dropdown-menu"> 
+                        <ul class="dropdown-menu">
                           <li><a class="dropdown-item" onclick="setSatuan('Jam')">Jam</a></li>
                           <li><a class="dropdown-item" onclick="setSatuan('Hari')">Hari</a></li>
                           <li><a class="dropdown-item" onclick="setSatuan('Minggu')">Minggu</a></li>
@@ -60,7 +60,7 @@
 
                         </ul>
                         <input type="text" class="form-control clear-form" aria-label="Satuan" name="satuan_periode" value="{{ old('satuan_periode') }}" id="satuan_periode" readonly>
-                      
+
                     </div>
 
                     <div class="my-5">
@@ -145,7 +145,7 @@
 
                     <div class="input-group mb-3">
                         <button class="btn btn-primary btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Satuan</button>
-                        <ul class="dropdown-menu"> 
+                        <ul class="dropdown-menu">
                           <li><a class="dropdown-item" onclick="setEditSatuan('Jam')">Jam</a></li>
                           <li><a class="dropdown-item" onclick="setEditSatuan('Hari')">Hari</a></li>
                           <li><a class="dropdown-item" onclick="setEditSatuan('Minggu')">Minggu</a></li>
@@ -154,7 +154,7 @@
 
                         </ul>
                         <input type="text" class="form-control clear-form" aria-label="Satuan" name="satuan_periode" value="{{ old('satuan_periode') }}" id="edit_satuan_periode" readonly>
-                      
+
                     </div>
 
                     <div class="my-5">
@@ -221,11 +221,11 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/setupMaintenance/kategori/update" method="POST">
+            <form action="/setupMaintenance/stasiun/update" method="POST">
             @method('put')
             @csrf
             <div class="modal-body">
-            
+
                     <input type="hidden" name="id" id="edit_for_kategori_id">
                     <div class="mb-3">
                         <label for="kategori_form" class="form-label float-start">Edit Kategori</label>
@@ -292,7 +292,7 @@
             <form action="/setupForm/create/" method="POST">
                 @csrf
             <div class="modal-body">
-            
+
                     <input type="hidden" name="kategori_id" value="{{ $id }}">
                     <input type="hidden" name="setup_maintenance_id" id="create_setup_maintenance_id">
                     <div class="mb-3">
@@ -366,7 +366,7 @@
                 @method('put')
                 @csrf
             <div class="modal-body">
-            
+
                     <input type="hidden" name="kategori_id" value="{{ $id }}">
                     <input type="hidden" name="id" id="edit_setup_form_id">
                     <div class="mb-3">
@@ -438,7 +438,7 @@
         <!--begin::Title-->
         <h4 class="mb-2 text-light">Error</h4>
         <!--end::Title-->
-        
+
         <!--begin::Content-->
         <span>Terjadi kesalahan, mohon cek kembali isian form. Beberapa form tidak boleh dikosongi</span>
         <br>
@@ -455,7 +455,7 @@
     <!--begin::Close-->
     <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
         <span class="svg-icon svg-icon-2x svg-icon-light">
-            <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen034.svg-->   
+            <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen034.svg-->
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
             <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="black"/>
             <rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="black"/>
@@ -469,7 +469,7 @@
 <!--end::Alert-->
 @endif
 
-   
+
 
 @endsection
 
@@ -481,7 +481,7 @@
         <td class="text-end">
             @canany(['superadmin', 'admin'])
 
-            <form action="/kategori/destroy" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
+            <form action="/stasiun/destroy" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
                 @method("delete")
                 @csrf
                 <input type="hidden" name="id" value="{{ $id }}">
@@ -518,11 +518,11 @@
 
     <tr>
     @if ($kategori->setupMaintenance->isEmpty())
-    
+
         <td>(kosong)</td>
-    
+
     @else
-    
+
     <td colspan="2">
     <table class="table fs-5 align-middle">
         @foreach ($kategori->setupMaintenance as $s)
@@ -545,8 +545,8 @@
                     <!--end::Svg Icon-->
                     <span>Edit</span>
                 </button>
-                
-                
+
+
                 <form action="/setupMaintenance/destroy" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
                     @method("delete")
                     @csrf
@@ -576,7 +576,7 @@
                     </span>
 
 
-                    
+
                     <span>Form</span>
             </button>
                 @endcanany
@@ -585,13 +585,13 @@
         <tr>
             <td colspan="5">
                        @if ($kategori->setupForm->where('setup_maintenance_id', $s->id)->isNotEmpty())
-                   
+
                    <table class="table table-row-dashed table-row-gray-400 gs-7 g-1">
                         <tr class="fw-bolder text-gray-800">
                             <th>Nama Form</th>
                             <th>Syarat</th>
                             <th>Aksi</th>
-                        
+
                         </tr>
                         @foreach ($kategori->setupForm->where('setup_maintenance_id', $s->id) as $f)
                         <tr>
@@ -608,40 +608,40 @@
                                     <button class="btn text-danger p-0 m-0">Hapus</button>
                                 </form>
                                 @else
-                                 - 
+                                 -
                                 @endcanany
-                                
+
 
                             </td>
-                        
+
                         </tr>
                         @endforeach
-                        
-                    
-      
+
+
+
                     </table>
-                   
+
                    @else
 
                    <p>*kosong*</p>
 
                    @endif
-                    
+
 
             </td>
         </tr>
-            
+
         @endforeach
     </table>
     </td>
-    
+
     @endif
     </tr>
-   
 
 
 
-    
+
+
 @endsection
 
 
@@ -668,7 +668,7 @@ function setEditSatuan(periode) {
 
 function setEdit(id,kategori_id ,nama_setup_maintenance, periode, satuan_periode, warna){
     document.getElementById('edit_id').value = id;
-    document.getElementById('edit_kategori_id').value = kategori_id; 
+    document.getElementById('edit_kategori_id').value = kategori_id;
     document.getElementById('edit_setup_maintenance_form').value = nama_setup_maintenance;
     document.getElementById('edit_periode_form').value = periode;
     document.getElementById('edit_satuan_periode').value = satuan_periode;

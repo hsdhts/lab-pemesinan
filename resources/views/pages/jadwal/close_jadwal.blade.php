@@ -4,12 +4,12 @@
     <style>
         .tabel-tampil-jadwal td{
     position: relative;
-    /*border: 1px #1a1a1a; */ 
+    /*border: 1px #1a1a1a; */
     text-align: center;
     min-width: 40px;
 }
 
-.tabel-tampil-jadwal thead th, 
+.tabel-tampil-jadwal thead th,
 .tabel-tampil-jadwal thead td{
    /* border-collapse: collapse; */
    font-size: small;
@@ -49,7 +49,7 @@
             <div class="form-floating">
                 <div class="input-group date">
                     <input type="text" name="tanggal_awal" placeholder="masukkan tanggal awal..." class="form-control @error('tanggal_awal')is-invalid @enderror">
-                    
+
                     <button class="btn btn-secondary" type="button">
                         <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
                         <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -70,10 +70,10 @@
 
             <div class="col-md-4">
               <div class="form-floating">
-             
+
                 <div class="input-group date">
                     <input type="text" name="tanggal_akhir" placeholder="masukkan tanggal akhir..." class="form-control @error('tanggal_akhir')is-invalid @enderror">
-                    
+
                     <button class="btn btn-secondary" type="button">
                         <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
                         <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -104,12 +104,12 @@
 <div class="container text-center mt-7"><h1>Realisasi</h1></div>
 
     <div class="container-fluid my-3 table-responsive p-0" style="overflow-y: scroll; max-height:450px;">
-        
+
         @php
             $start = $tglAwal->copy();
             $akhir = $tglAkhir->copy();
-        
-            $selisihHari = $tglAwal->diffInDays($tglAkhir, $tglAwal) + 1; 
+
+            $selisihHari = $tglAwal->diffInDays($tglAkhir, $tglAwal) + 1;
         @endphp
 
 
@@ -125,25 +125,25 @@
                         @php
                             $akhir->subDay();
                             @endphp
-                    @endwhile         
+                    @endwhile
 
             </tr>
-            
+
         </thead>
         <tbody>
 
 
             @foreach ($jadwal as $mesinKey => $mesinVal)
-                
+
             <tr>
-                <td class="text-light fs-5 fw-bold">{{ $mesinKey }}</td> 
-                <td colspan="{{ $selisihHari }}"></td>             
+                <td class="text-light fs-5 fw-bold">{{ $mesinKey }}</td>
+                <td colspan="{{ $selisihHari }}"></td>
             </tr>
 
                 @foreach ($mesinVal as $maintenanceKey => $maintenanceVal)
                     <tr>
                         <td class="text-light">&nbsp;&nbsp;-&nbsp;{{ $maintenanceKey }}</td>
-                        
+
                         @php
                             $tglMulai = $tglAwal->copy();
                             $tglSelesai = $tglAkhir->copy();
@@ -151,7 +151,7 @@
                         @endphp
                             @while($tglSelesai->greaterThanOrEqualTo($tglMulai))
                                 <td class="align-middle">
-                                   
+
                                     @php
                                     $jd = $maintenanceVal->first(function($value, $key) use ($tglSelesai){
                                         /*
@@ -163,7 +163,7 @@
                                         //echo $value->tanggal_realisasi . "<br>";
                                         return (Illuminate\Support\Carbon::parse($value->tanggal_realisasi)->isSameDay($tglSelesai));
 
-                                    });     
+                                    });
 
                                     if(is_null($jd)){
                                         echo $tglSelesai->day;
@@ -175,12 +175,12 @@
                                         */
                                         echo '<button class="btn btn-sm btn-primary" onclick="modal_approve('. $jd->id . ',\''. $jd->maintenance->mesin->nama_mesin .'\',\''. $jd->maintenance->nama_maintenance .'\',\''. Illuminate\Support\Carbon::parse($jd->tanggal_rencana)->format('d-m-Y') .'\',\''. Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('d-m-Y') .'\',\''. ((!is_null($jd->keterangan)) ? $jd->keterangan : '-') .'\',\''. ((!is_null($jd->alasan)) ? $jd->alasan : '-') .'\')" data-bs-toggle="modal" data-bs-target="#modal_approve">' . $tglSelesai->day .'</button>';
                                     }
-                                    
+
                                     $tglSelesai->subDay();
                                     @endphp
                                 </td>
 
-                            @endwhile             
+                            @endwhile
                     </tr>
                 @endforeach
 
@@ -188,7 +188,7 @@
 
 
 
-    
+
 
         </tbody>
 </table>
@@ -247,7 +247,7 @@
                         <th class="fw-bold">Alasan Terlambat</th>
                         <td id="approve_alasan"></td>
                     </tr>
-    
+
                 </table>
 
             </div>
@@ -258,7 +258,6 @@
                 <form action="/approve/jadwal" method="POST">
                     @csrf
                     <input type="hidden" name="jadwal_id" id='jadwal_id'>
-                    <button type="submit" class="btn btn-primary">Approve Pekerjaan</button>
                 </form>
             </div>
         </div>
@@ -284,7 +283,7 @@ $('.input-group.date').datepicker({
 
 
 function modal_approve(jadwal_id, mesin, maintenance, tgl_rencana, tgl_realisasi, keterangan, alasan) {
-        
+
         document.getElementById('approve_mesin').innerHTML = mesin;
         document.getElementById('approve_maintenance').innerHTML = maintenance;
         document.getElementById('approve_tanggal_rencana').innerHTML = tgl_rencana;

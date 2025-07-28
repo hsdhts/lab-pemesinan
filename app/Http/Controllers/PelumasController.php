@@ -11,9 +11,9 @@ class PelumasController extends Controller
 {
     //
     public function index(Request $request){
-        
+
         if($request->ajax()){
-            
+
             $parts = Pelumas::with(['sparepart']);
             return DataTables::of($parts)
             ->addColumn('nama_sparepart', function(Pelumas $pelumas){
@@ -31,22 +31,22 @@ class PelumasController extends Controller
 
         return view('pages.pelumas.index', [
             'halaman' => 'Pelumas',
-            'link_to_create' => '/pelumas/create'       
-            
+            'link_to_create' => '/pelumas/create'
+
         ]);
-        
+
     }
 
     public function create(){
-        
-        $sparepart = Sparepart::all(); 
+
+        $sparepart = Sparepart::all();
         return view('pages.pelumas.create', [
             'halaman' => 'Pelumas','sparepart' => $sparepart
         ]);
     }
 
     public function tambah(Request $request){
-        
+
         $dataValid = $request->validate([
             'sparepart_id' => 'required',
             'metode_pelumasan' => 'required',
@@ -62,9 +62,9 @@ class PelumasController extends Controller
 
 
     public function edit($id){
-    
+
         $pelumas = Pelumas::findOrFail($id);
-        $sparepart = Sparepart::all(); 
+        $sparepart = Sparepart::all();
 
 
         return view('pages.pelumas.update', [
@@ -78,7 +78,7 @@ class PelumasController extends Controller
 
 
     public function update(Request $request){
-    
+
         $dataValid = $request->validate([
             'sparepart_id' => 'required',
             'metode_pelumasan' => 'required',
@@ -90,10 +90,10 @@ class PelumasController extends Controller
         Pelumas::findOrFail($request->id_old)->update($dataValid);
 
         return redirect('/pelumas')->with('edit', 'p');
-        
+
     }
 
-    public function destroy(Request $request){  
+    public function destroy(Request $request){
         $dataValid = $request->validate([
             'id' => 'required|numeric',
         ]);

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
    /* public function _construct(){
-        parent::__construct();  
+        parent::__construct();
     }*/
 
     public function index(){
@@ -91,8 +91,8 @@ class HomeController extends Controller
             })->sort()->map(function($item){
                 return $item->count();
             });
-        
-        //ddd($jadwal_chart_rencana);    
+
+        //ddd($jadwal_chart_rencana);
         $jadwal_chart_realisasi = Jadwal::whereYear('tanggal_realisasi', now(7)->year)->where('status', '=', 4)->get()->groupBy(function($val) {
                 return Carbon::parse($val->tanggal_rencana)->month;
             })->sort()->map(function($item){
@@ -109,34 +109,31 @@ class HomeController extends Controller
          'sebulan' => $sebulan,
         ]);
 
-        
-      
     }
 
-
     public function test(){
-        
+
         return view('pages.jadwal.close_jadwal');
 
     }
 
     public function test2(Request $request){
-        
+
         return $request;
 
     }
-   
+
     public function load_test(){
-        
+
 
 //dd($collection);
 
         $setup = Kategori::with(['SetupMaintenance'])->find(1)->setupMaintenance;
         //$setup->forget(['id']);
-        
+
         $setup = $setup->map(function($item){
              return collect([
-                'nama_setup' => $item->nama_setup_maintenance, 
+                'nama_setup' => $item->nama_setup_maintenance,
                 'periode' => $item->periode,
                 'satuan_periode' => $item->satuan_periode,
                 'setupForm' => $item->setupForm->map(function($i) {
@@ -145,14 +142,14 @@ class HomeController extends Controller
                         'setup_maintenance_id' => $i->setup_maintenance_id,
                         'value' => $i->value,
                     ]);
-                    }) 
+                    })
             ]);
             });
 
- 
+
             //dd($a->get('a'));
             Cache::put('setup', $setup, 60);
-          
+
 
         //$maintenance = new Maintenance($setup->toArray());
         //dd($maintenance);
@@ -171,7 +168,7 @@ class HomeController extends Controller
             'title' => 'Ya ndak tau kok tanya saia',
             'date' => 56575675,
         ];
-          
+
         $pdf = PDF::loadView('test_page.test_for_pdf', $data);
 
         return $pdf->download('invoice.pdf');
@@ -186,7 +183,7 @@ class HomeController extends Controller
         $data = ['mesin' => $mesin, 'jadwal' => $jadwal];
 
         //return view('reports.inspeksi', $data);
-        
+
         $pdf = PDF::loadView('reports.inspeksi', $data);
 
         return $pdf->download('invoice.pdf');

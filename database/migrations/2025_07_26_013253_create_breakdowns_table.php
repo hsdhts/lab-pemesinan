@@ -10,7 +10,7 @@ class CreateBreakdownsTable extends Migration
     {
         Schema::create('breakdowns', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mesin_id')->constrained()->onDelete('cascade');
+            $table->foreignId('kategori_id')->constrained()->onDelete('cascade');
             $table->dateTime('tanggal_kejadian');
             $table->dateTime('tanggal_selesai')->nullable();
             $table->text('deskripsi_masalah');
@@ -24,7 +24,6 @@ class CreateBreakdownsTable extends Migration
         Schema::create('breakdown_sparepart', function (Blueprint $table) {
             $table->id();
             $table->foreignId('breakdown_id')->constrained()->onDelete('cascade');
-            $table->foreignId('sparepart_id')->constrained()->onDelete('cascade');
             $table->integer('jumlah');
             $table->timestamps();
         });
@@ -32,7 +31,6 @@ class CreateBreakdownsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('breakdown_sparepart');
         Schema::dropIfExists('breakdowns');
     }
 }

@@ -16,10 +16,7 @@ class SetupFormController extends Controller
         ]);
 
         SetupForm::create($data_valid);
-
-
     }
-
 
     private function edit($request){
         $data_valid = $request->validate([
@@ -46,7 +43,7 @@ class SetupFormController extends Controller
 
         return redirect('/setupMaintenance/' . $request->kategori_id)->with('tambah', 'p');
     }
-    
+
 
     public function editPadaSetup(Request $request){
         $this->edit($request);
@@ -57,19 +54,19 @@ class SetupFormController extends Controller
     public function createPadaKategori(Request $request){
         $this->create($request);
 
-        return redirect('/kategori')->with('tambah', 'p');
+        return redirect('/stasiun')->with('tambah', 'p');
     }
 
     public function editPadaKategori(Request $request){
         $this->edit($request);
 
-        return redirect('/kategori')->with('edit', 'p');
+        return redirect('/stasiun')->with('edit', 'p');
     }
 
     public function deletePadaKategori(Request $request){
         $this->delete($request);
 
-        return redirect('/kategori')->with('hapus', 'p');
+        return redirect('/stasiun')->with('hapus', 'p');
     }
 
     public function deletePadaSetup(Request $request){
