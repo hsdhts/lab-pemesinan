@@ -117,4 +117,40 @@ class LaporanController extends Controller
         return $pdf->download('laporan_maintenance_' . $jadwal->maintenance->mesin->nama_mesin . '_'. $jadwal->maintenance->nama_maintenance .'.pdf');
     }
 
+    public function laporan_maintenance_batch(Request $request)
+    {
+        $data_valid = $request->validate([
+            'tanggal_awal'  => 'required|date_format:d-m-Y',
+            'tanggal_akhir' => 'required|date_format:d-m-Y',
+        ]);
+
+        $tgl_awal  = Carbon::createFromFormat('d-m-Y', $data_valid['tanggal_awal'])->startOfDay();
+        $tgl_akhir = Carbon::createFromFormat('d-m-Y', $data_valid['tanggal_akhir'])->endOfDay();
+
+        if ($tgl_awal->greaterThan($tgl_akhir)) {
+            return back()->withErrors(['tanggal_error' => 'Tanggal awal tidak boleh mendahului tanggal akhir']);
+        }
+
+        $jadwals = Jadwal::with(['sparepart', 'maintenance' => function ($query) {
+            $query->withTrashed();
+        }, 'maintenance.mesin' => function ($query) {
+            $query->withTrashed();
+        }])
+            ->whereBetween('tanggal_realisasi', [$tgl_awal, $tgl_akhir])
+            ->withTrashed()
+            ->get();
+
+        if ($jadwals->isEmpty()) {
+            return back()->withErrors(['tidak_ada_data' => 'Tidak ada data maintenance pada rentang tanggal yang dipilih.']);
+        }
+
+        $data = [
+            'jadwals' => $jadwals,
+        ];
+
+        $pdf = PDF::loadView('pages.laporan.maintenance_batch', $data)->setPaper('a4', 'potrait')->setWarnings(false);
+
+        return $pdf->download('laporan_maintenance_' . $data_valid['tanggal_awal'] . '_-_' . $data_valid['tanggal_akhir'] . '.pdf');
+    }
+
 }

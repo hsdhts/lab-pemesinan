@@ -174,6 +174,7 @@ Route::post('/update_tahunan', [UpdateDbController::class, 'update_jadwal'])->mi
 Route::get('/laporan', [LaporanController::class, 'index'])->middleware('auth')->middleware('mahasiswa');
 Route::post('/laporan/inspeksi', [LaporanController::class, 'laporan_general_inspection'])->middleware('mahasiswa');
 Route::post('/laporan/maintenance', [LaporanController::class, 'laporan_maintenance'])->middleware('mahasiswa');
+Route::post('/laporan/maintenance/batch', [LaporanController::class, 'laporan_maintenance_batch'])->middleware('mahasiswa');
 Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_rencana_realisasi'])->middleware('mahasiswa');
 
 

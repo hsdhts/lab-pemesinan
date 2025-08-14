@@ -17,15 +17,15 @@
 
           <div class="modal-body">
 <form action="/laporan/inspeksi/" method="POST">
-  @csrf       
+  @csrf
             <div class="input-group my-4">
-        
+
               <input type="hidden" id="maintenance_id" name="maintenance_id">
-      
+
           <span class="form-label float-start">Tanggal Awal</span>
           <div class="input-group date">
               <input type="text" class="form-control @error('tanggal_awal')is-invalid @enderror" id="form_tanggal_awal" value="{{ old('tanggal_awal')  }}" name="tanggal_awal" readonly>
-              
+
               <button class="btn btn-secondary" type="button">
                   <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
                   <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -38,13 +38,13 @@
               </button>
           </div>
       </div>
-      
+
       <div class="input-group my-4">
-        
+
     <span class="form-label float-start">Tanggal Akhir</span>
     <div class="input-group date">
         <input type="text" class="form-control @error('tanggal_akhir')is-invalid @enderror" id="form_tanggal_akhir" value="{{ old('tanggal_akhir')  }}" name="tanggal_akhir" readonly>
-        
+
         <button class="btn btn-secondary" type="button">
             <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
             <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -69,25 +69,59 @@
   </div>
 </div>
 
-<form action="/laporan/rencana_realisasi" method="POST">
-    @csrf
-    <button type="submit" class="btn btn-primary">
-        <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil009.svg-->
-        <span class="svg-icon svg-icon-muted svg-icon-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM13 15.4V10C13 9.4 12.6 9 12 9C11.4 9 11 9.4 11 10V15.4H8L11.3 18.7C11.7 19.1 12.3 19.1 12.7 18.7L16 15.4H13Z" fill="black"/>
-                <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="black"/>
-            </svg>
-        </span>
-        <!--end::Svg Icon-->
-        Rencana - Realisasi
+<div class="d-flex justify-content-end">
+    <form action="/laporan/rencana_realisasi" method="POST" class="me-2">
+        @csrf
+        <button type="submit" class="btn btn-primary">
+            <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil009.svg-->
+            <span class="svg-icon svg-icon-muted svg-icon-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM13 15.4V10C13 9.4 12.6 9 12 9C11.4 9 11 9.4 11 10V15.4H8L11.3 18.7C11.7 19.1 12.3 19.1 12.7 18.7L16 15.4H13Z" fill="black"/>
+                    <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="black"/>
+                </svg>
+            </span>
+            <!--end::Svg Icon-->
+            Rencana - Realisasi
+        </button>
+    </form>
+
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
+        Download Laporan Maintenance
     </button>
-</form>
-  
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="kt_modal_2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Download Laporan Maintenance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/laporan/maintenance/batch" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="tanggal_awal_batch" class="form-label">Tanggal Awal</label>
+                        <input type="text" class="form-control" id="tanggal_awal_batch" name="tanggal_awal" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tanggal_akhir_batch" class="form-label">Tanggal Akhir</label>
+                        <input type="text" class="form-control" id="tanggal_akhir_batch" name="tanggal_akhir" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Download</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('tableHead')
-    
+
                     <th>Maintenance</th>
                     <th>Mesin</th>
                     <th>Mesin Id</th>
@@ -101,7 +135,7 @@
 <script>
 			//makan bang
     $('#tabelTemplate').DataTable({
-      
+
       columnDefs: [
 {
   class:'all',
@@ -134,7 +168,15 @@ columns: [
     }
 
     });
-  
+
+$('#tanggal_awal_batch, #tanggal_akhir_batch').datepicker({
+    format: "dd-mm-yyyy",
+    todayBtn: "linked",
+    language: "id",
+    autoclose: true,
+    todayHighlight: true,
+    orientation: "bottom left"
+});
 
 
 $('.input-group.date').datepicker({

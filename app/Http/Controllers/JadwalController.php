@@ -43,10 +43,10 @@ class JadwalController extends Controller
     }
 
     public function create_jadwal($id_maintenance){
-    
+
 
     $maintenance = Maintenance::find($id_maintenance);
-    
+
 
     $waktu = Carbon::parse($maintenance->start_date, 7);
     $waktu1 = Carbon::parse($maintenance->end_date, 7);
@@ -55,63 +55,63 @@ class JadwalController extends Controller
 
     $periode = $maintenance->periode;
     $satuan_periode = $maintenance->satuan_periode;
-    
+
     //echo "periode : " . $periode . " " . $satuan_periode . "<br>";
 
     switch ($satuan_periode) {
         case 'Jam':
             while($waktu <= $tahun){
                 //echo $waktu->format('d-m-Y') . "<br>";
-        
+
                 $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
 
                 $waktu->addHour($periode);
-            }            
+            }
             break;
         case 'Hari':
             while($waktu <= $tahun){
                 //echo $waktu->format('d-m-Y') . "<br>";
-        
+
                 //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                 $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
 
 
                 $waktu->addDays($periode);
-            }            
+            }
             break;
 
         case 'Minggu':
                 while($waktu <= $tahun){
                     //echo $waktu->format('d-m-Y') . "<br>";
-            
+
                     //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                     $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
 
 
                     $waktu->addWeeks($periode);
-                }            
+                }
             break;
 
         case 'Bulan':
                 while($waktu <= $tahun){
                     //echo $waktu->format('d-m-Y') . "<br>";
-            
+
                     //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                     $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
 
                     $waktu->addMonths($periode);
-                }            
+                }
                 break;
-        
+
         case 'Tahun':
             while($waktu <= $tahun){
                 //echo $waktu->format('d-m-Y') . "<br>";
-        
+
                 //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                 $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
 
                 $waktu->addYears($periode);
-            }            
+            }
             break;
 
         default:
@@ -119,7 +119,7 @@ class JadwalController extends Controller
             break;
     }
 
-    
+
     //echo "<br>";
     //echo "Hasil akhir adalah " . $waktu->format('d-m-Y') . "<br>";
 
@@ -151,7 +151,7 @@ class JadwalController extends Controller
         }])->where('jadwal_id', $id)->get();
 
         return view('pages.jadwal.detail', ['halaman' => 'Jadwal', 'jadwal' => $jadwal, 'isi_form' => $isi_form, 'mesin' => $mesin, 'maintenance' => $maintenance, 'sparepart' => $sparepart]);
-    }   
+    }
 
 
     public function update(Request $request){
@@ -162,6 +162,7 @@ class JadwalController extends Controller
             'tanggal_realisasi' => 'required|date_format:d-m-Y',
             'lama_pekerjaan' => 'required',
             'personel' => 'required',
+            'foto_hasil_perbaikan' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'keterangan' => 'nullable|not_regex:/\'/i',
         ]);
 
@@ -170,14 +171,14 @@ class JadwalController extends Controller
         $jadwal = Jadwal::find($data_valid['id']);
 
         if($data_valid['tanggal_realisasi']->greaterThan($data_valid['tanggal_rencana'])){
-            // tampilkan modal juga boleh dengan di redirect back 
+            // tampilkan modal juga boleh dengan di redirect back
             //ddd($request);
             if($jadwal->tanggal_realisasi == null){
                 return redirect()->back()->withInput()->with('form_alasan', 'p');
             }else{
                 if($request->has('alasan')){
                     $data_valid['alasan'] = $request->alasan;
-                }                
+                }
                 return $this->submit($request, $data_valid);
             }
         }else{
@@ -212,18 +213,28 @@ class JadwalController extends Controller
         $data_valid['alasan'] = $validator->validated()['alasan'];
         $data_valid['tanggal_rencana'] = Carbon::parse($data_valid['tanggal_rencana']);
         $data_valid['tanggal_realisasi'] = Carbon::parse($data_valid['tanggal_realisasi']);
-        
-        
+
+
         return $this->submit($request, $data_valid);
 
     }
 
     public function submit($request, $data_valid) {
 
-        
+
         $jadwal = Jadwal::find($data_valid['id']);
 
-       
+        if ($request->hasFile('foto_hasil_perbaikan')) {
+            // Hapus foto lama jika ada
+            if ($jadwal->foto_hasil_perbaikan && file_exists(storage_path('app/public/' . $jadwal->foto_hasil_perbaikan))) {
+                unlink(storage_path('app/public/' . $jadwal->foto_hasil_perbaikan));
+            }
+
+            $imagePath = $request->file('foto_hasil_perbaikan')->store('jadwal_photos', 'public');
+            $data_valid['foto_hasil_perbaikan'] = $imagePath;
+        }
+
+
         $jadwal->update($data_valid);
 
         if($jadwal->status == 1){

@@ -58,6 +58,21 @@
             text-align: center;
             margin: 2px auto;
         }
+        .tanda-tangan {
+            width: 100%;
+            margin-top: 40px;
+            text-align: center;
+            border-collapse: collapse;
+            border: none;
+        }
+        .tanda-tangan td {
+            border: none;
+            padding: 10px;
+            width: 33.33%;
+        }
+        .tanda-tangan .signature-space {
+            height: 60px;
+        }
     </style>
 
 </head>
@@ -108,7 +123,6 @@
             <th>Sparepart</th><th>Jumlah</th>
         </tr>
 
-
         @foreach ($sparepart as $s)
 
             <tr>
@@ -123,6 +137,53 @@
         @endif
     </table>
 
+    @if($jadwal->foto_hasil_perbaikan)
+        @php
+            $imagePath = storage_path('app/public/' . $jadwal->foto_hasil_perbaikan);
+            $src = '';
+            if (file_exists($imagePath)) {
+                try {
+                    $imageData = base64_encode(file_get_contents($imagePath));
+                    $imageType = mime_content_type($imagePath);
+                    $src = 'data:' . $imageType . ';base64,' . $imageData;
+                } catch (\Exception $e) {
+                    // Log error or handle it gracefully
+                    $src = '';
+                }
+            }
+        @endphp
+        <h5 style="margin-top: 20px; margin-bottom: 2px;">Foto Hasil Perbaikan : </h5>
+        <div class="foto-perbaikan">
+            @if($src)
+                <img src="{{ $src }}" style="max-width: 400px; max-height: 300px;">
+            @else
+                <p>Gambar tidak dapat dimuat.</p>
+            @endif
+        </div>
+    @endif
+
+    <table class="tanda-tangan">
+        <tr>
+            <td>Dibuat Oleh,</td>
+            <td>Diperiksa Oleh,</td>
+            <td>Disetujui Oleh,</td>
+        </tr>
+        <tr>
+            <td class="signature-space"></td>
+            <td class="signature-space"></td>
+            <td class="signature-space"></td>
+        </tr>
+        <tr>
+            <td>(.....................)</td>
+            <td>(.....................)</td>
+            <td>(.....................)</td>
+        </tr>
+        <tr>
+            <td>Teknisi</td>
+            <td>Foreman</td>
+            <td>Manager</td>
+        </tr>
+    </table>
 
 </body>
 </html>

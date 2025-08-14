@@ -18,7 +18,6 @@ class CreateJadwalSparepart extends Migration
             $table->foreignId('sparepart_id');
             $table->foreignId('jadwal_id');
             $table->integer('jumlah');
-
             $table->timestamps();
             $table->unique(['sparepart_id', 'jadwal_id']);
             $table->foreign('sparepart_id')->references('id')->on('spareparts')->cascadeOnDelete()->cascadeOnUpdate();

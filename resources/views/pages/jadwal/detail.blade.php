@@ -2,7 +2,7 @@
 
 
 @section('customCss')
-    
+
 @endsection
 
 @section('before_content')
@@ -13,7 +13,7 @@
         <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Sparepart</h5>
-                    
+
                     <!--begin::Close-->
                     <div class="btn btn-icon btn-sm btn-active-light-danger ms-2" data-bs-dismiss="modal" aria-label="Close">
                         <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen034.svg-->
@@ -37,12 +37,12 @@
                     <label for="id_sparepart" class="form-label">Sparepart</label>
                     <select class="form-select" id="id_sparepart" @error('sparepart_id') is-invalid @enderror name="sparepart_id">
                     <option selected> -- Silahkan Pilih -- </option>
-                    
+
                     @foreach ($sparepart as $s)
-                    
+
                     <option value="{{ $s->id }}">{{ $s->nama_sparepart }} -- {{ $s->id }}</option>
-                        
-                    @endforeach   
+
+                    @endforeach
                 </select>
                 </div>
 
@@ -50,18 +50,18 @@
                 <div class="mb-3">
                     <label for="jumlah" class="form-label">Jumlah</label>
                     <input type="number" class="form-control @error('jumlah') is-invalid @enderror" id="jumlah" placeholder="Jumlah" value="{{ old('jumlah', 1) }}" name="jumlah">
-                    @error('jumlah')    
+                    @error('jumlah')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                     </div>
                 </div>
-            
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
         </form>
-        
+
         </div>
     </div>
 </div>
@@ -104,9 +104,9 @@
   </div>
   @elseif($jadwal->status == 3)
   <div class="p-4 bg-success text-white h5 fw-bolder text-center rounded">
-    Sudah selesai, <br> dan verifikasi oleh Superadmin 
+    Sudah selesai, <br> dan verifikasi oleh Superadmin
   </div>
- 
+
   @endif
 
 @canany(['mahasiswa', 'admin'])
@@ -135,7 +135,7 @@
 @section('content_right')
 
 
-<form action=" @if(session()->has('form_alasan')) /jadwal/update_alasan/ @else /jadwal/update/ @endif" method="POST">
+<form action=" @if(session()->has('form_alasan')) /jadwal/update_alasan/ @else /jadwal/update/ @endif" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="my-4">
@@ -143,13 +143,13 @@
         <h4 class="text-muted">Periode : {{ $maintenance->periode }} {{ $maintenance->satuan_periode }}</h4>
     </div>
     <div class="input-group my-4">
-        
+
         <input type="hidden" name="id" value="{{ old('id', $jadwal->id)}}">
 
     <span class="form-label float-start">Tanggal Rencana</span>
     <div class="input-group date">
         <input type="text" class="form-control @error('tanggal_rencana')is-invalid @enderror" id="form_tanggal_rencana" value="{{ old('tanggal_rencana', Illuminate\Support\Carbon::parse($jadwal->tanggal_rencana)->format('d-m-Y'))  }}" name="tanggal_rencana" readonly @if($jadwal->status > 2) disabled @endif>
-        
+
         <button class="btn btn-secondary" type="button"  @if($jadwal->status > 2) disabled @endif>
             <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
             <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -164,7 +164,7 @@
 </div>
 
 <div class="input-group my-4">
-    
+
     <span class="form-label float-start">Tanggal Realisasi</span>
     <div class="input-group date">
         <input type="text" class="form-control @error('tanggal_realisasi') is-invalid @enderror" id="form_tanggal_realisasi" @if($jadwal->tanggal_realisasi == NULL) value="{{ old('tanggal_realisasi') }}" @else value="{{ old('tanggal_realisasi', Illuminate\Support\Carbon::parse($jadwal->tanggal_realisasi)->format('d-m-Y')) }}" @endif name="tanggal_realisasi" readonly  @if($jadwal->status > 2) disabled @endif>
@@ -178,7 +178,7 @@
             </span>
             <!--end::Svg Icon-->
     </button>
-    
+
     </div>
 </div>
 
@@ -186,7 +186,7 @@
 <div class="mb-3">
     <label for="lama_pekerjaan" class="form-label">Lama Pekerjaan</label>
     <input type="text" class="form-control @error('lama_pekerjaan') is-invalid @enderror" placeholder="lama pekerjaan" id="lama_pekerjaan" value="{{ old('lama_pekerjaan', $jadwal->lama_pekerjaan) }}" name="lama_pekerjaan">
-    @error('lama_pekerjaan')    
+    @error('lama_pekerjaan')
     <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>
@@ -194,9 +194,23 @@
 <div class="mb-3">
     <label for="personel" class="form-label">Personel</label>
     <input type="text" class="form-control @error('personel') is-invalid @enderror" placeholder="personel" id="personel" value="{{ old('personel', $jadwal->personel) }}" name="personel">
-    @error('personel')    
+    @error('personel')
     <div class="invalid-feedback">{{ $message }}</div>
     @enderror
+</div>
+
+<div class="mb-3">
+    <label for="foto_hasil_perbaikan" class="form-label">Foto Hasil Perbaikan</label>
+    <input class="form-control @error('foto_hasil_perbaikan') is-invalid @enderror" type="file" id="foto_hasil_perbaikan" name="foto_hasil_perbaikan" @if($jadwal->status > 2) disabled @endif>
+    @error('foto_hasil_perbaikan')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @if ($jadwal->foto_hasil_perbaikan)
+        <div class="mt-2">
+            <p>Foto saat ini:</p>
+            <img src="{{ asset('storage/' . $jadwal->foto_hasil_perbaikan) }}" alt="Foto Hasil Perbaikan" class="img-fluid rounded" style="max-height: 200px;">
+        </div>
+    @endif
 </div>
 
 @if($jadwal->alasan)
@@ -210,7 +224,7 @@
     <label for="kt_docs_tinymce_basic" class="form-label">Keterangan</label>
     <p>Isian tidak boleh mengandung karakter petik (") maupun (')</p>
     <p class="text-danger">
-        @error('keterangan')    
+        @error('keterangan')
          {{ $message }}
         @enderror
     </p>
@@ -228,14 +242,14 @@
 <div class="container m-5">
 
     <table class="table fs-3 table-row-dashed table-row-gray-600 gy-5 gx-4 gs-7">
-        
+
         <tr>
             <td class="text-end"><h2>Form</h2></td>
             <td class="text-center">Syarat</td>
             <td></td>
         </tr>
-  
-        
+
+
 
         @foreach ($isi_form as $i)
         <tr>
@@ -249,11 +263,11 @@
 
 
     </table>
-    
+
 </div>
 
 
-@if($jadwal->status == 2 && Gate::allows('mahasiswa'))  
+@if($jadwal->status == 2 && Gate::allows('mahasiswa'))
     <div class="form-check my-4">
         <input class="form-check-input" type="checkbox" value="divalidasi" name="validasi" id="flexCheckDefault">
         <label class="form-check-label h2" for="flexCheckDefault">
@@ -264,10 +278,10 @@
 
 
 <div class="container-fluid text-end">
-    
+
     <a href="/mesin">
         <button type="button" class="btn btn-lg btn-secondary d-inline">
-            
+
             <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr046.svg-->
             <span class="svg-icon svg-icon-muted svg-icon-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -278,7 +292,7 @@
             <span>Kembali</span>
             <!--end::Svg Icon-->
         </button>
-            
+
         </a>
 
 
@@ -314,7 +328,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">ALASAN</h5>
 
-   
+
             </div>
 
             <div class="modal-body">
@@ -326,14 +340,14 @@
                     <div class="invalid-feedback">
                         {{ $message }}
                       </div>
-                    @enderror  
+                    @enderror
                 </div>
             </div>
 
             <div class="modal-footer">
-                
+
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
-                
+
                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
 
             </div>
@@ -351,9 +365,9 @@
 
     <tr class="table-primary">
         <td class="fw-bold fs-1">Pemakaian Sparepart</td>
-    
+
         <td class="text-end">
-            @if($jadwal->status < 3 && !$jadwal->trashed() && (Gate::allows('superadmin') || Gate::denies('admin'))) 
+            @if($jadwal->status < 3 && !$jadwal->trashed() && (Gate::allows('superadmin') || Gate::denies('admin')))
             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
                     <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="white"/>
@@ -362,16 +376,16 @@
                 </svg>
             </button>
             @endif
-    
+
         </td>
     </tr>
-    
+
     <tr>
         <td colspan="2">
-    
+
             @if($jadwal->sparepart->isNotEmpty())
             <table class="table align-middle fs-5 table-row-dashed table-row-gray-400 gs-7 g-3">
-                
+
                 <tr class="fw-bolder text-gray-800">
                     <td>Item Number</td>
                     <td>Nama Sparepart</td>
@@ -380,7 +394,7 @@
                     <td>Satuan</td>
                     <td>Aksi</td>
                 </tr>
-                
+
             @foreach ($jadwal->sparepart as $s)
                 <tr>
                     <td>{{ $s->id }}</td>
@@ -389,7 +403,7 @@
                     <td>{{ $s->pivot->jumlah }}</td>
                     <td>{{ $s->satuan }}</td>
                     <td>
-                        @if($jadwal->status < 3) 
+                        @if($jadwal->status < 3)
                         <form action="/sparepart/jadwal/delete" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
                         @method('delete')
                         @csrf
@@ -405,22 +419,22 @@
                     @endif
                 </td>
                 </tr>
-                
-               
+
+
                 @endforeach
-                
-    
-                
+
+
+
             </table>
             @else
                 <b>Tidak ada pemakaian sparepart</b>
             @endif
-            
-            
+
+
         </td>
     </tr>
-    
-    
+
+
     </table>
 
 
