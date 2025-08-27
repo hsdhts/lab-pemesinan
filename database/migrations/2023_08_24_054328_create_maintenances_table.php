@@ -19,9 +19,8 @@ class CreateMaintenancesTable extends Migration
             $table->foreignId('mesin_id');
             $table->integer('periode');
             $table->enum('satuan_periode', ['Jam', 'Hari', 'Minggu', 'Bulan', 'Tahun'])->default('Jam');
-            $table->dateTime('start_date');
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
+
+
             $table->char('warna', 7)->default('#0095E8');
             $table->timestamps();
             $table->softDeletes();

@@ -12,16 +12,16 @@ class JadwalApproveController extends Controller
     //
 
     public function index(Request $request){
-        
+
         $jadwal = Jadwal::with(['maintenance', 'maintenance.mesin'])->where('status', 3)->get()->groupBy(['maintenance.mesin.nama_mesin', 'maintenance.nama_maintenance']);
 
         // $jadwal = collect($jadwal);
 
-        
+
         //ddd(Carbon::getAvailableLocalesInfo());
 
         if($request->tanggal_awal||$request->tanggal_akhir){
-            
+
             if($request->tanggal_awal && $request->tanggal_akhir){
                 $tglawal = Carbon::parse($request->tanggal_awal, 7);
                 $tglakhir = Carbon::parse($request->tanggal_akhir, 7);
@@ -30,23 +30,23 @@ class JadwalApproveController extends Controller
                     return redirect()->back()->withErrors(['tanggal_lebih_besar' => 'Tanggal awal tidak boleh mendahului dari tanggal akhir']);
                 }
 
-            }else{                
+            }else{
                 $tglawal = now(7)->subDays(30);
                 $tglakhir = now(7);
                 return redirect()->back()->withErrors(['salah_input' => 'Pastikan input tanggal yang anda masukkan benar!']);
 
             }
 
-           
+
         }else{
             $tglawal = now(7)->subDays(30);
             $tglakhir = now(7);
         }
 
 
-        return view('pages.jadwal.close_jadwal', 
-        ['jadwal' => $jadwal, 
-        'tglAwal' => $tglawal, 
+        return view('pages.jadwal.close_jadwal',
+        ['jadwal' => $jadwal,
+        'tglAwal' => $tglawal,
         'tglAkhir' => $tglakhir]);
 
     }
@@ -59,6 +59,9 @@ class JadwalApproveController extends Controller
         return redirect()->back()->with('approve', $data_valid['jadwal_id']);
     }
 
+
+    // Hapus method approve_ubah dan buat_jadwal
+    // Hanya biarkan approve_tetap untuk approval normal
 
     public function approve_tetap(Request $request){
         $data_valid = $request->validate([
@@ -80,9 +83,7 @@ class JadwalApproveController extends Controller
 
         $jd = Jadwal::find($data_valid['jadwal_id']);
         $maintenance_id = $jd->maintenance_id;
-        //ddd($maintenance_id);
 
-        //$jadwal = Jadwal::with('maintenance')->where('maintenance_id', 7)->where('status', 3)->orWhere('status', 4)->orderBy('tanggal_realisasi', 'DESC')->get();
         $jadwal = Jadwal::with('maintenance')->where('status', 3)->orWhere('status', 4)->where('maintenance_id', 7)->orderBy('tanggal_realisasi', 'DESC')->get();
         if($data_valid['jadwal_id'] == $jadwal[0]->id){
 
@@ -111,10 +112,10 @@ class JadwalApproveController extends Controller
 
     private function buat_jadwal($id_maintenance, $start_date){
 
-    
+
     $maintenance = Maintenance::find($id_maintenance);
     $tahun = Carbon::now()->year;
-    
+
     $jadwalObj = new JadwalController();
 
     $waktu = Carbon::parse($start_date);
@@ -122,74 +123,74 @@ class JadwalApproveController extends Controller
 
     $periode = $maintenance->periode;
     $satuan_periode = $maintenance->satuan_periode;
-    
+
 
         switch ($satuan_periode) {
             case 'Jam':
                 $waktu->addHour($periode);
-                
+
                 while($waktu->year === $tahun){
                     //echo $waktu->format('d-m-Y') . "<br>";
-            
+
                     $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-    
+
                     $waktu->addHour($periode);
-                }            
+                }
                 break;
             case 'Hari':
                 $waktu->addDays($periode);
 
                 while($waktu->year === $tahun){
                     //echo $waktu->format('d-m-Y') . "<br>";
-            
+
                     //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                     $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-    
-    
+
+
                     $waktu->addDays($periode);
-                }            
+                }
                 break;
-    
+
             case 'Minggu':
                     $waktu->addWeeks($periode);
 
                     while($waktu->year === $tahun){
                         //echo $waktu->format('d-m-Y') . "<br>";
-                
+
                         //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                         $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-    
-    
+
+
                         $waktu->addWeeks($periode);
-                    }            
+                    }
                 break;
-    
+
             case 'Bulan':
                     $waktu->addMonths($periode);
 
                     while($waktu->year === $tahun){
                         //echo $waktu->format('d-m-Y') . "<br>";
-                
+
                         //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                         $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-    
+
                         $waktu->addMonths($periode);
-                    }            
+                    }
                     break;
-            
+
             case 'Tahun':
                 $waktu->addYears($periode);
 
                 while($waktu->year === $tahun){
                     //echo $waktu->format('d-m-Y') . "<br>";
-            
+
                     //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                     $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-    
+
                     $waktu->addYears($periode);
-                }            
+                }
                 break;
-    
+
             default:
                 # code...
                 break;

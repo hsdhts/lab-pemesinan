@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Mesin;
 use App\Models\Ruang;
-use App\Models\Kategori;
 use App\Models\Maintenance;
 use App\Models\SetupForm;
 use App\Models\SetupMaintenance;
@@ -24,7 +23,6 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            KategoriSeeder::class,
             UserSeeder::class
         ]);
 

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Cache;
 class UpdateMaintenanceController extends Controller
 {
     public function create(Request $request){
-        $mesin = Mesin::with(['maintenance',  'kategori', 'form'])->find($request->mesin_id);
+        $mesin = Mesin::with(['maintenance', 'form'])->find($request->mesin_id);
         
         $setup = collect([]);  
         $attach = collect(['aksi' => 'tambah']);
@@ -33,7 +33,7 @@ class UpdateMaintenanceController extends Controller
             'maintenance_id' => 'required|numeric'
         ]);
 
-        $mesin = Mesin::with(['maintenance',  'kategori', 'form'])->find($data_valid['mesin_id']);
+        $mesin = Mesin::with(['maintenance', 'form'])->find($data_valid['mesin_id']);
 
         $maintenance = Maintenance::find($data_valid['maintenance_id']);
         $setup = collect([$maintenance])->map(function($item){
@@ -42,8 +42,6 @@ class UpdateMaintenanceController extends Controller
                'nama_setup' => $item->nama_maintenance, 
                'periode' => $item->periode,
                'satuan_periode' => $item->satuan_periode,
-               'start_date' => $item->start_date,
-               'end_date' => $item->end_date,
                'warna' => $item->warna,
                
                'setupForm' => $item->form->map(function($i) {
@@ -80,8 +78,6 @@ class UpdateMaintenanceController extends Controller
                     'mesin_id' => $mesin->get('id'),
                     'periode' => $s->get('periode'),
                     'satuan_periode' => $s->get('satuan_periode'),
-                    'start_date' => Carbon::parse($s->get('start_date')),
-                    'end_date' => Carbon::parse($s->get('end_date')),
                     'warna' => $s->get('warna')
                 ]);
                 foreach($s->get('setupForm') as $form){
@@ -115,8 +111,6 @@ class UpdateMaintenanceController extends Controller
                     'mesin_id' => $mesin->get('id'),
                     'periode' => $s->get('periode'),
                     'satuan_periode' => $s->get('satuan_periode'),
-                    'start_date' => Carbon::parse($s->get('start_date')),
-                    'end_date' => Carbon::parse($s->get('end_date')),
                     'warna' => $s->get('warna')
                 ]);
                 foreach($s->get('setupForm') as $form){
@@ -131,11 +125,11 @@ class UpdateMaintenanceController extends Controller
 
             }
 
-            $start_date = Carbon::parse($setup[0]->get('start_date'))->toDateTimeString();
-            //ddd($start_date);
-            Jadwal::where('maintenance_id', $attach['maintenance_id'])->where('tanggal_rencana', '>=', $start_date)->forceDelete();
+            // Remove all future scheduled maintenance for this maintenance_id
+            Jadwal::where('maintenance_id', $attach['maintenance_id'])->where('tanggal_rencana', '>=', now())->forceDelete();
 
-            $jadwal = Jadwal::where('maintenance_id', $attach['maintenance_id'])->where('tanggal_rencana', '<', $start_date);
+            // Update past scheduled maintenance status
+            $jadwal = Jadwal::where('maintenance_id', $attach['maintenance_id'])->where('tanggal_rencana', '<', now());
             $jadwal->increment('status', 20);
 
             Maintenance::destroy($attach['maintenance_id']);

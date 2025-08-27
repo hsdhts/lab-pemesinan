@@ -8,7 +8,7 @@ use App\Http\Controllers\MesinController;
 use App\Http\Controllers\RuangController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JadwalSparepartController;
-use App\Http\Controllers\KategoriController;
+
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\SetupFormController;
 use App\Http\Controllers\SparepartController;
@@ -71,28 +71,19 @@ Route::put('/mesin/maintenance/edit/submit', [UpdateMaintenanceController::class
 Route::delete('/mesin/maintenance/delete/', [UpdateMaintenanceController::class, 'delete'])->middleware('mahasiswa');
 
 
-Route::get('/kategori', [KategoriController::class, 'index'])->middleware('auth')->middleware('teknisi');
-Route::post('/kategori/create', [KategoriController::class, 'create'])->middleware('mahasiswa');
-Route::put('/kategori/update', [KategoriController::class, 'updateOnKategori'])->middleware('mahasiswa');
-Route::delete('/kategori/destroy', [KategoriController::class, 'destroy'])->middleware('mahasiswa');
 
-Route::post('/kategori/setupMaintenance/create', [SetupMaintenanceController::class, 'createPadaKategori'])->middleware('mahasiswa');
-Route::put('/kategori/setupMaintenance/edit', [SetupMaintenanceController::class, 'editPadaKategori'])->middleware('mahasiswa');
-Route::delete('/kategori/setupMaintenance/destroy', [SetupMaintenanceController::class, 'hapusPadaKategori'])->middleware('mahasiswa');
 
 Route::get('/setupMaintenance/{id}', [SetupMaintenanceController::class, 'setup'])->middleware('auth')->middleware('teknisi');
 Route::post('/setupMaintenance/create', [SetupMaintenanceController::class, 'createPadaSetup'])->middleware('mahasiswa');
 Route::put('/setupMaintenance/edit', [SetupMaintenanceController::class, 'editPadaSetup'])->middleware('mahasiswa');
 Route::delete('/setupMaintenance/destroy', [SetupMaintenanceController::class, 'hapusPadaSetup'])->middleware('mahasiswa');
-Route::put('/setupMaintenance/kategori/update', [KategoriController::class, 'updateOnSetup'])->middleware('mahasiswa');
+
 
 Route::post('/setupForm/create/', [SetupFormController::class, 'createPadaSetup'])->middleware('mahasiswa');
 Route::put('/setupForm/edit/', [SetupFormController::class, 'editPadaSetup'])->middleware('mahasiswa');
 Route::delete('/setupForm/delete/', [SetupFormController::class, 'deletePadaSetup'])->middleware('mahasiswa');
 
-Route::post('/kategori/setupForm/create/', [SetupFormController::class, 'createPadaKategori'])->middleware('mahasiswa');
-Route::put('/kategori/setupForm/edit/', [SetupFormController::class, 'editPadaKategori'])->middleware('mahasiswa');
-Route::delete('/kategori/setupForm/delete/', [SetupFormController::class, 'deletePadaKategori'])->middleware('mahasiswa');
+
 
 Route::get('/ruang', [RuangController::class, 'index'])->middleware('auth')->middleware('teknisi');
 Route::post('/ruang/create', [RuangController::class, 'create'])->middleware('admin');

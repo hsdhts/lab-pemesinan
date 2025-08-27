@@ -4,12 +4,12 @@
     <style>
         .tabel-tampil-jadwal td{
     position: relative;
-    /*border: 1px #1a1a1a; */ 
+    /*border: 1px #1a1a1a; */
     text-align: center;
     min-width: 40px;
 }
 
-.tabel-tampil-jadwal thead th, 
+.tabel-tampil-jadwal thead th,
 .tabel-tampil-jadwal thead td{
    /* border-collapse: collapse; */
    font-size: small;
@@ -49,7 +49,7 @@
             <div class="form-floating">
                 <div class="input-group date">
                     <input type="text" name="tanggal_awal" placeholder="masukkan tanggal awal..." class="form-control @error('tanggal_awal')is-invalid @enderror">
-                    
+
                     <button class="btn btn-secondary" type="button">
                         <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
                         <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -70,10 +70,10 @@
 
             <div class="col-md-4">
               <div class="form-floating">
-             
+
                 <div class="input-group date">
                     <input type="text" name="tanggal_akhir" placeholder="masukkan tanggal akhir..." class="form-control @error('tanggal_akhir')is-invalid @enderror">
-                    
+
                     <button class="btn btn-secondary" type="button">
                         <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
                         <span class="svg-icon svg-icon-muted svg-icon-2">
@@ -104,12 +104,12 @@
 <div class="container text-center mt-7"><h1>Realisasi</h1></div>
 
     <div class="container-fluid my-3 table-responsive p-0" style="overflow-y: scroll; max-height:450px;">
-        
+
         @php
             $start = $tglAwal->copy();
             $akhir = $tglAkhir->copy();
-        
-            $selisihHari = $tglAwal->diffInDays($tglAkhir, $tglAwal) + 1; 
+
+            $selisihHari = $tglAwal->diffInDays($tglAkhir, $tglAwal) + 1;
         @endphp
 
 
@@ -125,25 +125,25 @@
                         @php
                             $akhir->subDay();
                             @endphp
-                    @endwhile         
+                    @endwhile
 
             </tr>
-            
+
         </thead>
         <tbody>
 
 
             @foreach ($jadwal as $mesinKey => $mesinVal)
-                
+
             <tr>
-                <td class="text-light fs-5 fw-bold">{{ $mesinKey }}</td> 
-                <td colspan="{{ $selisihHari }}"></td>             
+                <td class="text-light fs-5 fw-bold">{{ $mesinKey }}</td>
+                <td colspan="{{ $selisihHari }}"></td>
             </tr>
 
                 @foreach ($mesinVal as $maintenanceKey => $maintenanceVal)
                     <tr>
                         <td class="text-light">&nbsp;&nbsp;-&nbsp;{{ $maintenanceKey }}</td>
-                        
+
                         @php
                             $tglMulai = $tglAwal->copy();
                             $tglSelesai = $tglAkhir->copy();
@@ -151,7 +151,7 @@
                         @endphp
                             @while($tglSelesai->greaterThanOrEqualTo($tglMulai))
                                 <td class="align-middle">
-                                   
+
                                     @php
                                     $jd = $maintenanceVal->first(function($value, $key) use ($tglSelesai){
                                         /*
@@ -163,7 +163,7 @@
                                         //echo $value->tanggal_realisasi . "<br>";
                                         return (Illuminate\Support\Carbon::parse($value->tanggal_realisasi)->isSameDay($tglSelesai));
 
-                                    });     
+                                    });
 
                                     if(is_null($jd)){
                                         echo $tglSelesai->day;
@@ -173,14 +173,14 @@
                                             return '['. $item->id .',\''. $item->maintenance->nama_maintenance .'\',\''. $item->maintenance->mesin->nama_mesin .'\']';
                                             });
                                         */
-                                        echo '<button class="btn btn-sm btn-primary" onclick="modal_approve('. $jd->id . ',\''. $jd->maintenance->mesin->nama_mesin .'\',\''. $jd->maintenance->nama_maintenance .'\',\''. Illuminate\Support\Carbon::parse($jd->tanggal_rencana)->format('d-m-Y') .'\',\''. Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('d-m-Y') .'\',\''. ((!is_null($jd->keterangan)) ? $jd->keterangan : '-') .'\',\''. ((!is_null($jd->alasan)) ? $jd->alasan : '-') .'\')" data-bs-toggle="modal" data-bs-target="#modal_approve">' . $tglSelesai->day .'</button>';
+                                        echo '<button class="btn btn-sm btn-primary" onclick="modal_approve('. $jd->id . ',\''. $jd->maintenance->mesin->nama_mesin .'\',\''. $jd->maintenance->nama_maintenance .'\',\''. Illuminate\Support\Carbon::parse($jd->tanggal_rencana)->format('d-m-Y') .'\',\''. Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('d-m-Y') .'\',\''. ((!is_null($jd->keterangan)) ? $jd->keterangan : '-') .'\')" data-bs-toggle="modal" data-bs-target="#modal_approve">' . $tglSelesai->day .'</button>';
                                     }
-                                    
+
                                     $tglSelesai->subDay();
                                     @endphp
                                 </td>
 
-                            @endwhile             
+                            @endwhile
                     </tr>
                 @endforeach
 
@@ -188,7 +188,7 @@
 
 
 
-    
+
 
         </tbody>
 </table>
@@ -243,17 +243,27 @@
                         <th class="fw-bold">Keterangan</th>
                         <td id="approve_keterangan"></td>
                     </tr>
-                    <tr>
-                        <th class="fw-bold">Alasan Terlambat</th>
-                        <td id="approve_alasan"></td>
-                    </tr>
-    
                 </table>
 
             </div>
 
             <div class="modal-footer">
                 <a class="btn btn-warning" id="link_detail" target="_blank">Lihat Detail</a>
+                <form action="/laporan/maintenance" method="POST" style="display: inline;">
+                    @csrf
+                    <input type="hidden" name="jadwal_id" id="download_jadwal_id">
+                    <button type="submit" class="btn btn-success">
+                        <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil009.svg-->
+                        <span class="svg-icon svg-icon-muted svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM13 15.4V10C13 9.4 12.6 9 12 9C11.4 9 11 9.4 11 10V15.4H8L11.3 18.7C11.7 19.1 12.3 19.1 12.7 18.7L16 15.4H13Z" fill="black"/>
+                                <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="black"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        Download Laporan
+                    </button>
+                </form>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 <form action="/approve/jadwal" method="POST">
                     @csrf
@@ -283,17 +293,16 @@ $('.input-group.date').datepicker({
 
 
 
-function modal_approve(jadwal_id, mesin, maintenance, tgl_rencana, tgl_realisasi, keterangan, alasan) {
-        
-        document.getElementById('approve_mesin').innerHTML = mesin;
-        document.getElementById('approve_maintenance').innerHTML = maintenance;
-        document.getElementById('approve_tanggal_rencana').innerHTML = tgl_rencana;
-        document.getElementById('approve_tanggal_realisasi').innerHTML = tgl_realisasi;
-        document.getElementById('approve_keterangan').innerHTML = keterangan;
-        document.getElementById('approve_alasan').innerHTML = alasan;
-        document.getElementById('jadwal_id').value = jadwal_id;
-        document.getElementById('link_detail').href = '/jadwal/detail/'+jadwal_id;
-    }
+function modal_approve(jadwal_id, mesin, maintenance, tgl_rencana, tgl_realisasi, keterangan) {
+    document.getElementById('approve_mesin').innerHTML = mesin;
+    document.getElementById('approve_maintenance').innerHTML = maintenance;
+    document.getElementById('approve_tanggal_rencana').innerHTML = tgl_rencana;
+    document.getElementById('approve_tanggal_realisasi').innerHTML = tgl_realisasi;
+    document.getElementById('approve_keterangan').innerHTML = keterangan;
+    document.getElementById('jadwal_id').value = jadwal_id;
+    document.getElementById('download_jadwal_id').value = jadwal_id;
+    document.getElementById('link_detail').href = '/jadwal/detail/'+jadwal_id;
+}
 
 
 @if(session('approve'))

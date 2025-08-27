@@ -43,17 +43,6 @@
             margin-bottom: 5px;
             font-size: 8pt;
         }
-        .alasan{
-            width: 100%;
-            margin-bottom: 20px;
-            border: 1px solid black;
-            border-radius: 3px;
-            min-height: 50px;
-            font-size: 11pt;
-            padding: 6px;
-            box-sizing: border-box;
-            font-size: 9pt;
-        }
         .judul{
             text-align: center;
             margin: 2px auto;
@@ -90,12 +79,6 @@
         {!! $jadwal->keterangan !!}
     </div>
 
-    @if($jadwal->alasan)
-        <h5 style="margin-bottom: 2px;">Alasan Terlambat : </h5>
-        <div class="alasan">
-            {{ $jadwal->alasan }}
-        </div>
-    @endif
     @php
         $sparepart = $jadwal->sparepart;
     @endphp

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Mesin;
-use App\Models\Kategori;
 use App\Models\Stasiun;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -18,7 +17,7 @@ class MesinController extends Controller
     //
     public function index(Request $request) {
         if ($request->ajax()) {
-            $mesin = Mesin::with(['kategori', 'user', 'stasiun']);
+            $mesin = Mesin::with(['user', 'stasiun']);
     
             return DataTables::of($mesin)
                 ->addColumn('nama_mesin', function ($mesin) {
@@ -27,9 +26,7 @@ class MesinController extends Controller
                 ->addColumn('user', function (Mesin $mesin) {
                     return $mesin->user ? $mesin->user->nama : ''; // Periksa apakah user tidak null
                 })
-                ->addColumn('kategori', function (Mesin $mesin) {
-                    return $mesin->kategori ? $mesin->kategori->nama_kategori : 'Tak Terkategori'; // Periksa apakah kategori tidak null
-                })
+
                 ->addColumn('stasiun', function (Mesin $mesin) {
                     return $mesin->stasiun ? $mesin->stasiun->nama_stasiun : 'Belum Ditentukan'; // Periksa apakah stasiun tidak null
                 })

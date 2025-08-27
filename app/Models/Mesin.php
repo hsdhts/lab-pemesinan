@@ -21,7 +21,6 @@ class Mesin extends Model
 
     protected $fillable = [
         'nama_mesin',
-        'kategori_id',
         'stasiun_id',
         'spesifikasi',
         'kode_mesin',
@@ -31,9 +30,7 @@ class Mesin extends Model
         'nameTag_image'
     ];
 
-    public function kategori() {
-        return $this->belongsTo(Kategori::class);
-    }
+
     
     public function stasiun() {
         return $this->belongsTo(Stasiun::class);
