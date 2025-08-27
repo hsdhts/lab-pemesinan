@@ -19,8 +19,24 @@ class Mesin extends Model
     
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'nama_mesin',
+        'kategori_id',
+        'stasiun_id',
+        'spesifikasi',
+        'kode_mesin',
+        'tanggal_pembelian',
+        'user_id',
+        'mesin_image',
+        'nameTag_image'
+    ];
+
     public function kategori() {
         return $this->belongsTo(Kategori::class);
+    }
+    
+    public function stasiun() {
+        return $this->belongsTo(Stasiun::class);
     }
     
     public function maintenance() {

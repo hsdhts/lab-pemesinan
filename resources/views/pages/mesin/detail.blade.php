@@ -22,7 +22,11 @@
                     <td><b>Kode Mesin</b></td>
                     <td>{{ $mesin->kode_mesin }}</td>
                 </tr>
+                
                 <tr>
+                    <td><b>Stasiun</b></td>
+                    <td>{{ $mesin->stasiun ? $mesin->stasiun->nama_stasiun : 'Belum Ditentukan' }}</td>
+                </tr>
 
                 <tr>
                     <td><b>Tanggal Pembelian</b></td>
