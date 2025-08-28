@@ -7,16 +7,56 @@
     <!--begin::Row-->
     <div class="row g-5 g-xl-8">
         <div class="col-xl-3">
-            <!--begin::Statistics Widget 5-->
-            <a class="card bg-danger hoverable card-xl-stretch mb-xl-8" data-bs-toggle="modal" data-bs-target="#kt_modal_1">
+                        <!--begin::Statistics Widget 5-->
+            <a href="{{ url('/jadwal/all') }}" class="card bg-primary hoverable card-xl-stretch mb-5 mb-xl-8">
                 <!--begin::Body-->
+                <div class="card-body">
+                    @if($total_jadwal->count() > 0 and $total_jadwal->count() < 100)
+                    <span class="position-absolute top-0 fs-3 start-100 p-7 translate-middle badge badge-circle badge-warning">{{ $total_jadwal->count() }}</span>
+                    @elseif($total_jadwal->count() > 100)
+                    <span class="position-absolute top-0 fs-3 start-100 p-7 translate-middle badge badge-circle badge-warning">99+</span>
+                    @endif
+                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                    <span class="svg-icon svg-icon-light svg-icon-3x ms-n1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M11.998 2.50006C8.79882 2.50006 6.12448 4.9443 6.00448 8.10006V9.50006H4.50048C3.90048 9.50006 3.50048 9.90006 3.50048 10.5001V19.5001C3.50048 20.1001 3.90048 20.5001 4.50048 20.5001H19.5005C20.1005 20.5001 20.5005 20.1001 20.5005 19.5001V10.5001C20.5005 9.90006 20.1005 9.50006 19.5005 9.50006H18.0005V8.10006C17.8805 4.9443 15.2061 2.50006 11.998 2.50006ZM11.998 4.50006C14.1026 4.50006 15.8005 6.19791 15.8005 8.30256V9.50006H8.19548V8.30256C8.19548 6.19791 9.89332 4.50006 11.998 4.50006Z" fill="black"/>
+                            <path opacity="0.3" d="M9.00048 16.5001C8.40048 16.5001 8.00048 16.1001 8.00048 15.5001C8.00048 14.9001 8.40048 14.5001 9.00048 14.5001H15.0005C15.6005 14.5001 16.0005 14.9001 16.0005 15.5001C16.0005 16.1001 15.6005 16.5001 15.0005 16.5001H9.00048Z" fill="black"/>
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                    <div class="text-white fw-bolder fs-2 mb-2 mt-5">RIWAYAT</div>
+                    <div class="fw-bold text-white">Riwayat Semua Data Breakdown</div>
+                </div>
                 <!--end::Body-->
             </a>
             <!--end::Statistics Widget 5-->
         </div>
+
+                <div class="col-xl-3">
+            <!--begin::Statistics Widget 5-->
+            <a href="{{ url('/mesin') }}" class="card bg-primary hoverable card-xl-stretch mb-5 mb-xl-8">
+                <!--begin::Body-->
+                <div class="card-body">
+                    {{-- <span class="position-absolute top-0 fs-3 start-100 p-7 translate-middle badge badge-circle badge-danger">0</span> --}}
+                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                    <span class="svg-icon svg-icon-light svg-icon-3x ms-n1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.3" d="M21.25 18.525L13.05 21.825C12.35 22.125 11.65 22.125 10.95 21.825L2.75 18.525C2.05 18.225 1.5 17.525 1.5 16.725V7.225C1.5 6.425 2.05 5.725 2.75 5.425L10.95 2.125C11.65 1.825 12.35 1.825 13.05 2.125L21.25 5.425C21.95 5.725 22.5 6.425 22.5 7.225V16.725C22.5 17.525 21.95 18.225 21.25 18.525Z" fill="black"></path>
+                            <path d="M11.1 15.025L14.9 13.225C15.3 13.025 15.3 12.525 14.9 12.325L11.1 10.525C10.7 10.325 10.3 10.725 10.3 11.125V14.425C10.3 14.825 10.7 15.225 11.1 15.025Z" fill="black"></path>
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                    <div class="text-white fw-bolder fs-2 mb-2 mt-5">BREAKDOWN</div>
+                    <div class="fw-bold text-white">Laporkan Kerusakan Disini!</div>
+                </div>
+                <!--end::Body-->
+            </a>
+            <!--end::Statistics Widget 5-->
+        </div>
+
         <div class="col-xl-3">
             <!--begin::Statistics Widget 5-->
-            <a class="card bg-dark hoverable card-xl-stretch mb-xl-8" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
+            <a class="card bg-warning hoverable card-xl-stretch mb-xl-8" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
                 <!--begin::Body-->
                 <div class="card-body">
                     @if($hari_ini->count() > 0 and $hari_ini->count() < 100)
@@ -32,41 +72,17 @@
                         </svg>
                     </span>
                     <!--end::Svg Icon-->
-                    <div class="text-gray-100 fw-bolder fs-2 mb-2 mt-5">HARI INI</div>
-                    <div class="fw-bold text-gray-100">Maintenance Pada Hari Ini</div>
+                    <div class="text-white fw-bolder fs-2 mb-2 mt-5">HARI INI</div>
+                    <div class="fw-bold text-white">Breakdown Pada Hari Ini</div>
                 </div>
                 <!--end::Body-->
             </a>
             <!--end::Statistics Widget 5-->
         </div>
-        <div class="col-xl-3">
-            <!--begin::Statistics Widget 5-->
-            <a class="card bg-info hoverable card-xl-stretch mb-xl-8" data-bs-toggle="modal" data-bs-target="#kt_modal_3">
-                <!--begin::Body-->
-                <div class="card-body">
-                    @if($seminggu->count() > 0 and $seminggu->count() < 100)
-                    <span class="position-absolute top-0 fs-3 start-100 p-7 translate-middle badge badge-circle badge-warning">{{ $seminggu->count() }}</span>
-                    @elseif($seminggu->count() > 100)
-                    <span class="position-absolute top-0 fs-3 start-100 p-7 translate-middle badge badge-circle badge-warning">99+</span>
-                    @endif
 
-                    <!--begin::Svg Icon | path: icons/duotune/finance/fin006.svg-->
-                    <span class="svg-icon svg-icon-light svg-icon-3x ms-n1">
-                        <svg xmlns="http://www.w3.org/2000/svg"  shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 461.169" fill="black">
-                            <path opacity="0.3" d="M164.327 88.809h232.902v308.103h-11.572l20.326 47.279a11.763 11.763 0 011.181 5.155c0 6.529-5.294 11.823-11.823 11.823H195.626v-.047c-1.318 0-2.658-.223-3.971-.693-6.122-2.192-9.305-8.934-7.113-15.055l17.363-48.462h-37.578c-10.333 0-19.732-4.231-26.547-11.045l-.026-.026c-6.814-6.815-11.046-16.214-11.046-26.548v-15.651H79.376c-5.759 0-11.008-2.358-14.8-6.151-3.785-3.785-6.148-9.022-6.148-14.797v-59.423H20.411C9.139 263.271 0 254.132 0 242.86c0-11.271 9.139-20.41 20.411-20.41h38.017v-59.423c0-5.773 2.351-11.011 6.144-14.803 3.793-3.793 9.03-6.144 14.804-6.144h47.332v-15.652c0-10.334 4.232-19.733 11.046-26.548l.026-.026c6.815-6.813 16.214-11.045 26.547-11.045zM247.214 0h105.097c17.73 0 32.233 14.536 32.233 32.233v.004c0 17.696-14.535 32.233-32.233 32.233H247.214c-17.697 0-32.233-14.505-32.233-32.233v-.004C214.981 14.503 229.486 0 247.214 0zM122.04 165.726H82.075v154.269h39.965V165.726zm298.836-76.238c23.617 2.73 44.866 13.533 60.888 29.557C500.421 137.7 512 163.44 512 191.757v109.537c0 26.302-10.757 50.211-28.083 67.535-16.333 16.334-38.515 26.828-63.041 27.976V89.488zm-58.625 312.798H224.994l-12.624 35.236h165.029l-15.148-35.236zm-161.583-218.22c-7.45 0-13.492-6.042-13.492-13.492 0-7.451 6.042-13.493 13.492-13.493h146.274c7.45 0 13.492 6.042 13.492 13.493 0 7.45-6.042 13.492-13.492 13.492H200.668zm0 147.512c-7.45 0-13.492-6.042-13.492-13.493 0-7.45 6.042-13.492 13.492-13.492h146.274c7.45 0 13.492 6.042 13.492 13.492 0 7.451-6.042 13.493-13.492 13.492H200.668zm0-73.756c-7.45 0-13.492-6.041-13.492-13.492 0-7.45 6.042-13.492 13.492-13.492h146.274c7.45 0 13.492 6.042 13.492 13.492 0 7.451-6.042 13.492-13.492 13.492H200.668z" fill="black"/>
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
-                    <div class="text-white fw-bolder fs-2 mb-2 mt-5">Mesin</div>
-                    <div class="fw-bold text-white">Data Total Mesin</div>
-                </div>
-                <!--end::Body-->
-            </a>
-            <!--end::Statistics Widget 5-->
-        </div>
         <div class="col-xl-3">
             <!--begin::Statistics Widget 5-->
-            <a class="card bg-success hoverable card-xl-stretch mb-5 mb-xl-8" data-bs-toggle="modal" data-bs-target="#kt_modal_4">
+            <a class="card bg-info hoverable card-xl-stretch mb-5 mb-xl-8" data-bs-toggle="modal" data-bs-target="#kt_modal_4">
                 <!--begin::Body-->
                 <div class="card-body">
                     @if($sebulan->count() > 0 and $sebulan->count() < 100)
@@ -88,6 +104,7 @@
             </a>
             <!--end::Statistics Widget 5-->
         </div>
+
     </div>
     <!--end::Row-->
 

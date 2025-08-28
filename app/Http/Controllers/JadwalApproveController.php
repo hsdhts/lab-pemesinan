@@ -13,102 +13,53 @@ class JadwalApproveController extends Controller
 
     public function index(Request $request){
 
-        $jadwal = Jadwal::with(['maintenance', 'maintenance.mesin'])->where('status', 3)->get()->groupBy(['maintenance.mesin.nama_mesin', 'maintenance.nama_maintenance']);
-
-        // $jadwal = collect($jadwal);
-
-
-        //ddd(Carbon::getAvailableLocalesInfo());
-
+        // Set default date range
         if($request->tanggal_awal||$request->tanggal_akhir){
 
             if($request->tanggal_awal && $request->tanggal_akhir){
-                $tglawal = Carbon::parse($request->tanggal_awal, 7);
-                $tglakhir = Carbon::parse($request->tanggal_akhir, 7);
+                $tglawal = Carbon::parse($request->tanggal_awal);
+                $tglakhir = Carbon::parse($request->tanggal_akhir);
 
                 if($tglawal->greaterThan($tglakhir)){
                     return redirect()->back()->withErrors(['tanggal_lebih_besar' => 'Tanggal awal tidak boleh mendahului dari tanggal akhir']);
                 }
 
             }else{
-                $tglawal = now(7)->subDays(30);
-                $tglakhir = now(7);
+                $tglawal = now()->subDays(90);
+                $tglakhir = now();
                 return redirect()->back()->withErrors(['salah_input' => 'Pastikan input tanggal yang anda masukkan benar!']);
 
             }
 
 
         }else{
-            $tglawal = now(7)->subDays(30);
-            $tglakhir = now(7);
+            $tglawal = now()->subDays(90);
+            $tglakhir = now();
         }
 
+        // Query dengan filter tanggal pada tanggal_realisasi
+        $query = Jadwal::with(['maintenance', 'maintenance.mesin'])
+            ->whereIn('status', [3, 4])
+            ->whereNotNull('tanggal_realisasi') // Pastikan tanggal_realisasi tidak null
+            ->whereDate('tanggal_realisasi', '>=', $tglawal->format('Y-m-d'))
+            ->whereDate('tanggal_realisasi', '<=', $tglakhir->format('Y-m-d'));
 
-        return view('pages.jadwal.close_jadwal',
-        ['jadwal' => $jadwal,
-        'tglAwal' => $tglawal,
-        'tglAkhir' => $tglakhir]);
-
-    }
-
-    public function approve(Request $request){
-        $data_valid = $request->validate([
-            'jadwal_id' => 'required|numeric',
-        ]);
-
-        return redirect()->back()->with('approve', $data_valid['jadwal_id']);
-    }
-
-
-    // Hapus method approve_ubah dan buat_jadwal
-    // Hanya biarkan approve_tetap untuk approval normal
-
-    public function approve_tetap(Request $request){
-        $data_valid = $request->validate([
-            'jadwal_id' => 'required|numeric',
-        ]);
-
-        Jadwal::find($data_valid['jadwal_id'])->increment('status');
-
-        return redirect()->back()->with('approve_berhasil', 'p');
-    }
-
-
-    public function approve_ubah(Request $request){
-        $data_valid = $request->validate([
-            'jadwal_id' => 'required|numeric',
-        ]);
-
-        //logika reset jadwal disini
-
-        $jd = Jadwal::find($data_valid['jadwal_id']);
-        $maintenance_id = $jd->maintenance_id;
-
-        $jadwal = Jadwal::with('maintenance')->where('status', 3)->orWhere('status', 4)->where('maintenance_id', 7)->orderBy('tanggal_realisasi', 'DESC')->get();
-        if($data_valid['jadwal_id'] == $jadwal[0]->id){
-
-            if(Carbon::parse($jadwal[0]->tanggal_realisasi, 7)->lessThan(Carbon::parse($jadwal[0]->tanggal_rencana, 7))){
-                $jadwal_terakhir = $jadwal[0]->tanggal_rencana;
-            }else{
-                $jadwal_terakhir = $jadwal[0]->tanggal_realisasi;
-            }
-
-
-            Jadwal::where('tanggal_rencana', '>' , $jadwal_terakhir)->where('maintenance_id', $maintenance_id)->forceDelete();
-
-            $this->buat_jadwal($maintenance_id, $jadwal_terakhir);
-
-            $jd->increment('status');
-
-
-        }else{
-            return redirect()->back()->withErrors(['reset_gagal' => 'Sudah tidak bisa mereset jadwal setelah tanggal ini, sudah terlambat!']);
+        // Tambahkan filter mesin jika ada
+        if($request->mesin_filter && $request->mesin_filter != ''){
+            $query = $query->whereHas('maintenance.mesin', function($q) use ($request) {
+                $q->where('nama_mesin', 'like', '%' . $request->mesin_filter . '%');
+            });
         }
 
-        //Jadwal::find($data_valid['jadwal_id'])->increment('status');
+        $jadwal = $query->orderBy('tanggal_realisasi', 'desc')->get();
 
-        return redirect()->back()->with('approve_berhasil', 'p');
+
+
+        return view('pages.jadwal.close_jadwal', compact('jadwal'));
+
     }
+
+    // Fungsi approve dihapus karena sekarang hanya menampilkan history laporan pekerjaan yang sudah selesai
 
     private function buat_jadwal($id_maintenance, $start_date){
 

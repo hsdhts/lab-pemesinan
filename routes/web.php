@@ -97,7 +97,6 @@ Route::put('/approve/jadwal/tetap', [JadwalApproveController::class, 'approve_te
 Route::put('/approve/jadwal/ubah', [JadwalApproveController::class, 'approve_ubah'])->middleware('manager')->middleware('admin');
 
 
-
 Route::post('/maintenance/form/pilih/', [SetupMesinController::class, 'pilih_template'])->middleware('teknisi');
 Route::post('/maintenance/form/pilih/kirim/', [SetupMesinController::class, 'ambil_template'])->middleware('mahasiswa');
 Route::get('/maintenance/form/pilih/', [SetupMesinController::class, 'tampil_template'])->middleware('auth')->middleware('mahasiswa');
@@ -159,6 +158,8 @@ Route::post('/sparepart/jadwal/', [JadwalSparepartController::class, 'tambah_spa
 Route::delete('/sparepart/jadwal/delete/', [JadwalSparepartController::class, 'hapus_sparepart'])->middleware('teknisi');
 
 
+// Tambahkan route ini SEBELUM route /jadwal/{id}
+Route::get('/jadwal/all', [JadwalController::class, 'indexAll'])->middleware('auth');
 Route::get('/jadwal/{id}', [JadwalController::class, 'index'])->middleware('auth');
 Route::get('/jadwal/detail/{id}', [JadwalController::class, 'detail'])->middleware('auth');
 Route::put('/jadwal/update/', [JadwalController::class, 'update'])->middleware('teknisi')->middleware('bukan admin');

@@ -200,4 +200,13 @@ class JadwalController extends Controller
         return redirect('/jadwal/detail/' . $jadwal->id);
     }
 
+    public function indexAll() {
+        // Logic untuk menampilkan semua jadwal
+        $maintenance = Maintenance::with(['jadwal'])->withTrashed()->get();
+
+        return view('pages.jadwal.index_all', [
+            'halaman' => 'Semua Jadwal',
+            'maintenance' => $maintenance
+        ]);
+    }
 }

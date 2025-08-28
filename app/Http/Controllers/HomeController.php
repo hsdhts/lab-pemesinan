@@ -30,6 +30,7 @@ class HomeController extends Controller
 
             $seminggu = Mesin::with(['user'])->get();
             $sebulan = User::where('users.level', '!=', 'Superadmin')->get();
+            $totalJadwal = Jadwal::all();
         }else{
             $user_id = Auth::user()->id;
             $hari_ini = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])
@@ -39,6 +40,7 @@ class HomeController extends Controller
                                 ->get()->sortBy('tanggal_rencana');
             $seminggu = Mesin::with(['user'])->get();
             $sebulan = User::where('users.level', '!=', 'Superadmin')->get();
+            $totalJadwal = Jadwal::whereRelation('maintenance.mesin', 'user_id', $user_id);
         }
 
         $jadwal_chart_rencana = Jadwal::whereYear('tanggal_rencana', now(7)->year)->get()->groupBy(function($val) {
@@ -61,6 +63,7 @@ class HomeController extends Controller
          'hari_ini' => $hari_ini,
          'seminggu' => $seminggu,
          'sebulan' => $sebulan,
+         'total_jadwal' => $totalJadwal,
         ]);
 
 
