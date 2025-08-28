@@ -613,5 +613,65 @@
             `;
             document.head.appendChild(style);
         });
+        
+        // Handle status dropdown change for modal reminder
+        $(document).ready(function() {
+            $('.status-dropdown').on('change', function() {
+                const dropdown = $(this);
+                const jadwalId = dropdown.data('jadwal-id');
+                const newStatus = dropdown.val();
+                const originalStatus = dropdown.data('original-status');
+                
+                // Show loading state
+                dropdown.prop('disabled', true);
+                
+                // Send AJAX request
+                $.ajax({
+                    url: `/jadwal/update-status/${jadwalId}`,
+                    type: 'PUT',
+                    data: {
+                        status: newStatus,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Update the original status data attribute
+                            dropdown.data('original-status', newStatus);
+                            
+                            // Show success notification
+                            if (typeof toastr !== 'undefined') {
+                                toastr.success('Status berhasil diperbarui!');
+                            }
+                        } else {
+                            // Revert dropdown to original value
+                            dropdown.val(originalStatus);
+                            
+                            if (typeof toastr !== 'undefined') {
+                                toastr.error('Gagal memperbarui status: ' + (response.message || 'Terjadi kesalahan'));
+                            }
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Revert dropdown to original value
+                        dropdown.val(originalStatus);
+                        
+                        let errorMessage = 'Terjadi kesalahan saat memperbarui status';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        
+                        if (typeof toastr !== 'undefined') {
+                            toastr.error(errorMessage);
+                        }
+                        
+                        console.error('Error updating status:', error);
+                    },
+                    complete: function() {
+                        // Re-enable dropdown
+                        dropdown.prop('disabled', false);
+                    }
+                });
+            });
+        });
     </script>
 @endsection

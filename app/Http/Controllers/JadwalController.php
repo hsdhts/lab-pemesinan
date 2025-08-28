@@ -209,4 +209,49 @@ class JadwalController extends Controller
             'maintenance' => $maintenance
         ]);
     }
+
+    public function updateStatus(Request $request, $id) {
+        try {
+            $validator = Validator::make($request->all(), [
+                'status' => 'required|integer|in:1,2'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Status tidak valid. Hanya status 1 (Belum Dikerjakan) dan 2 (Dalam Pekerjaan) yang diizinkan.'
+                ], 400);
+            }
+
+            $jadwal = Jadwal::find($id);
+            
+            if (!$jadwal) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Jadwal tidak ditemukan.'
+                ], 404);
+            }
+
+            $jadwal->status = $request->status;
+            $jadwal->save();
+
+            $statusText = $request->status == 1 ? 'Belum Dikerjakan' : 'Dalam Pekerjaan';
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status berhasil diperbarui menjadi ' . $statusText,
+                'data' => [
+                    'id' => $jadwal->id,
+                    'status' => $jadwal->status,
+                    'status_text' => $statusText
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memperbarui status: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

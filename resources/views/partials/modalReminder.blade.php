@@ -45,11 +45,10 @@
                                         <span class="text-dark fw-bolder d-block mb-1 fs-6">{{ Illuminate\Support\Carbon::parse($h->tanggal_rencana)->format('d/m/Y') }}</span>
                                     </td>
                                     <td>
-                                        @if($h->status == 1)
-                                            <span class="badge badge-light-danger">Belum Dikerjakan</span>
-                                        @else
-                                            <span class="badge badge-light-success">Menunggu Approve</span>
-                                        @endif
+                                        <select class="form-select form-select-sm status-dropdown" data-jadwal-id="{{ $h->id }}" data-original-status="{{ $h->status }}">
+                                            <option value="1" {{ $h->status == 1 ? 'selected' : '' }}>Belum Dikerjakan</option>
+                                            <option value="2" {{ $h->status == 2 ? 'selected' : '' }}>Dalam Pekerjaan</option>
+                                        </select>
                                     </td>
                                     <td>
                                         <a href="/jadwal/detail/{{ $h->id }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
@@ -81,6 +80,8 @@
         </div>
     </div>
 </div>
+
+
 
 <div class="modal fade" tabindex="-1" id="kt_modal_3">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">

@@ -165,6 +165,7 @@ Route::get('/jadwal/detail/{id}', [JadwalController::class, 'detail'])->middlewa
 Route::put('/jadwal/update/', [JadwalController::class, 'update'])->middleware('teknisi')->middleware('bukan admin');
 Route::put('/jadwal/update_alasan/', [JadwalController::class, 'update_with_alasan'])->middleware('teknisi')->middleware('bukan admin');
 Route::post('/jadwal/update_alasan_batal/', [JadwalController::class, 'update_with_alasan_batal'])->middleware('teknisi')->middleware('bukan admin');
+Route::put('/jadwal/update-status/{id}', [JadwalController::class, 'updateStatus'])->middleware('auth');
 
 
 Route::get('/update_tahunan', [UpdateDbController::class, 'index'])->middleware('auth')->middleware('manager');
