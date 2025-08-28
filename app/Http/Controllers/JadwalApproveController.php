@@ -53,8 +53,6 @@ class JadwalApproveController extends Controller
 
         $jadwal = $query->orderBy('tanggal_realisasi', 'desc')->get();
 
-
-
         return view('pages.jadwal.close_jadwal', compact('jadwal'));
 
     }

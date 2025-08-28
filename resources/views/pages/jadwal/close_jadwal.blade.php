@@ -39,260 +39,170 @@
 
 @section('styles')
 <style>
-    /* Modern UI Styles */
+    /* Clean Modern UI */
     :root {
-        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        --dark-gradient: linear-gradient(135deg, #434343 0%, #000000 100%);
-        --glass-bg: rgba(255, 255, 255, 0.25);
-        --glass-border: rgba(255, 255, 255, 0.18);
+        --primary-color: #3b82f6;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-500: #6b7280;
+        --gray-900: #111827;
     }
 
     body {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .search-highlight {
-        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-        padding: 4px 8px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        animation: highlight 0.3s ease;
-    }
-
-    @keyframes highlight {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
+        background-color: var(--gray-50);
+        font-family: 'Inter', system-ui, sans-serif;
     }
 
     .card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
     .filter-section {
-        background: var(--glass-bg);
-        backdrop-filter: blur(10px);
-        border: 1px solid var(--glass-border);
-        border-radius: 16px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        animation: slideInDown 0.6s ease;
-    }
-
-    @keyframes slideInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
     }
 
     .filter-section h5 {
-        background: var(--primary-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-weight: 700;
-        font-size: 1.25rem;
+        color: var(--gray-900);
+        font-weight: 600;
+        font-size: 1.125rem;
+        margin-bottom: 1rem;
     }
 
     .form-control, .form-select {
-        border: 2px solid rgba(102, 126, 234, 0.2);
-        border-radius: 15px;
-        padding: 14px 20px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(15px);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid var(--gray-200);
+        border-radius: 6px;
+        padding: 0.75rem;
+        background: white;
+        transition: border-color 0.2s ease;
         font-size: 14px;
-        font-weight: 500;
     }
 
     .form-control:focus, .form-select:focus {
-        border-color: transparent;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3), 0 8px 25px rgba(102, 126, 234, 0.15);
-        background: white;
-        transform: translateY(-3px) scale(1.02);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         outline: none;
     }
 
     .form-control::placeholder {
-        color: rgba(0, 0, 0, 0.5);
-        font-weight: 400;
+        color: var(--gray-500);
     }
 
     .form-label {
-        font-weight: 600;
-        color: #4a5568;
-        margin-bottom: 8px;
-        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
     }
 
     .input-group-text {
-        background: var(--primary-gradient);
-        border: none;
+        background: var(--primary-color);
+        border: 1px solid var(--primary-color);
         color: white;
-        border-radius: 12px 0 0 12px;
+        border-radius: 6px 0 0 6px;
     }
 
     .btn {
-        border-radius: 15px;
-        padding: 14px 28px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: none;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        transition: left 0.6s ease;
+        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border: 1px solid transparent;
+        font-size: 0.875rem;
     }
 
     .btn:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
-    }
-
-    .btn:hover::before {
-        left: 100%;
-    }
-
-    .btn:active {
-        transform: translateY(-1px) scale(1.02);
+        transform: translateY(-1px);
     }
 
     .btn-primary {
-        background: var(--primary-gradient);
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+        color: white;
     }
 
     .btn-primary:hover {
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        background: #2563eb;
+        border-color: #2563eb;
     }
 
     .btn-secondary {
-        background: var(--dark-gradient);
-        box-shadow: 0 4px 15px rgba(67, 67, 67, 0.4);
+        background: var(--gray-500);
+        border-color: var(--gray-500);
+        color: white;
     }
 
     .btn-secondary:hover {
-        box-shadow: 0 8px 25px rgba(67, 67, 67, 0.6);
-    }
-
-    .btn-info {
-        background: var(--success-gradient);
-        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        background: #4b5563;
+        border-color: #4b5563;
     }
 
     .btn-success {
-        background: var(--warning-gradient);
-        box-shadow: 0 4px 15px rgba(67, 233, 123, 0.4);
+        background: var(--success-color);
+        border-color: var(--success-color);
+        color: white;
+    }
+
+    .btn-info {
+        background: #06b6d4;
+        border-color: #06b6d4;
+        color: white;
     }
 
     .btn-action {
-        padding: 8px 16px;
-        font-size: 0.85rem;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        min-width: 80px;
-    }
-
-    .btn-action:hover {
-        transform: translateY(-2px) scale(1.05);
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        min-width: 70px;
     }
 
     .table-responsive {
-        border-radius: 16px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
         overflow: hidden;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
+        background: white;
     }
 
     .table {
         margin-bottom: 0;
-        background: transparent;
     }
 
     .table th {
-        background: var(--primary-gradient);
-        color: white;
-        font-weight: 700;
-        border: none;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        padding: 16px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-size: 0.85rem;
+        background: var(--gray-100);
+        color: var(--gray-900);
+        font-weight: 600;
+        border-bottom: 1px solid var(--gray-200);
+        padding: 1rem;
+        font-size: 0.875rem;
     }
 
     .table td {
-        padding: 16px;
+        padding: 1rem;
         vertical-align: middle;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        font-size: 0.9rem;
-    }
-
-    .table tbody tr {
-        transition: all 0.3s ease;
-        cursor: pointer;
+        border-bottom: 1px solid var(--gray-100);
+        font-size: 0.875rem;
     }
 
     .table tbody tr:hover {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
-        border-left: 4px solid var(--primary-gradient);
-    }
-
-    .table tbody tr:hover td {
-        color: #2d3748;
-        font-weight: 500;
-    }
-
-    .table tbody tr:nth-child(even) {
-        background: rgba(248, 249, 250, 0.5);
+        background: var(--gray-50);
     }
 
     .no-data-message {
-        color: #6c757d;
-        font-style: italic;
-        padding: 40px;
+        color: var(--gray-500);
+        padding: 2rem;
         text-align: center;
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-radius: 12px;
-        margin: 20px;
+        background: var(--gray-50);
+        border-radius: 8px;
+        margin: 1rem;
     }
 
     .loading-overlay {
@@ -302,19 +212,18 @@
         right: 0;
         bottom: 0;
         background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(5px);
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 1000;
-        border-radius: 16px;
+        border-radius: 8px;
     }
 
     .spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #667eea;
+        width: 32px;
+        height: 32px;
+        border: 3px solid var(--gray-200);
+        border-top: 3px solid var(--primary-color);
         border-radius: 50%;
         animation: spin 1s linear infinite;
     }
@@ -324,342 +233,55 @@
         100% { transform: rotate(360deg); }
     }
 
-    .fade-in {
-        animation: fadeInUp 0.6s ease-out;
+    /* Scrollbar */
+    .table-responsive::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
     }
 
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .table-responsive::-webkit-scrollbar-track {
+        background: var(--gray-100);
     }
 
-    .pulse {
-        animation: pulse 2s infinite;
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: var(--gray-500);
+        border-radius: 3px;
     }
 
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.02);
-        }
-        100% {
-            transform: scale(1);
-        }
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+        background: var(--gray-900);
     }
-
-    /* Loading Spinner Modern */
-        .modern-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Smooth Scrollbar */
-        .table-responsive::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        .table-responsive::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        .table-responsive::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 10px;
-        }
-
-        .table-responsive::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(45deg, #5a6fd8, #6a4190);
-        }
 
     /* Mobile Responsiveness */
     @media (max-width: 768px) {
         .filter-section {
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 1rem;
         }
-        
-        .card {
-            border-radius: 16px;
-        }
-        
-        .table-responsive {
-            font-size: 0.85rem;
-            border-radius: 12px;
-        }
-        
-        .btn-action {
-            padding: 6px 12px;
-            font-size: 0.75rem;
-            min-width: 60px;
-        }
-        
+
         .table th, .table td {
-            padding: 12px 8px;
+            padding: 0.75rem 0.5rem;
         }
-        
+
         .btn {
-            padding: 10px 20px;
-            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
         }
-    }
-
-    /* Scrollbar Styling */
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: var(--primary-gradient);
-        border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--secondary-gradient);
-    }
-
-    /* Animation Keyframes */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.05);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    @keyframes slideInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Card Hover Effects */
-    .jadwal-card {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-    }
-
-    .jadwal-card:hover {
-        transform: translateY(-12px) scale(1.02);
-        box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-    }
-    
-    .jadwal-card .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
-    }
-    
-    .jadwal-card .card-header {
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .jadwal-card .card-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-        transform: rotate(45deg);
-        transition: all 0.6s ease;
-        opacity: 0;
-    }
-    
-    .jadwal-card:hover .card-header::before {
-        animation: shimmer 1.5s ease-in-out;
-    }
-    
-    @keyframes shimmer {
-        0% {
-            transform: translateX(-100%) translateY(-100%) rotate(45deg);
-            opacity: 0;
-        }
-        50% {
-            opacity: 1;
-        }
-        100% {
-            transform: translateX(100%) translateY(100%) rotate(45deg);
-            opacity: 0;
-        }
-    }
-    
-    .jadwal-card .badge {
-        transition: all 0.3s ease;
-    }
-    
-    .jadwal-card:hover .badge {
-        transform: scale(1.05);
-    }
-    
-    .jadwal-card .bg-gradient {
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .jadwal-card .bg-gradient::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    
-    .jadwal-card:hover .bg-gradient::after {
-         opacity: 1;
-     }
-     
-     /* List View Styles */
-     .list-view {
-         display: flex;
-         flex-direction: column;
-     }
-     
-     .list-item {
-         width: 100% !important;
-         margin-bottom: 1rem;
-     }
-     
-     .list-card {
-         display: flex;
-         flex-direction: row;
-         align-items: center;
-         min-height: 120px;
-     }
-     
-     .list-card .card-header {
-         flex: 0 0 200px;
-         margin-bottom: 0;
-         border-radius: 12px 0 0 12px;
-     }
-     
-     .list-card .card-body {
-         flex: 1;
-         display: flex;
-         align-items: center;
-         padding: 1.5rem;
-     }
-     
-     .list-card .card-footer {
-         flex: 0 0 150px;
-         border-radius: 0 12px 12px 0;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-     }
-     
-     /* View Toggle Buttons */
-     .view-toggle {
-         transition: all 0.3s ease;
-         border: 2px solid #e2e8f0;
-         background: white;
-         color: #64748b;
-     }
-     
-     .view-toggle.active {
-         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-         border-color: #667eea;
-         color: white;
-         transform: translateY(-2px);
-         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-     }
-     
-     .view-toggle:hover:not(.active) {
-         border-color: #667eea;
-         color: #667eea;
-         transform: translateY(-1px);
-     }
-
-    /* Utility Classes */
-    .fade-in {
-        animation: fadeInUp 0.6s ease;
-    }
-
-    .pulse {
-        animation: pulse 2s infinite;
-    }
-
-    /* Load More Button */
-    #loadMoreBtn {
-        transition: all 0.3s ease;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
-        color: white;
-    }
-
-    #loadMoreBtn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-    }
-
-    #loadMoreBtn:disabled {
-        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-        cursor: not-allowed;
     }
 
     /* Badge Styling */
     .badge {
-        font-weight: 600;
-        letter-spacing: 0.5px;
+        font-weight: 500;
+        font-size: 0.75rem;
     }
 
-    /* Icon Wrapper */
-    .icon-wrapper {
-        transition: all 0.3s ease;
+    /* Jadwal Card Simple */
+    .jadwal-card {
+        transition: box-shadow 0.2s ease;
+        border: 1px solid var(--gray-200);
     }
 
-    .jadwal-card:hover .icon-wrapper {
-        transform: rotate(10deg) scale(1.1);
+    .jadwal-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 </style>
 @endsection
@@ -667,10 +289,10 @@
 @section('konten')
 
 
-<div class="card fade-in">
+<div class="card">
     <div class="card-body">
         <div class="filter-section">
-            <h5 class="mb-3 pulse"><i class="fas fa-filter me-2"></i>Filter & Pencarian Data</h5>
+            <h5><i class="fas fa-search me-2"></i>Pencarian & Filter</h5>
             <form action="/approve" method="get" id="filterForm">
     <div class="row g-4 mb-4">
         <!-- Search Bar -->
@@ -683,7 +305,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row g-4">
         <div class="col-md-3">
             <label class="form-label fw-bold">Tanggal Awal</label>
@@ -742,7 +364,7 @@
     </div>
 </div>
 
-<div class="card mt-4 fade-in">
+<div class="card mt-4">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="mb-0 pulse"><i class="fas fa-history me-2"></i>History Laporan Pekerjaan</h5>
@@ -763,10 +385,10 @@
     <div class="position-relative">
         <div class="row g-4" id="historyList">
             @foreach($jadwal as $jd)
-            <div class="col-lg-4 col-md-6 jadwal-item" 
-                 data-mesin="{{ strtolower($jd->maintenance->mesin->nama_mesin) }}" 
-                 data-maintenance="{{ strtolower($jd->maintenance->nama_maintenance) }}" 
-                 data-keterangan="{{ strtolower($jd->keterangan ?? '') }}" 
+            <div class="col-lg-4 col-md-6 jadwal-item"
+                 data-mesin="{{ strtolower($jd->maintenance->mesin->nama_mesin) }}"
+                 data-maintenance="{{ strtolower($jd->maintenance->nama_maintenance) }}"
+                 data-keterangan="{{ strtolower($jd->keterangan ?? '') }}"
                  data-tanggal="{{ $jd->tanggal_realisasi }}">
                 <div class="card jadwal-card h-100 border-0 shadow-sm" style="border-radius: 16px; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
                     <!-- Card Header with Date Badge -->
@@ -776,7 +398,7 @@
                             <h6 class="mb-1 fw-bold text-white" style="font-size: 1.1rem;">Maintenance Report</h6>
                             <small class="text-white opacity-75" style="font-size: 0.8rem;">Completed Task</small>
                         </div>
-                        
+
                         <!-- Right side - Date Badge -->
                         <div class="bg-white bg-opacity-20 rounded-3 p-2 text-center" style="backdrop-filter: blur(10px);">
                             <i class="fas fa-calendar-check text-white mb-1 d-block" style="font-size: 1.2rem;"></i>
@@ -797,8 +419,7 @@
                                     <h6 class="mb-1 fw-bold" style="color: #1a202c; font-size: 1rem; line-height: 1.3;">{{ $jd->maintenance->mesin->nama_mesin }}</h6>
                                     <p class="mb-2 text-muted" style="font-size: 0.85rem; line-height: 1.4;">{{ $jd->maintenance->nama_maintenance }}</p>
                                     <div class="d-flex align-items-center">
-                                        <span class="badge bg-light text-dark me-2" style="font-size: 0.7rem; padding: 4px 8px; border-radius: 8px;">Maintenance</span>
-                                        <small class="text-muted" style="font-size: 0.75rem;">Status: Completed</small>
+                                        <span class="badge bg-light text-dark me-2" style="font-size: 0.7rem; padding: 4px 8px; border-radius: 8px;">Status: Completed</span>
                                     </div>
                                 </div>
                             </div>
@@ -852,12 +473,6 @@
                                     style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px; font-weight: 600; padding: 12px 16px; font-size: 0.85rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
                                 <i class="fas fa-eye me-2"></i>Detail
                             </button>
-                            <a href="/jadwal/detail/{{ $jd->id }}"
-                               class="btn btn-success"
-                               target="_blank"
-                               style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; border-radius: 12px; font-weight: 600; padding: 12px 16px; font-size: 0.85rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
-                                <i class="fas fa-external-link-alt me-2"></i>View
-                            </a>
                         </div>
                     </div>
 
@@ -870,7 +485,7 @@
                                 </div>
                                 <div>
                                     <small class="text-muted d-block" style="font-size: 0.7rem; line-height: 1.2;">Completed on</small>
-                                    <small class="fw-semibold" style="font-size: 0.75rem; color: #4a5568;">{{ Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('H:i, d M Y') }}</small>
+                                    <small class="fw-semibold" style="font-size: 0.75rem; color: #4a5568;">{{ Illuminate\Support\Carbon::parse($jd->tanggaKeteranganl_realisasi)->format('H:i, d M Y') }}</small>
                                 </div>
                             </div>
                             <div class="text-end">
@@ -886,7 +501,7 @@
                                 @else
                                     <span class="badge bg-warning" style="font-size: 0.7rem; padding: 4px 8px; border-radius: 8px;">
                                         <i class="fas fa-clock me-1"></i>{{ $diff }} day{{ $diff > 1 ? ' s' : '' }} late
-                                    </span> 
+                                    </span>
                                 @endif
                             </div>
                         </div>
@@ -990,7 +605,6 @@
                         Download Laporan
                     </button>
                 </form>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -1135,12 +749,12 @@ function resetFilter() {
     document.querySelector('select[name="mesin_filter"]').value = '';
     document.getElementById('sortSelect').value = 'tanggal_desc';
     document.getElementById('itemsPerPageSelect').value = '12';
-    
+
     // Reset global variables
     currentSort = 'tanggal_desc';
     itemsPerPage = 12;
     currentPage = 1;
-    
+
     applyFiltersAndSort();
 }
 
@@ -1157,15 +771,15 @@ function handleSearch() {
 function toggleView(viewType) {
     const historyList = document.getElementById('historyList');
     const viewButtons = document.querySelectorAll('.view-toggle');
-    
+
     // Update active button
     viewButtons.forEach(btn => btn.classList.remove('active'));
     document.querySelector(`[onclick="toggleView('${viewType}')"]`).classList.add('active');
-    
+
     if (viewType === 'list') {
         historyList.classList.remove('row', 'g-4');
         historyList.classList.add('list-view');
-        
+
         // Update card classes for list view
         document.querySelectorAll('.jadwal-item').forEach(item => {
             item.className = 'jadwal-item list-item mb-3';
@@ -1177,7 +791,7 @@ function toggleView(viewType) {
     } else {
         historyList.classList.remove('list-view');
         historyList.classList.add('row', 'g-4');
-        
+
         // Update card classes for grid view
         document.querySelectorAll('.jadwal-item').forEach(item => {
             item.className = 'jadwal-item col-xl-4 col-lg-6 col-md-6';
@@ -1203,7 +817,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Filter saat mengubah pilihan mesin
         mesinSelect.addEventListener('change', applyFiltersAndSort);
     }
-    
+
     // Add reset button functionality
     const resetButton = document.getElementById('resetFilter');
     if (resetButton) {
@@ -1254,7 +868,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize data and pagination
     initializeData();
-    
+
     // Add event listeners for sorting and pagination controls
     const sortSelect = document.getElementById('sortSelect');
     if (sortSelect) {
@@ -1262,14 +876,14 @@ document.addEventListener('DOMContentLoaded', function() {
             changeSort(this.value);
         });
     }
-    
+
     const itemsPerPageSelect = document.getElementById('itemsPerPageSelect');
     if (itemsPerPageSelect) {
         itemsPerPageSelect.addEventListener('change', function() {
             changeItemsPerPage(this.value);
         });
     }
-    
+
     // Inisialisasi filter saat halaman dimuat
     filterTable();
 });
@@ -1300,103 +914,59 @@ Swal.fire({
 <!-- Modal Download Laporan -->
 @if($jadwal->isNotEmpty())
 <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header bg-gradient-success text-white">
-                <h5 class="modal-title" id="downloadModalLabel">
-                    <i class="fas fa-download me-2"></i>Download Laporan Harian
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="downloadModalLabel">
+                    <i class="fas fa-download text-primary me-2"></i>Download Laporan Harian
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <!-- Search and Filter -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-search"></i></span>
-                            <input type="text" class="form-control" id="modalSearchInput" placeholder="Cari berdasarkan tanggal...">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-select" id="modalSortSelect">
-                            <option value="date_desc">Tanggal Terbaru</option>
-                            <option value="date_asc">Tanggal Terlama</option>
-                            <option value="count_desc">Laporan Terbanyak</option>
-                            <option value="count_asc">Laporan Tersedikit</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-select" id="modalItemsPerPage">
-                            <option value="6">6 per halaman</option>
-                            <option value="12" selected>12 per halaman</option>
-                            <option value="18">18 per halaman</option>
-                            <option value="24">24 per halaman</option>
-                        </select>
-                    </div>
+            <div class="modal-body pt-2">
+                <!-- Simple Search -->
+                <div class="mb-4">
+                    <input type="text" class="form-control form-control-lg" id="modalSearchInput"
+                           placeholder="Cari tanggal laporan..." style="border-radius: 10px;">
                 </div>
 
-                <!-- Grid Layout untuk Tanggal -->
-                <div class="row g-3" id="downloadGrid">
+                <!-- Simple List Layout -->
+                <div class="list-group list-group-flush" id="downloadList">
                     @php
                         $tanggalList = $jadwal->groupBy(function($item) {
                             return \Illuminate\Support\Carbon::parse($item->tanggal_realisasi)->format('Y-m-d');
                         })->sortKeysDesc();
                     @endphp
                     @foreach($tanggalList as $tanggal => $laporanHarian)
-                    <div class="col-xl-3 col-lg-4 col-md-6 download-item" data-date="{{ $tanggal }}" data-count="{{ $laporanHarian->count() }}">
-                        <div class="card h-100 shadow-sm border-0 download-card" style="transition: all 0.3s ease; border-radius: 15px;">
-                            <div class="card-body text-center p-4">
-                                <div class="mb-3">
-                                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                                        <i class="fas fa-file-pdf text-danger" style="font-size: 24px;"></i>
-                                    </div>
+                    <div class="list-group-item border-0 px-0 py-3 download-item" data-date="{{ $tanggal }}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="fas fa-file-pdf text-danger" style="font-size: 20px;"></i>
                                 </div>
-                                <h6 class="card-title fw-bold mb-2" style="color: #2d3748;">
-                                    {{ \Illuminate\Support\Carbon::parse($tanggal)->format('d M Y') }}
-                                </h6>
-                                <p class="text-muted mb-3" style="font-size: 0.9rem;">
-                                    {{ \Illuminate\Support\Carbon::parse($tanggal)->format('l') }}
-                                </p>
-                                <div class="mb-3">
-                                    <span class="badge bg-primary rounded-pill px-3 py-2" style="font-size: 0.85rem;">
-                                        <i class="fas fa-list-alt me-1"></i>{{ $laporanHarian->count() }} Laporan
-                                    </span>
+                                <div>
+                                    <h6 class="mb-1 fw-bold">{{ \Illuminate\Support\Carbon::parse($tanggal)->format('d M Y') }}</h6>
+                                    <small class="text-muted">{{ $laporanHarian->count() }} laporan tersedia</small>
                                 </div>
-                                <a href="/laporan/harian?tanggal={{ $tanggal }}" target="_blank" 
-                                   class="btn btn-success btn-sm w-100" 
-                                   style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; border-radius: 10px; font-weight: 600; padding: 8px 16px;">
-                                    <i class="fas fa-download me-2"></i>Download PDF
-                                </a>
                             </div>
+                            <a href="/laporan/harian?tanggal={{ $tanggal }}" target="_blank"
+                               class="btn btn-primary btn-sm px-3" style="border-radius: 8px;">
+                                <i class="fas fa-download me-1"></i>Download
+                            </a>
                         </div>
                     </div>
                     @endforeach
                 </div>
 
-                <!-- Pagination -->
-                <div class="d-flex justify-content-between align-items-center mt-4" id="modalPagination">
-                    <div class="text-muted" id="modalShowingInfo">
-                        Menampilkan <span id="modalStartItem">1</span>-<span id="modalEndItem">12</span> dari <span id="modalTotalItems">{{ $tanggalList->count() }}</span> tanggal
-                    </div>
-                    <nav aria-label="Download pagination">
-                        <ul class="pagination pagination-sm mb-0" id="modalPaginationList">
-                            <!-- Pagination akan diisi oleh JavaScript -->
-                        </ul>
-                    </nav>
-                </div>
-
                 <!-- No Data Message -->
                 <div id="modalNoData" class="text-center py-5" style="display: none;">
-                    <div class="mb-3">
-                        <i class="fas fa-search text-muted" style="font-size: 48px;"></i>
-                    </div>
+                    <i class="fas fa-search text-muted mb-3" style="font-size: 48px;"></i>
                     <h6 class="text-muted">Tidak ada data yang ditemukan</h6>
-                    <p class="text-muted mb-0">Coba ubah kata kunci pencarian Anda</p>
+                    <p class="text-muted mb-0">Coba kata kunci lain</p>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times me-2"></i>Tutup
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    Tutup
                 </button>
             </div>
         </div>
@@ -1404,175 +974,56 @@ Swal.fire({
 </div>
 
 <script>
-// Modal Download Laporan JavaScript
+// Simple Modal Download JavaScript
 document.addEventListener('DOMContentLoaded', function() {
-    let modalCurrentPage = 1;
-    let modalItemsPerPage = 12;
-    let modalCurrentSort = 'date_desc';
-    let modalSearchTerm = '';
-    
     const modalSearchInput = document.getElementById('modalSearchInput');
-    const modalSortSelect = document.getElementById('modalSortSelect');
-    const modalItemsPerPageSelect = document.getElementById('modalItemsPerPage');
-    
-    // Event listeners
+
+    // Simple search functionality
     if (modalSearchInput) {
         modalSearchInput.addEventListener('input', function() {
-            modalSearchTerm = this.value.toLowerCase();
-            modalCurrentPage = 1;
-            filterAndDisplayModalItems();
-        });
-    }
-    
-    if (modalSortSelect) {
-        modalSortSelect.addEventListener('change', function() {
-            modalCurrentSort = this.value;
-            modalCurrentPage = 1;
-            filterAndDisplayModalItems();
-        });
-    }
-    
-    if (modalItemsPerPageSelect) {
-        modalItemsPerPageSelect.addEventListener('change', function() {
-            modalItemsPerPage = parseInt(this.value);
-            modalCurrentPage = 1;
-            filterAndDisplayModalItems();
-        });
-    }
-    
-    // Filter and display items
-    function filterAndDisplayModalItems() {
-        const allItems = document.querySelectorAll('.download-item');
-        let filteredItems = Array.from(allItems);
-        
-        // Filter by search term
-        if (modalSearchTerm) {
-            filteredItems = filteredItems.filter(item => {
+            const searchTerm = this.value.toLowerCase();
+            const allItems = document.querySelectorAll('.download-item');
+            let visibleCount = 0;
+
+            allItems.forEach(item => {
                 const date = item.dataset.date;
                 const formattedDate = new Date(date).toLocaleDateString('id-ID', {
                     day: 'numeric',
                     month: 'long',
                     year: 'numeric'
                 });
-                return formattedDate.toLowerCase().includes(modalSearchTerm);
+
+                if (formattedDate.toLowerCase().includes(searchTerm)) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
             });
-        }
-        
-        // Sort items
-        filteredItems.sort((a, b) => {
-            const dateA = new Date(a.dataset.date);
-            const dateB = new Date(b.dataset.date);
-            const countA = parseInt(a.dataset.count);
-            const countB = parseInt(b.dataset.count);
-            
-            switch (modalCurrentSort) {
-                case 'date_asc':
-                    return dateA - dateB;
-                case 'date_desc':
-                    return dateB - dateA;
-                case 'count_asc':
-                    return countA - countB;
-                case 'count_desc':
-                    return countB - countA;
-                default:
-                    return dateB - dateA;
+
+            // Show/hide no data message
+            const noDataDiv = document.getElementById('modalNoData');
+            if (visibleCount === 0) {
+                noDataDiv.style.display = 'block';
+            } else {
+                noDataDiv.style.display = 'none';
             }
         });
-        
-        // Hide all items first
-        allItems.forEach(item => item.style.display = 'none');
-        
-        // Show filtered and paginated items
-        const startIndex = (modalCurrentPage - 1) * modalItemsPerPage;
-        const endIndex = startIndex + modalItemsPerPage;
-        const paginatedItems = filteredItems.slice(startIndex, endIndex);
-        
-        paginatedItems.forEach(item => item.style.display = 'block');
-        
-        // Update pagination info
-        updateModalPagination(filteredItems.length);
-        
-        // Show/hide no data message
-        const noDataDiv = document.getElementById('modalNoData');
-        if (filteredItems.length === 0) {
-            noDataDiv.style.display = 'block';
-        } else {
-            noDataDiv.style.display = 'none';
-        }
     }
-    
-    // Update pagination
-    function updateModalPagination(totalItems) {
-        const totalPages = Math.ceil(totalItems / modalItemsPerPage);
-        const startItem = totalItems > 0 ? (modalCurrentPage - 1) * modalItemsPerPage + 1 : 0;
-        const endItem = Math.min(modalCurrentPage * modalItemsPerPage, totalItems);
-        
-        // Update showing info
-        document.getElementById('modalStartItem').textContent = startItem;
-        document.getElementById('modalEndItem').textContent = endItem;
-        document.getElementById('modalTotalItems').textContent = totalItems;
-        
-        // Update pagination buttons
-        const paginationList = document.getElementById('modalPaginationList');
-        paginationList.innerHTML = '';
-        
-        if (totalPages > 1) {
-            // Previous button
-            const prevLi = document.createElement('li');
-            prevLi.className = `page-item ${modalCurrentPage === 1 ? 'disabled' : ''}`;
-            prevLi.innerHTML = `<a class="page-link" href="#" onclick="changeModalPage(${modalCurrentPage - 1})">Previous</a>`;
-            paginationList.appendChild(prevLi);
-            
-            // Page numbers
-            for (let i = 1; i <= totalPages; i++) {
-                const li = document.createElement('li');
-                li.className = `page-item ${i === modalCurrentPage ? 'active' : ''}`;
-                li.innerHTML = `<a class="page-link" href="#" onclick="changeModalPage(${i})">${i}</a>`;
-                paginationList.appendChild(li);
-            }
-            
-            // Next button
-            const nextLi = document.createElement('li');
-            nextLi.className = `page-item ${modalCurrentPage === totalPages ? 'disabled' : ''}`;
-            nextLi.innerHTML = `<a class="page-link" href="#" onclick="changeModalPage(${modalCurrentPage + 1})">Next</a>`;
-            paginationList.appendChild(nextLi);
-        }
-    }
-    
-    // Change page function
-    window.changeModalPage = function(page) {
-        const totalItems = document.querySelectorAll('.download-item:not([style*="display: none"])').length;
-        const totalPages = Math.ceil(totalItems / modalItemsPerPage);
-        
-        if (page >= 1 && page <= totalPages) {
-            modalCurrentPage = page;
-            filterAndDisplayModalItems();
-        }
-    };
-    
-    // Add hover effects to download cards
-    document.querySelectorAll('.download-card').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px) scale(1.02)';
-            this.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.15)';
+
+    // Simple hover effects
+    document.querySelectorAll('.download-item').forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#f8f9fa';
+            this.style.transition = 'background-color 0.2s ease';
         });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-            this.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+
+        item.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = 'transparent';
         });
     });
-    
-    // Initialize modal when opened
-    const downloadModal = document.getElementById('downloadModal');
-    if (downloadModal) {
-        downloadModal.addEventListener('shown.bs.modal', function() {
-            filterAndDisplayModalItems();
-        });
-    }
 });
 </script>
 @endif
 
 @endsection
-                                                                        
