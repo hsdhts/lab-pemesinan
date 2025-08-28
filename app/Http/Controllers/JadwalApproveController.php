@@ -37,10 +37,10 @@ class JadwalApproveController extends Controller
             $tglakhir = now();
         }
 
-        // Query dengan filter tanggal pada tanggal_realisasi
+        // Query untuk menampilkan hanya jadwal yang sudah selesai (memiliki tanggal_realisasi)
+        // Logika sederhana: jika sudah selesai maka akan muncul, jika belum selesai maka tidak akan muncul
         $query = Jadwal::with(['maintenance', 'maintenance.mesin'])
-            ->whereIn('status', [3, 4])
-            ->whereNotNull('tanggal_realisasi') // Pastikan tanggal_realisasi tidak null
+            ->whereNotNull('tanggal_realisasi') // Hanya tampilkan yang sudah selesai
             ->whereDate('tanggal_realisasi', '>=', $tglawal->format('Y-m-d'))
             ->whereDate('tanggal_realisasi', '<=', $tglakhir->format('Y-m-d'));
 

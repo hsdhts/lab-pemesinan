@@ -116,5 +116,37 @@ class LaporanController extends Controller
 
         return $pdf->download('laporan_maintenance_' . $jadwal->maintenance->mesin->nama_mesin . '_'. $jadwal->maintenance->nama_maintenance .'.pdf');
     }
+
+    public function laporan_harian(Request $request){
+        
+        $data_valid = $request->validate([
+            'tanggal' => 'required|date'
+        ]);
+
+        $tanggal = Carbon::parse($data_valid['tanggal']);
+        
+        // Ambil semua jadwal yang sudah selesai pada tanggal tersebut
+        $jadwal_list = Jadwal::with(['sparepart', 'maintenance' => function($query){
+            $query->withTrashed();
+        }, 'maintenance.mesin' => function($query){
+            $query->withTrashed();
+        }])->whereNotNull('tanggal_realisasi')
+        ->whereDate('tanggal_realisasi', $tanggal)
+        ->withTrashed()
+        ->get();
+
+        if($jadwal_list->isEmpty()){
+            return back()->with('error', 'Tidak ada laporan pekerjaan pada tanggal ' . $tanggal->format('d-m-Y'));
+        }
+
+        $data = [
+            'jadwal_list' => $jadwal_list,
+            'tanggal' => $tanggal
+        ];
+
+        $pdf = PDF::loadView('pages.laporan.harian', $data)->setPaper('a4', 'potrait')->setWarnings(false);
+
+        return $pdf->download('laporan_harian_' . $tanggal->format('Y-m-d') . '.pdf');
+    }
     
 }

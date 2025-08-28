@@ -175,6 +175,7 @@ Route::get('/laporan', [LaporanController::class, 'index'])->middleware('auth')-
 Route::post('/laporan/inspeksi', [LaporanController::class, 'laporan_general_inspection'])->middleware('mahasiswa');
 Route::post('/laporan/maintenance', [LaporanController::class, 'laporan_maintenance'])->middleware('mahasiswa');
 Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_rencana_realisasi'])->middleware('mahasiswa');
+Route::get('/laporan/harian', [LaporanController::class, 'laporan_harian'])->middleware('mahasiswa');
 
 
 Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');

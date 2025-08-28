@@ -55,16 +55,6 @@
 @endif
 
 
-
-
-
-
-
-
-
-
-
-
 @endsection
 
 @section('content_left')

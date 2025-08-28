@@ -746,10 +746,15 @@
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="mb-0 pulse"><i class="fas fa-history me-2"></i>History Laporan Pekerjaan</h5>
-            <div class="text-muted">
+            <div class="d-flex align-items-center gap-3">
                 <div class="badge" style="background: var(--success-gradient); color: white; font-size: 0.9rem; padding: 8px 12px; border-radius: 20px;">
                     <i class="fas fa-chart-bar me-1"></i>Total: <span id="totalRecords">{{ $jadwal->count() }}</span> laporan
                 </div>
+                @if($jadwal->isNotEmpty())
+                <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#downloadModal" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; border-radius: 12px; font-weight: 600; padding: 10px 16px; font-size: 0.85rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                    <i class="fas fa-download me-2"></i>Download Laporan
+                </button>
+                @endif
             </div>
         </div>
 
@@ -1291,5 +1296,283 @@ Swal.fire({
 });
 @enderror
 </script>
+
+<!-- Modal Download Laporan -->
+@if($jadwal->isNotEmpty())
+<div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-success text-white">
+                <h5 class="modal-title" id="downloadModalLabel">
+                    <i class="fas fa-download me-2"></i>Download Laporan Harian
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Search and Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" id="modalSearchInput" placeholder="Cari berdasarkan tanggal...">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="modalSortSelect">
+                            <option value="date_desc">Tanggal Terbaru</option>
+                            <option value="date_asc">Tanggal Terlama</option>
+                            <option value="count_desc">Laporan Terbanyak</option>
+                            <option value="count_asc">Laporan Tersedikit</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="modalItemsPerPage">
+                            <option value="6">6 per halaman</option>
+                            <option value="12" selected>12 per halaman</option>
+                            <option value="18">18 per halaman</option>
+                            <option value="24">24 per halaman</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Grid Layout untuk Tanggal -->
+                <div class="row g-3" id="downloadGrid">
+                    @php
+                        $tanggalList = $jadwal->groupBy(function($item) {
+                            return \Illuminate\Support\Carbon::parse($item->tanggal_realisasi)->format('Y-m-d');
+                        })->sortKeysDesc();
+                    @endphp
+                    @foreach($tanggalList as $tanggal => $laporanHarian)
+                    <div class="col-xl-3 col-lg-4 col-md-6 download-item" data-date="{{ $tanggal }}" data-count="{{ $laporanHarian->count() }}">
+                        <div class="card h-100 shadow-sm border-0 download-card" style="transition: all 0.3s ease; border-radius: 15px;">
+                            <div class="card-body text-center p-4">
+                                <div class="mb-3">
+                                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                        <i class="fas fa-file-pdf text-danger" style="font-size: 24px;"></i>
+                                    </div>
+                                </div>
+                                <h6 class="card-title fw-bold mb-2" style="color: #2d3748;">
+                                    {{ \Illuminate\Support\Carbon::parse($tanggal)->format('d M Y') }}
+                                </h6>
+                                <p class="text-muted mb-3" style="font-size: 0.9rem;">
+                                    {{ \Illuminate\Support\Carbon::parse($tanggal)->format('l') }}
+                                </p>
+                                <div class="mb-3">
+                                    <span class="badge bg-primary rounded-pill px-3 py-2" style="font-size: 0.85rem;">
+                                        <i class="fas fa-list-alt me-1"></i>{{ $laporanHarian->count() }} Laporan
+                                    </span>
+                                </div>
+                                <a href="/laporan/harian?tanggal={{ $tanggal }}" target="_blank" 
+                                   class="btn btn-success btn-sm w-100" 
+                                   style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; border-radius: 10px; font-weight: 600; padding: 8px 16px;">
+                                    <i class="fas fa-download me-2"></i>Download PDF
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+                <!-- Pagination -->
+                <div class="d-flex justify-content-between align-items-center mt-4" id="modalPagination">
+                    <div class="text-muted" id="modalShowingInfo">
+                        Menampilkan <span id="modalStartItem">1</span>-<span id="modalEndItem">12</span> dari <span id="modalTotalItems">{{ $tanggalList->count() }}</span> tanggal
+                    </div>
+                    <nav aria-label="Download pagination">
+                        <ul class="pagination pagination-sm mb-0" id="modalPaginationList">
+                            <!-- Pagination akan diisi oleh JavaScript -->
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- No Data Message -->
+                <div id="modalNoData" class="text-center py-5" style="display: none;">
+                    <div class="mb-3">
+                        <i class="fas fa-search text-muted" style="font-size: 48px;"></i>
+                    </div>
+                    <h6 class="text-muted">Tidak ada data yang ditemukan</h6>
+                    <p class="text-muted mb-0">Coba ubah kata kunci pencarian Anda</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Modal Download Laporan JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    let modalCurrentPage = 1;
+    let modalItemsPerPage = 12;
+    let modalCurrentSort = 'date_desc';
+    let modalSearchTerm = '';
+    
+    const modalSearchInput = document.getElementById('modalSearchInput');
+    const modalSortSelect = document.getElementById('modalSortSelect');
+    const modalItemsPerPageSelect = document.getElementById('modalItemsPerPage');
+    
+    // Event listeners
+    if (modalSearchInput) {
+        modalSearchInput.addEventListener('input', function() {
+            modalSearchTerm = this.value.toLowerCase();
+            modalCurrentPage = 1;
+            filterAndDisplayModalItems();
+        });
+    }
+    
+    if (modalSortSelect) {
+        modalSortSelect.addEventListener('change', function() {
+            modalCurrentSort = this.value;
+            modalCurrentPage = 1;
+            filterAndDisplayModalItems();
+        });
+    }
+    
+    if (modalItemsPerPageSelect) {
+        modalItemsPerPageSelect.addEventListener('change', function() {
+            modalItemsPerPage = parseInt(this.value);
+            modalCurrentPage = 1;
+            filterAndDisplayModalItems();
+        });
+    }
+    
+    // Filter and display items
+    function filterAndDisplayModalItems() {
+        const allItems = document.querySelectorAll('.download-item');
+        let filteredItems = Array.from(allItems);
+        
+        // Filter by search term
+        if (modalSearchTerm) {
+            filteredItems = filteredItems.filter(item => {
+                const date = item.dataset.date;
+                const formattedDate = new Date(date).toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                return formattedDate.toLowerCase().includes(modalSearchTerm);
+            });
+        }
+        
+        // Sort items
+        filteredItems.sort((a, b) => {
+            const dateA = new Date(a.dataset.date);
+            const dateB = new Date(b.dataset.date);
+            const countA = parseInt(a.dataset.count);
+            const countB = parseInt(b.dataset.count);
+            
+            switch (modalCurrentSort) {
+                case 'date_asc':
+                    return dateA - dateB;
+                case 'date_desc':
+                    return dateB - dateA;
+                case 'count_asc':
+                    return countA - countB;
+                case 'count_desc':
+                    return countB - countA;
+                default:
+                    return dateB - dateA;
+            }
+        });
+        
+        // Hide all items first
+        allItems.forEach(item => item.style.display = 'none');
+        
+        // Show filtered and paginated items
+        const startIndex = (modalCurrentPage - 1) * modalItemsPerPage;
+        const endIndex = startIndex + modalItemsPerPage;
+        const paginatedItems = filteredItems.slice(startIndex, endIndex);
+        
+        paginatedItems.forEach(item => item.style.display = 'block');
+        
+        // Update pagination info
+        updateModalPagination(filteredItems.length);
+        
+        // Show/hide no data message
+        const noDataDiv = document.getElementById('modalNoData');
+        if (filteredItems.length === 0) {
+            noDataDiv.style.display = 'block';
+        } else {
+            noDataDiv.style.display = 'none';
+        }
+    }
+    
+    // Update pagination
+    function updateModalPagination(totalItems) {
+        const totalPages = Math.ceil(totalItems / modalItemsPerPage);
+        const startItem = totalItems > 0 ? (modalCurrentPage - 1) * modalItemsPerPage + 1 : 0;
+        const endItem = Math.min(modalCurrentPage * modalItemsPerPage, totalItems);
+        
+        // Update showing info
+        document.getElementById('modalStartItem').textContent = startItem;
+        document.getElementById('modalEndItem').textContent = endItem;
+        document.getElementById('modalTotalItems').textContent = totalItems;
+        
+        // Update pagination buttons
+        const paginationList = document.getElementById('modalPaginationList');
+        paginationList.innerHTML = '';
+        
+        if (totalPages > 1) {
+            // Previous button
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${modalCurrentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" onclick="changeModalPage(${modalCurrentPage - 1})">Previous</a>`;
+            paginationList.appendChild(prevLi);
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = `page-item ${i === modalCurrentPage ? 'active' : ''}`;
+                li.innerHTML = `<a class="page-link" href="#" onclick="changeModalPage(${i})">${i}</a>`;
+                paginationList.appendChild(li);
+            }
+            
+            // Next button
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${modalCurrentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" onclick="changeModalPage(${modalCurrentPage + 1})">Next</a>`;
+            paginationList.appendChild(nextLi);
+        }
+    }
+    
+    // Change page function
+    window.changeModalPage = function(page) {
+        const totalItems = document.querySelectorAll('.download-item:not([style*="display: none"])').length;
+        const totalPages = Math.ceil(totalItems / modalItemsPerPage);
+        
+        if (page >= 1 && page <= totalPages) {
+            modalCurrentPage = page;
+            filterAndDisplayModalItems();
+        }
+    };
+    
+    // Add hover effects to download cards
+    document.querySelectorAll('.download-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px) scale(1.02)';
+            this.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.15)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+            this.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+        });
+    });
+    
+    // Initialize modal when opened
+    const downloadModal = document.getElementById('downloadModal');
+    if (downloadModal) {
+        downloadModal.addEventListener('shown.bs.modal', function() {
+            filterAndDisplayModalItems();
+        });
+    }
+});
+</script>
+@endif
+
 @endsection
                                                                         
