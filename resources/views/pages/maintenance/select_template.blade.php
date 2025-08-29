@@ -23,7 +23,7 @@
         </svg>
     </span>
     <!--end::Svg Icon-->
-    Tambah Maintenance
+    Tambah Breakdown
 </button>
 @endcanany
 
@@ -44,21 +44,21 @@
 @section('content_right')
 
 @canany(['superadmin','admin'])
-<h3>Tambah Maintenance Baru</h3>
-<p>Anda dapat menambahkan maintenance baru untuk mesin ini secara langsung menggunakan tombol di sebelah kiri.</p>
+<h3>Tambah Breakdown Baru</h3>
+<p>Anda dapat menambahkan breakdown baru untuk mesin ini secara langsung menggunakan tombol di sebelah kiri.</p>
 @else
-<h3>Mesin ini tidak punya jadwal maintenance</h3>
+<h3>Mesin ini tidak punya jadwal breakdown</h3>
 <p>Silahkan hubungi PIC dari mesin ini atau admin untuk dibuatkan jadwal</p>
 @endcanany
 
 @endsection
 
-<!-- Modal untuk Tambah Maintenance -->
+<!-- Modal untuk Tambah Breakdown -->
 <div class="modal fade" tabindex="-1" id="kt_modal_add_maintenance">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Maintenance</h5>
+                <h5 class="modal-title">Tambah Breakdown</h5>
                 <!--begin::Close-->
                 <div onclick="clearValue()" class="btn btn-icon btn-sm btn-active-light-danger ms-2" data-bs-dismiss="modal" aria-label="Close">
                 <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen034.svg-->

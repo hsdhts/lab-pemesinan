@@ -68,7 +68,7 @@ class MaintenanceController extends Controller
 
 
         return view('pages.maintenance.maintenance', [
-            'halaman' => 'Maintenace',
+            'halaman' => 'Breakdown',
             'mesin' => $mesin,
             'maintenance' => $maintenance,
             'form' => $form
@@ -77,7 +77,6 @@ class MaintenanceController extends Controller
 
 
     public function maintenance_add(Request $request){
-        //maintenance ditambahkan bersama form nya
 
         $objectJadwal = new JadwalController();
 
@@ -98,14 +97,14 @@ class MaintenanceController extends Controller
         // Jika validasi berhasil, lanjutkan proses pembuatan maintenance
         try {
             $fotoKerusakanPath = null;
-            
+
             // Handle file upload untuk foto_kerusakan
             if ($request->hasFile('foto_kerusakan')) {
                 $file = $request->file('foto_kerusakan');
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $fotoKerusakanPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
             }
-            
+
             $maintenance = Maintenance::create([
                 'mesin_id' => $request->mesin_id,
                 'nama_maintenance' => $request->nama_maintenance,

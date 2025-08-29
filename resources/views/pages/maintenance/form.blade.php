@@ -61,7 +61,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Maintenance</h5>
+                <h5 class="modal-title">Tambah Breakdown</h5>
 
                 <!--begin::Close-->
                 <div onclick="clearValue()" class="btn btn-icon btn-sm btn-active-light-danger ms-2" data-bs-dismiss="modal" aria-label="Close">
