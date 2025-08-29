@@ -19,8 +19,19 @@ class Mesin extends Model
     
     protected $guarded = ['id'];
 
-    public function kategori() {
-        return $this->belongsTo(Kategori::class);
+    protected $fillable = [
+        'nama_mesin',
+        'stasiun_id',
+        'spesifikasi',
+        'kode_mesin',
+        'user_id',
+        'mesin_image'
+    ];
+
+
+    
+    public function stasiun() {
+        return $this->belongsTo(Stasiun::class);
     }
     
     public function maintenance() {
@@ -34,6 +45,10 @@ class Mesin extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function jadwalPreventive(){
+        return $this->hasMany(JadwalPreventive::class);
     }
 
 }

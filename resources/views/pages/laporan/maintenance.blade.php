@@ -6,7 +6,7 @@
 
     <style>
         @page{
-            margin-left: 2.5cm; 
+            margin-left: 2.5cm;
         }
         html{
             font-family: Arial, Helvetica, sans-serif;
@@ -39,20 +39,9 @@
           margin: 5px auto;
         }
         .detailPekerjaan p{
-            margin-top: 5px; 
+            margin-top: 5px;
             margin-bottom: 5px;
             font-size: 8pt;
-        }
-        .alasan{
-            width: 100%;
-            margin-bottom: 20px;
-            border: 1px solid black;
-            border-radius: 3px;
-            min-height: 50px;
-            font-size: 11pt;
-            padding: 6px;
-            box-sizing: border-box;
-            font-size: 9pt;
         }
         .judul{
             text-align: center;
@@ -62,9 +51,9 @@
 
 </head>
 <body>
-    
+
     <h4 class="judul">LAPORAN PENYELESAIAN PEKERJAAN</h4>
-    <h6 class="judul">Pendidikan Teknik Mesin, Universitas Sriwijaya</h6>
+    <h6 class="judul">PT.Parit Sembada POM</h6>
     <table class="tabel1">
 
         @php
@@ -90,12 +79,6 @@
         {!! $jadwal->keterangan !!}
     </div>
 
-    @if($jadwal->alasan)
-        <h5 style="margin-bottom: 2px;">Alasan Terlambat : </h5>
-        <div class="alasan">
-            {{ $jadwal->alasan }}
-        </div>
-    @endif
     @php
         $sparepart = $jadwal->sparepart;
     @endphp
@@ -107,7 +90,7 @@
         <tr>
             <th>Sparepart</th><th>Jumlah</th>
         </tr>
-        
+
 
         @foreach ($sparepart as $s)
 
@@ -115,7 +98,7 @@
                 <td>{{ $s->nama_sparepart }}</td><td>{{ $s->pivot->jumlah }}</td>
             </tr>
         @endforeach
-     
+
         @if($sparepart->isEmpty())
             <tr>
                 <td style="padding: 10px; text-align: center;" colspan="2">Tidak Ada Penggunaan Spareparts</td>

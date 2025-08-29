@@ -15,7 +15,12 @@ class Jadwal extends Model
 
     protected $cascadeDeletes = ['isi_form'];
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'tanggal_jadwal', 'tanggal_selesai'];
+
+    protected $casts = [
+        'tanggal_jadwal' => 'date',
+        'tanggal_selesai' => 'date',
+    ];
 
     protected $guarded = ['id'];
 

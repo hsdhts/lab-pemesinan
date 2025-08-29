@@ -1,9 +1,6 @@
 <div class="m-1">
-<form action="/maintenance/form/pilih/" method="post" style ="display:inline-block;">
-    @csrf
-    <input type="hidden" name="id" value="{{ $id }}">
-    <button class="btn btn-sm btn-warning  btn-color-dark py-0 text-nowrap" type="submit">
-     <!--begin::Svg Icon | path: assets/media/icons/duotune/text/txt010.svg-->
+<a href="/mesin/maintenance/{{ $id }}">
+    <button class="btn btn-sm btn-warning  btn-color-dark py-0 text-nowrap" type="button">
 <span class="svg-icon svg-icon-muted svg-icon-7">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path opacity="0.3" d="M17.1 10.5H11.1C10.5 10.5 10.1 10.1 10.1 9.5V8.5C10.1 7.9 10.5 7.5 11.1 7.5H17.1C17.7 7.5 18.1 7.9 18.1 8.5V9.5C18.1 10.1 17.7 10.5 17.1 10.5ZM22.1 4.5V3.5C22.1 2.9 21.7 2.5 21.1 2.5H11.1C10.5 2.5 10.1 2.9 10.1 3.5V4.5C10.1 5.1 10.5 5.5 11.1 5.5H21.1C21.7 5.5 22.1 5.1 22.1 4.5ZM22.1 15.5V14.5C22.1 13.9 21.7 13.5 21.1 13.5H11.1C10.5 13.5 10.1 13.9 10.1 14.5V15.5C10.1 16.1 10.5 16.5 11.1 16.5H21.1C21.7 16.5 22.1 16.1 22.1 15.5ZM18.1 20.5V19.5C18.1 18.9 17.7 18.5 17.1 18.5H11.1C10.5 18.5 10.1 18.9 10.1 19.5V20.5C10.1 21.1 10.5 21.5 11.1 21.5H17.1C17.7 21.5 18.1 21.1 18.1 20.5Z" fill="black"/>
@@ -11,9 +8,9 @@
     </svg>
 </span>
     <!--end::Svg Icon-->
-<span>Maintenance</span>
+<span>Breakdown</span>
 </button>
-</form>
+</a>
 
 <a href="/jadwal/{{ $id }}">
     <button class="btn btn-sm btn-dark py-0 text-nowrap d-inline">
