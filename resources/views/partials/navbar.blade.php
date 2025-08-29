@@ -52,6 +52,12 @@
 
 			</div>
 
+            <div class="menu-item me-lg-1">
+				<a class="menu-link py-3" href="/stasiun" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+					<span class="menu-title">Stasiun</span>
+				</a>
+			</div>
+
 			@can( 'admin')
 			<div class="menu-item me-lg-1">
 				<a class="menu-link py-3" href="/approve">
@@ -59,12 +65,6 @@
 				</a>
 			</div>
 			@endcan
-
-            <div class="menu-item me-lg-1">
-				<a class="menu-link py-3" href="/stasiun" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-					<span class="menu-title">Stasiun</span>
-				</a>
-			</div>
 
 			@can('superadmin')
 			<div class="menu-item me-lg-1">
