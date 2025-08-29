@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 
 use App\Models\Mesin;
 use App\Models\User;
+use App\Models\Maintenance;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -25,22 +26,22 @@ class HomeController extends Controller
         if(Auth::user()->level != 'Mahasiswa'){
             $hari_ini = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])
                         ->where('status', '<', 3)
-                        ->whereDate('tanggal_rencana', now(7)->toDateString())
                         ->get();
 
             $seminggu = Mesin::with(['user'])->get();
             $sebulan = User::where('users.level', '!=', 'Superadmin')->get();
             $totalJadwal = Jadwal::all();
+            $totalMaintenance = Maintenance::count();
         }else{
             $user_id = Auth::user()->id;
             $hari_ini = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin'])
                                 ->whereRelation('maintenance.mesin','user_id', $user_id)
                                 ->where('status', '<', 3)
-                                ->whereDate('tanggal_rencana', now(7)->toDateString())
                                 ->get()->sortBy('tanggal_rencana');
             $seminggu = Mesin::with(['user'])->get();
             $sebulan = User::where('users.level', '!=', 'Superadmin')->get();
             $totalJadwal = Jadwal::whereRelation('maintenance.mesin', 'user_id', $user_id);
+            $totalMaintenance = Maintenance::whereRelation('mesin', 'user_id', $user_id)->count();
         }
 
         $jadwal_chart_rencana = Jadwal::whereYear('tanggal_rencana', now(7)->year)->get()->groupBy(function($val) {
@@ -64,6 +65,7 @@ class HomeController extends Controller
          'seminggu' => $seminggu,
          'sebulan' => $sebulan,
          'total_jadwal' => $totalJadwal,
+         'total_maintenance' => $totalMaintenance,
         ]);
 
 

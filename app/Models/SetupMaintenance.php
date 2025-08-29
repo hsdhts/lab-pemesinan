@@ -16,15 +16,10 @@ class SetupMaintenance extends Model
 
     protected $dates = ['deleted_at'];
 
-
     protected $guarded = ['id'];
-    
 
-
-    
     public function setupForm(){
         return $this->hasMany(SetupForm::class, 'setup_maintenance_id');
     }
-   
-    
+
 }

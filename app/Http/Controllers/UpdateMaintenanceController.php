@@ -13,17 +13,32 @@ use Illuminate\Support\Facades\Cache;
 class UpdateMaintenanceController extends Controller
 {
     public function create(Request $request){
-        $mesin = Mesin::with(['maintenance', 'form'])->find($request->mesin_id);
-        
-        $setup = collect([]);  
-        $attach = collect(['aksi' => 'tambah']);
+        $data_valid = $request->validate([
+            'mesin_id' => 'required|numeric',
+            'nama_maintenance' => 'required|string|max:255',
+            'warna' => 'required|string',
+            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
 
-        Cache::put('setup', $setup, now()->addMinutes(30));
-        Cache::put('mesin', $mesin, now()->addMinutes(30));
-        Cache::put('attach', $attach, now()->addMinutes(30));
+        // Handle file upload if exists
+        $foto_kerusakan = null;
+        if ($request->hasFile('foto_kerusakan')) {
+            $foto_kerusakan = $request->file('foto_kerusakan')->store('maintenance_photos', 'public');
+        }
 
-        return redirect('/maintenance/form/pilih/');
+        // Create maintenance record
+        $maintenance = Maintenance::create([
+            'nama_maintenance' => $data_valid['nama_maintenance'],
+            'mesin_id' => $data_valid['mesin_id'],
+            'warna' => $data_valid['warna'],
+            'foto_kerusakan' => $foto_kerusakan
+        ]);
 
+        // Create jadwal for this maintenance
+        $objectJadwal = new JadwalController();
+        $objectJadwal->create_jadwal($maintenance->id);
+
+        return redirect('/mesin/maintenance/' . $request->mesin_id)->with('success', 'Maintenance berhasil ditambahkan!');
     }
 
     public function edit(Request $request){
@@ -37,20 +52,19 @@ class UpdateMaintenanceController extends Controller
 
         $maintenance = Maintenance::find($data_valid['maintenance_id']);
         $setup = collect([$maintenance])->map(function($item){
-               
+
             return collect([
-               'nama_setup' => $item->nama_maintenance, 
-               'periode' => $item->periode,
-               'satuan_periode' => $item->satuan_periode,
+               'nama_maintenance' => $item->nama_maintenance,
                'warna' => $item->warna,
-               
+               'foto_kerusakan' => $item->foto_kerusakan,
+
                'setupForm' => $item->form->map(function($i) {
                    return collect([
                        'nama_setup_form' => $i->nama_form,
                        'syarat_setup_form' => $i->syarat,
                        'value' => $i->value,
                    ]);
-                   }) 
+                   })
            ]);
            });
            //ddd('aku rapopo');
@@ -59,7 +73,7 @@ class UpdateMaintenanceController extends Controller
            Cache::put('attach', $attach, now()->addMinutes(30));
            Cache::put('setup', $setup, now()->addMinutes(30));
            Cache::put('mesin', $mesin, now()->addMinutes(30));
-           return redirect('/maintenance/form/pilih/');
+           return redirect('/mesin/maintenance/' . $data_valid['mesin_id']);
 
     }
 
@@ -71,14 +85,13 @@ class UpdateMaintenanceController extends Controller
         $objectJadwal = new JadwalController();
 
 
-        
+
             foreach($setup as $s){
                 $maintenance = Maintenance::create([
-                    'nama_maintenance' => $s->get('nama_setup'),
+                    'nama_maintenance' => $s->get('nama_maintenance'),
                     'mesin_id' => $mesin->get('id'),
-                    'periode' => $s->get('periode'),
-                    'satuan_periode' => $s->get('satuan_periode'),
-                    'warna' => $s->get('warna')
+                    'warna' => $s->get('warna'),
+                    'foto_kerusakan' => $s->get('foto_kerusakan')
                 ]);
                 foreach($s->get('setupForm') as $form){
                     Form::create([
@@ -91,7 +104,7 @@ class UpdateMaintenanceController extends Controller
 
 
             }
-        
+
         return redirect('/jadwal/'.$mesin['id']);
 
     }
@@ -104,14 +117,13 @@ class UpdateMaintenanceController extends Controller
 
         $objectJadwal = new JadwalController();
 
-        
+
             foreach($setup as $s){
                 $maintenance = Maintenance::create([
-                    'nama_maintenance' => $s->get('nama_setup'),
+                    'nama_maintenance' => $s->get('nama_maintenance'),
                     'mesin_id' => $mesin->get('id'),
-                    'periode' => $s->get('periode'),
-                    'satuan_periode' => $s->get('satuan_periode'),
-                    'warna' => $s->get('warna')
+                    'warna' => $s->get('warna'),
+                    'foto_kerusakan' => $s->get('foto_kerusakan')
                 ]);
                 foreach($s->get('setupForm') as $form){
                     Form::create([
@@ -134,20 +146,20 @@ class UpdateMaintenanceController extends Controller
 
             Maintenance::destroy($attach['maintenance_id']);
             // DATA YANG SEBELUMNYA DILAKUKAN SOFT DELETE, TARUH LOGIKANNYA DISINI
-            // SILAHKAN DITENTUKAN APAKAH DATA YANG SEBELUMNYA PERLU DITAMPILKAN ATAU TIDAK. 
+            // SILAHKAN DITENTUKAN APAKAH DATA YANG SEBELUMNYA PERLU DITAMPILKAN ATAU TIDAK.
 
             //$maintenance->forceDelete();
 
 
             return redirect('/jadwal/'.$mesin['id']);
-            
+
 
     }
 
 
     public function delete(Request $request){
 
-        
+
 
         $data_valid = $request->validate([
             'maintenance_id' => 'required|numeric',
@@ -156,10 +168,10 @@ class UpdateMaintenanceController extends Controller
 
 
         Maintenance::destroy($data_valid['maintenance_id']);
-        
+
         return redirect('/jadwal/'.$data_valid['mesin_id']);
     }
-    
+
 
 
 

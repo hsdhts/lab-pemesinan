@@ -29,126 +29,21 @@ class UpdateDbController extends Controller
 
                 $tahun = Carbon::now(7)->year;
     
-                $jadwal_terakhir = $m->rencana_terakhir;
-                $waktu = Carbon::parse($jadwal_terakhir->tanggal_rencana, 7);
-                //echo "Awalnya adalah " . $waktu->format('d-m-Y') . "<br>";
                 $id_maintenance = $m->id;
-                $periode = $m->periode;
-                $satuan_periode = $m->satuan_periode;
-                //pengecekan kondisi apakah dia lebih dari 1 tahun atau tidak
-                switch ($satuan_periode) {
-                    case 'Jam':
-
-                        $waktu = $waktu->addHours($periode);
-                        if($waktu->year <= $tahun){
-
-                            while($waktu->year <= $tahun){
-                                //echo $waktu->format('d-m-Y') . "<br>";
-
-                                $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-                                $waktu->addHour($periode);
-
-                            }            
-
-                        }else{
-                            $jadwal_tahunan = Carbon::parse($jadwal_terakhir->tanggal_rencana, 7);
-
-                            if($jadwal_tahunan->year <= $tahun){
-                                $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-                            }
-
-                        }
-                               
-                        break;
-                    case 'Hari':
-                            
-                        $waktu = $waktu->addDays($periode);
-                        if($waktu->year <= $tahun){
-
-                            while($waktu->year <= $tahun){
-                                //echo $waktu->format('d-m-Y') . "<br>";
-
-                                $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-                                $waktu->addDays($periode);
-
-                            }            
-
-                        }else{
-                            $jadwal_tahunan = Carbon::parse($jadwal_terakhir->tanggal_rencana, 7);
-                            
-                            if($jadwal_tahunan->year <= $tahun){
-                                $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-                            }
-
-                        }
-                        break;
-            
-                    case 'Minggu':
-                        $waktu = $waktu->addWeeks($periode);
-                        if($waktu->year <= $tahun){
-
-                            while($waktu->year <= $tahun){
-                                //echo $waktu->format('d-m-Y') . "<br>";
-
-                                $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-                                $waktu->addWeeks($periode);
-
-                            }            
-
-                        }else{
-                            $jadwal_tahunan = Carbon::parse($jadwal_terakhir->tanggal_rencana, 7);
-                            
-                            if($jadwal_tahunan->year <= $tahun){
-                                $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-                            }
-
-                        }       
-                        break;
-            
-                    case 'Bulan':
-                        $waktu = $waktu->addMonths($periode);
-                        if($waktu->year <= $tahun){
-
-                            while($waktu->year <= $tahun){
-                                //echo $waktu->format('d-m-Y') . "<br>";
-
-                                $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-                                $waktu->addMonths($periode);
-
-                            }            
-
-                        }else{
-                            $jadwal_tahunan = Carbon::parse($jadwal_terakhir->tanggal_rencana, 7);
-                            
-                            if($jadwal_tahunan->year <= $tahun){
-                                $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-                            }
-
-                        }      
-                            break;
-                    
-                    case 'Tahun':
-                        $waktu = $waktu->addYears($periode);
-                        if($waktu->year <= $tahun){
-
-                            while($waktu->year <= $tahun){
-                                //echo $waktu->format('d-m-Y') . "<br>";
-
-                                $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-                                $waktu->addYears($periode);
-
-                            }            
-
-                        }else{
-                            $jadwal_tahunan = Carbon::parse($jadwal_terakhir->tanggal_rencana, 7);
-                            
-                            if($jadwal_tahunan->year <= $tahun){
-                                $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-                            }
-
-                        }      
-                        break;
-                    }
+                
+                // Karena periode dan satuan_periode sudah dihapus, 
+                // buat jadwal sederhana berdasarkan maintenance yang ada
+                $jadwal_terakhir = $m->rencana_terakhir;
+                if ($jadwal_terakhir) {
+                    $waktu = Carbon::parse($jadwal_terakhir->tanggal_rencana, 7)->addMonth(); // Default tambah 1 bulan
+                } else {
+                    $waktu = Carbon::now(7); // Jika belum ada jadwal, mulai dari sekarang
+                }
+                
+                // Buat jadwal baru untuk maintenance ini
+                if($waktu->year <= $tahun){
+                    $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
+                }
                 
             }
 

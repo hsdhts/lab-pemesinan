@@ -132,7 +132,7 @@
 @section('content_right')
 
 
-<form action="/jadwal/update/" method="POST">
+<form action="/jadwal/update/" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="my-4">
@@ -160,41 +160,17 @@
     </div>
 </div>
 
+@if($jadwal->tanggal_realisasi)
 <div class="input-group my-4">
-
-    <span class="form-label float-start">Tanggal Realisasi</span>
-    <div class="input-group date">
-        <input type="text" class="form-control @error('tanggal_realisasi') is-invalid @enderror" id="form_tanggal_realisasi" @if($jadwal->tanggal_realisasi == NULL) value="{{ old('tanggal_realisasi') }}" @else value="{{ old('tanggal_realisasi', Illuminate\Support\Carbon::parse($jadwal->tanggal_realisasi)->format('d-m-Y')) }}" @endif name="tanggal_realisasi" readonly  @if($jadwal->status > 2) disabled @endif>
-        <button class="btn btn-secondary" type="button"  @if($jadwal->status > 2) disabled @endif>
-            <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
-            <span class="svg-icon svg-icon-muted svg-icon-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
-                    <path opacity="0.3" d="M19 3.40002C18.4 3.40002 18 3.80002 18 4.40002V8.40002H14V4.40002C14 3.80002 13.6 3.40002 13 3.40002C12.4 3.40002 12 3.80002 12 4.40002V8.40002H8V4.40002C8 3.80002 7.6 3.40002 7 3.40002C6.4 3.40002 6 3.80002 6 4.40002V8.40002H2V4.40002C2 3.80002 1.6 3.40002 1 3.40002C0.4 3.40002 0 3.80002 0 4.40002V19.4C0 20 0.4 20.4 1 20.4H19C19.6 20.4 20 20 20 19.4V4.40002C20 3.80002 19.6 3.40002 19 3.40002ZM18 10.4V13.4H14V10.4H18ZM12 10.4V13.4H8V10.4H12ZM12 15.4V18.4H8V15.4H12ZM6 10.4V13.4H2V10.4H6ZM2 15.4H6V18.4H2V15.4ZM14 18.4V15.4H18V18.4H14Z" fill="black"/>
-                    <path d="M19 0.400024H1C0.4 0.400024 0 0.800024 0 1.40002V4.40002C0 5.00002 0.4 5.40002 1 5.40002H19C19.6 5.40002 20 5.00002 20 4.40002V1.40002C20 0.800024 19.6 0.400024 19 0.400024Z" fill="black"/>
-                </svg>
-            </span>
-            <!--end::Svg Icon-->
-    </button>
-
+    <span class="form-label float-start">Tanggal Realisasi (Otomatis)</span>
+    <div class="input-group">
+        <input type="text" class="form-control" value="{{ Illuminate\Support\Carbon::parse($jadwal->tanggal_realisasi)->format('d-m-Y H:i') }}" readonly disabled>
     </div>
 </div>
+@endif
 
 
-<div class="mb-3">
-    <label for="lama_pekerjaan" class="form-label">Lama Pekerjaan</label>
-    <input type="text" class="form-control @error('lama_pekerjaan') is-invalid @enderror" placeholder="lama pekerjaan" id="lama_pekerjaan" value="{{ old('lama_pekerjaan', $jadwal->lama_pekerjaan) }}" name="lama_pekerjaan">
-    @error('lama_pekerjaan')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>
 
-<div class="mb-3">
-    <label for="personel" class="form-label">Personel</label>
-    <input type="text" class="form-control @error('personel') is-invalid @enderror" placeholder="personel" id="personel" value="{{ old('personel', $jadwal->personel) }}" name="personel">
-    @error('personel')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>
 
 <div class="mb-3">
     <label for="kt_docs_tinymce_basic" class="form-label">Keterangan</label>
@@ -206,6 +182,20 @@
     </p>
     <textarea id="kt_docs_tinymce_basic" name="keterangan" class="tox-target" @if($jadwal->status > 2) disabled @endif>{{ old('keterangan', $jadwal->keterangan) }}</textarea>
 
+</div>
+
+<div class="mb-3">
+    <label for="foto_perbaikan" class="form-label">Foto Hasil Perbaikan</label>
+    <input type="file" class="form-control @error('foto_perbaikan') is-invalid @enderror" id="foto_perbaikan" name="foto_perbaikan" accept="image/*" @if($jadwal->status > 2) disabled @endif>
+    @error('foto_perbaikan')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @if($jadwal->foto_perbaikan)
+    <div class="mt-2">
+        <small class="text-muted">Foto saat ini:</small><br>
+        <img src="{{ asset('storage/' . $jadwal->foto_perbaikan) }}" alt="Foto Perbaikan" class="img-thumbnail" style="max-width: 200px; cursor: pointer;" onclick="showImage('{{ asset('storage/' . $jadwal->foto_perbaikan) }}', 'Foto Hasil Perbaikan - {{ $maintenance->nama_maintenance }}')">
+    </div>
+    @endif
 </div>
 
 

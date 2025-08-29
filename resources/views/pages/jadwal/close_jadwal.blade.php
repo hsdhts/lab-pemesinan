@@ -369,7 +369,7 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="mb-0 pulse"><i class="fas fa-history me-2"></i>History Laporan Pekerjaan</h5>
             <div class="d-flex align-items-center gap-3">
-                <div class="badge" style="background: var(--success-gradient); color: white; font-size: 0.9rem; padding: 8px 12px; border-radius: 20px;">
+                <div class="badge" style="background: var(--success-gradient); color: black; font-size: 0.9rem; padding: 8px 12px; border-radius: 20px;">
                     <i class="fas fa-chart-bar me-1"></i>Total: <span id="totalRecords">{{ $jadwal->count() }}</span> laporan
                 </div>
                 @if($jadwal->isNotEmpty())
@@ -390,122 +390,115 @@
                  data-maintenance="{{ strtolower($jd->maintenance->nama_maintenance) }}"
                  data-keterangan="{{ strtolower($jd->keterangan ?? '') }}"
                  data-tanggal="{{ $jd->tanggal_realisasi }}">
-                <div class="card jadwal-card h-100 border-0 shadow-sm" style="border-radius: 16px; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
-                    <!-- Card Header with Date Badge -->
-                    <div class="card-header border-0 position-relative d-flex justify-content-between align-items-start" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 16px 16px 0 0;">
-                        <!-- Left side - Title -->
-                        <div class="text-white">
-                            <h6 class="mb-1 fw-bold text-white" style="font-size: 1.1rem;">Maintenance Report</h6>
-                            <small class="text-white opacity-75" style="font-size: 0.8rem;">Completed Task</small>
-                        </div>
-
-                        <!-- Right side - Date Badge -->
-                        <div class="bg-white bg-opacity-20 rounded-3 p-2 text-center" style="backdrop-filter: blur(10px);">
-                            <i class="fas fa-calendar-check text-white mb-1 d-block" style="font-size: 1.2rem;"></i>
-                            <small class="d-block text-white fw-semibold" style="font-size: 0.7rem;">{{ Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('d M') }}</small>
-                            <small class="d-block text-white opacity-75" style="font-size: 0.65rem;">{{ Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('Y') }}</small>
+                <div class="card jadwal-card h-100 border-0 shadow-sm" style="border-radius: 12px; overflow: hidden; transition: all 0.3s ease; background: white; border: 1px solid #e5e7eb;">
+                    <!-- Card Header - Simplified -->
+                    <div class="card-header border-0 bg-primary text-white" style="padding: 1.25rem; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0 fw-bold text-white" style="font-size: 1rem;">Laporan Maintenance</h6>
+                                <small class="text-white opacity-90" style="font-size: 0.85rem;">Status: Selesai</small>
+                            </div>
+                            <div class="text-end" style="margin-left: 8rem;">
+                                <div class="badge bg-white text-primary fw-semibold" style="font-size: 0.75rem; padding: 8px 12px; border-radius: 8px;">
+                                    <i class="fas fa-calendar me-2"></i>{{ Illuminate\Support\Carbon::parse($jd->tanggal_rencana)->format('d M Y') }}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Card Body -->
-                    <div class="card-body" style="padding: 1.5rem;">
-                        <!-- Machine & Maintenance Info -->
-                        <div class="mb-4">
-                            <div class="d-flex align-items-start mb-3">
-                                <div class="bg-gradient rounded-3 p-3 me-3" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);">
-                                    <i class="fas fa-cogs text-white" style="font-size: 1.2rem;"></i>
+                    <!-- Card Body - Simplified Layout -->
+                    <div class="card-body" style="padding: 1.25rem;">
+                        <!-- Main Info Section -->
+                        <div class="mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-2">
+                                    <div class="bg-primary bg-opacity-10 rounded-3 p-2 text-center" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-cogs text-primary" style="font-size: 1.1rem;"></i>
+                                    </div>
                                 </div>
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1 fw-bold" style="color: #1a202c; font-size: 1rem; line-height: 1.3;">{{ $jd->maintenance->mesin->nama_mesin }}</h6>
-                                    <p class="mb-2 text-muted" style="font-size: 0.85rem; line-height: 1.4;">{{ $jd->maintenance->nama_maintenance }}</p>
-                                    <div class="d-flex align-items-center">
-                                        <span class="badge bg-light text-dark me-2" style="font-size: 0.7rem; padding: 4px 8px; border-radius: 8px;">Status: Completed</span>
+                                <div class="col-10">
+                                    <h6 class="mb-1 fw-bold text-dark" style="font-size: 1rem;">{{ $jd->maintenance->mesin->nama_mesin }}</h6>
+                                    <p class="mb-0 text-muted" style="font-size: 0.9rem;">{{ $jd->maintenance->nama_maintenance }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Info - Simplified -->
+                        <div class="mb-3">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-2">
+                                        <small class="text-muted d-block" style="font-size: 0.75rem;">Tanggal Rencana</small>
+                                        <div class="fw-semibold" style="font-size: 0.85rem; color: #374151;">{{ Illuminate\Support\Carbon::parse($jd->tanggal_rencana)->format('d M Y') }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-2">
+                                        <small class="text-muted d-block" style="font-size: 0.75rem;">Tanggal Selesai</small>
+                                        <div class="fw-semibold" style="font-size: 0.85rem; color: #374151;">{{ $jd->tanggal_realisasi ? Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('d M Y') : '-' }}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Timeline Info -->
-                        <div class="mb-4">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <div class="border rounded-3 p-3 h-100" style="border-color: #e2e8f0 !important; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <i class="fas fa-calendar-alt text-primary me-2" style="font-size: 0.9rem;"></i>
-                                            <small class="text-muted fw-semibold" style="font-size: 0.75rem;">Rencana</small>
-                                        </div>
-                                        <div class="fw-bold" style="font-size: 0.9rem; color: #2d3748;">{{ Illuminate\Support\Carbon::parse($jd->tanggal_rencana)->format('d M Y') }}</div>
-                                        <small class="text-muted" style="font-size: 0.7rem;">{{ Illuminate\Support\Carbon::parse($jd->tanggal_rencana)->format('l') }}</small>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="border rounded-3 p-3 h-100" style="border-color: #10b981 !important; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <i class="fas fa-check-circle text-success me-2" style="font-size: 0.9rem;"></i>
-                                            <small class="text-success fw-semibold" style="font-size: 0.75rem;">Realisasi</small>
-                                        </div>
-                                        <div class="fw-bold text-success" style="font-size: 0.9rem;">{{ Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('d M Y') }}</div>
-                                        <small class="text-success" style="font-size: 0.7rem;">{{ Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('l') }}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Description -->
-                   @if($jd->keterangan)
-                        <div class="mb-4">
-                            <div class="bg-light rounded-3 p-3" style="border-left: 4px solid #667eea;">
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="fas fa-sticky-note text-primary me-2" style="font-size: 0.85rem;"></i>
-                                    <small class="text-muted fw-semibold" style="font-size: 0.75rem;">Keterangan</small>
-                                </div>
-                                <p class="mb-0" style="font-size: 0.85rem; color: #4a5568; line-height: 1.5;">{{ Str::limit($jd->keterangan, 100) }}</p>
+                        <!-- Description - Simplified -->
+                        @if($jd->keterangan)
+                        <div class="mb-3">
+                            <div class="bg-light rounded p-2">
+                                <small class="text-muted d-block mb-1" style="font-size: 0.75rem;">Keterangan:</small>
+                                <p class="mb-0" style="font-size: 0.85rem; color: #374151; line-height: 1.4;">{{ Str::limit($jd->keterangan, 80) }}</p>
                             </div>
                         </div>
                         @endif
 
-                    <!-- Action Buttons -->
-                        <div class="d-flex gap-3">
-                            <button class="btn btn-primary flex-fill"
-                                    onclick="modal_history({{ $jd->id }}, '{{ $jd->maintenance->mesin->nama_mesin }}', '{{ $jd->maintenance->nama_maintenance }}', '{{ Illuminate\Support\Carbon::parse($jd->tanggal_rencana)->format('d-m-Y') }}', '{{ Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('d-m-Y') }}', '{{ $jd->keterangan ?? '-' }}')"
+                        <!-- Foto Perbaikan - Simplified -->
+                        @if($jd->foto_perbaikan)
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-2" style="font-size: 0.75rem;">Foto Hasil Perbaikan:</small>
+                            <div class="position-relative d-inline-block">
+                                <img src="{{ asset('storage/' . $jd->foto_perbaikan) }}"
+                                     alt="Foto Perbaikan"
+                                     class="img-fluid rounded border"
+                                     style="max-width: 120px; max-height: 90px; object-fit: cover; cursor: pointer;"
+                                     data-bs-toggle="modal"
+                                     data-bs-target="#imageModal"
+                                     onclick="showImage('{{ asset('storage/' . $jd->foto_perbaikan) }}', 'Foto Perbaikan - {{ $jd->maintenance->nama_maintenance }}')">
+                                <div class="position-absolute top-0 end-0 bg-primary text-white rounded-circle" style="width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 10px; margin: 4px;">
+                                    <i class="fas fa-expand-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+
+                        <!-- Status Badge -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            @php
+                                $rencana = Illuminate\Support\Carbon::parse($jd->tanggal_rencana);
+                                $realisasi = Illuminate\Support\Carbon::parse($jd->tanggal_realisasi);
+                                $diff = $rencana->diffInDays($realisasi, false);
+                            @endphp
+                            <div>
+                                @if($diff <= 0)
+                                    <span class="badge bg-success" style="font-size: 0.75rem; padding: 6px 10px;">
+                                        <i class="fas fa-check me-1"></i>Tepat Waktu
+                                    </span>
+                                @else
+                                    <span class="badge bg-warning" style="font-size: 0.75rem; padding: 6px 10px;">
+                                        <i class="fas fa-clock me-1"></i>Terlambat {{ $diff }} hari
+                                    </span>
+                                @endif
+                            </div>
+                            <button class="btn btn-primary btn-sm"
+                                    onclick="modal_history({{ $jd->id }}, '{{ $jd->maintenance->mesin->nama_mesin }}', '{{ $jd->maintenance->nama_maintenance }}', '{{ Illuminate\Support\Carbon::parse($jd->tanggal_rencana)->format('d-m-Y') }}', '{{ $jd->keterangan ?? '-' }}', '{{ $jd->tanggal_realisasi ? Illuminate\Support\Carbon::parse($jd->tanggal_realisasi)->format('d-m-Y') : '-' }}', '{{ $jd->foto_perbaikan ? asset('storage/' . $jd->foto_perbaikan) : '' }}')"
                                     data-bs-toggle="modal"
                                     data-bs-target="#modal_history"
-                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px; font-weight: 600; padding: 12px 16px; font-size: 0.85rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
-                                <i class="fas fa-eye me-2"></i>Detail
+                                    style="padding: 8px 16px; font-size: 0.8rem; border-radius: 6px;">
+                                <i class="fas fa-eye me-1"></i>Lihat Detail
                             </button>
                         </div>
                     </div>
 
-                    <!-- Card Footer with Additional Info -->
-                    <div class="card-footer border-0 bg-transparent" style="padding: 0 1.5rem 1.5rem;">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-light rounded-circle p-2 me-2" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="fas fa-clock text-muted" style="font-size: 0.75rem;"></i>
-                                </div>
-                                <div>
-                                    <small class="text-muted d-block" style="font-size: 0.7rem; line-height: 1.2;">Completed on</small>
-                                    <small class="fw-semibold" style="font-size: 0.75rem; color: #4a5568;">{{ Illuminate\Support\Carbon::parse($jd->tanggaKeteranganl_realisasi)->format('H:i, d M Y') }}</small>
-                                </div>
-                            </div>
-                            <div class="text-end">
-                                @php
-                                    $rencana = Illuminate\Support\Carbon::parse($jd->tanggal_rencana);
-                                    $realisasi = Illuminate\Support\Carbon::parse($jd->tanggal_realisasi);
-                                    $diff = $rencana->diffInDays($realisasi, false);
-                                @endphp
-                                @if($diff <= 0)
-                                    <span class="badge bg-success" style="font-size: 0.7rem; padding: 4px 8px; border-radius: 8px;">
-                                         <i class="fas fa-check me-1"></i>On Time
-                                    </span>
-                                @else
-                                    <span class="badge bg-warning" style="font-size: 0.7rem; padding: 4px 8px; border-radius: 8px;">
-                                        <i class="fas fa-clock me-1"></i>{{ $diff }} day{{ $diff > 1 ? ' s' : '' }} late
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
             @endforeach
@@ -584,6 +577,10 @@
                         <th class="fw-bold">Keterangan</th>
                         <td id="approve_keterangan"></td>
                     </tr>
+                    <tr id="foto_perbaikan_row" style="display: none;">
+                        <th class="fw-bold">Foto Perbaikan</th>
+                        <td id="approve_foto_perbaikan"></td>
+                    </tr>
                 </table>
 
             </div>
@@ -612,6 +609,21 @@
 
 
 
+<!-- Modal untuk Foto Perbaikan -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Foto Perbaikan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="" class="img-fluid" style="max-width: 100%; height: auto; border-radius: 8px;">
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('customJs')
@@ -626,16 +638,67 @@ $('.input-group.date').datepicker({
     orientation: "bottom left"
 });
 
+function showImage(imageSrc, imageTitle) {
+    document.getElementById('modalImage').src = imageSrc;
+    document.getElementById('modalImage').alt = imageTitle;
+    document.getElementById('imageModalLabel').textContent = imageTitle;
+}
 
+function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, tgl_realisasi, foto_perbaikan) {
+    console.log('Modal history called with:', {
+        jadwal_id, mesin, maintenance, tgl_rencana, keterangan, tgl_realisasi, foto_perbaikan
+    });
 
-function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, tgl_realisasi, keterangan) {
-    document.getElementById('approve_mesin').innerHTML = mesin;
-    document.getElementById('approve_maintenance').innerHTML = maintenance;
-    document.getElementById('approve_tanggal_rencana').innerHTML = tgl_rencana;
-    document.getElementById('approve_tanggal_realisasi').innerHTML = tgl_realisasi;
-    document.getElementById('approve_keterangan').innerHTML = keterangan;
-    document.getElementById('download_jadwal_id').value = jadwal_id;
-    document.getElementById('link_detail').href = '/jadwal/detail/'+jadwal_id;
+    // Check if elements exist
+    const elements = {
+        approve_mesin: document.getElementById('approve_mesin'),
+        approve_maintenance: document.getElementById('approve_maintenance'),
+        approve_tanggal_rencana: document.getElementById('approve_tanggal_rencana'),
+        approve_tanggal_realisasi: document.getElementById('approve_tanggal_realisasi'),
+        approve_keterangan: document.getElementById('approve_keterangan'),
+        download_jadwal_id: document.getElementById('download_jadwal_id'),
+        link_detail: document.getElementById('link_detail')
+    };
+
+    // Log missing elements
+    Object.keys(elements).forEach(key => {
+        if (!elements[key]) {
+            console.error(`Element with ID '${key}' not found`);
+        }
+    });
+
+    // Set values if elements exist
+    if (elements.approve_mesin) elements.approve_mesin.innerHTML = mesin || '-';
+    if (elements.approve_maintenance) elements.approve_maintenance.innerHTML = maintenance || '-';
+    if (elements.approve_tanggal_rencana) elements.approve_tanggal_rencana.innerHTML = tgl_rencana || '-';
+    if (elements.approve_tanggal_realisasi) elements.approve_tanggal_realisasi.innerHTML = tgl_realisasi || '-';
+    if (elements.approve_keterangan) elements.approve_keterangan.innerHTML = keterangan || '-';
+    if (elements.download_jadwal_id) elements.download_jadwal_id.value = jadwal_id;
+    if (elements.link_detail) elements.link_detail.href = '/jadwal/detail/'+jadwal_id;
+
+    // Handle foto perbaikan
+    const fotoRow = document.getElementById('foto_perbaikan_row');
+    const fotoCell = document.getElementById('approve_foto_perbaikan');
+
+    if (fotoRow && fotoCell) {
+        if (foto_perbaikan && foto_perbaikan !== '') {
+            fotoRow.style.display = 'table-row';
+            fotoCell.innerHTML = `
+                <img src="${foto_perbaikan}"
+                     alt="Foto Perbaikan"
+                     class="img-fluid rounded"
+                     style="max-width: 200px; max-height: 150px; object-fit: cover; cursor: pointer;"
+                     onclick="showImage('${foto_perbaikan}', 'Foto Perbaikan - ${maintenance}')"
+                     data-bs-toggle="modal"
+                     data-bs-target="#imageModal">
+            `;
+        } else {
+            fotoRow.style.display = 'none';
+            fotoCell.innerHTML = '';
+        }
+    } else {
+        console.error('Foto perbaikan elements not found');
+    }
 }
 
 // Fungsi untuk filter list secara real-time

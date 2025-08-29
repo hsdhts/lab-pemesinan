@@ -10,6 +10,7 @@ use App\Models\Maintenance;
 use App\Models\Sparepart;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
@@ -48,29 +49,8 @@ class JadwalController extends Controller
     // Start from current date
     $waktu = Carbon::now();
 
-    $periode = $maintenance->periode;
-    $satuan_periode = $maintenance->satuan_periode;
-
-    // Hanya buat jadwal pertama, bukan untuk seluruh tahun
-    switch ($satuan_periode) {
-        case 'Jam':
-            $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-            break;
-        case 'Hari':
-            $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-            break;
-        case 'Minggu':
-            $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-            break;
-        case 'Bulan':
-            $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-            break;
-        case 'Tahun':
-            $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-            break;
-        default:
-            break;
-    }
+    // Langsung buat jadwal tanpa bergantung pada periode dan satuan_periode
+    $this->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
 }
 
 
@@ -115,33 +95,23 @@ class JadwalController extends Controller
         $data_valid = $request->validate([
             'id' => 'required|numeric',
             'tanggal_rencana' => 'required|date_format:d-m-Y',
-            'tanggal_realisasi' => 'required|date_format:d-m-Y',
-            'lama_pekerjaan' => 'required',
-            'personel' => 'required',
+            'tanggal_realisasi' => 'nullable|date_format:d-m-Y',
+            'lama_pekerjaan' => 'nullable',
+            'personel' => 'nullable',
             'keterangan' => 'nullable|not_regex:/\'/i',
+            'foto_perbaikan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data_valid['tanggal_rencana'] = Carbon::parse($data_valid['tanggal_rencana']);
-        $data_valid['tanggal_realisasi'] = Carbon::parse($data_valid['tanggal_realisasi']);
+        if(isset($data_valid['tanggal_realisasi']) && $data_valid['tanggal_realisasi']){
+            $data_valid['tanggal_realisasi'] = Carbon::parse($data_valid['tanggal_realisasi']);
+        }
         $jadwal = Jadwal::find($data_valid['id']);
 
-        if($data_valid['tanggal_realisasi']->greaterThan($data_valid['tanggal_rencana'])){
-            // tampilkan modal juga boleh dengan di redirect back
-            //ddd($request);
-            if($jadwal->tanggal_realisasi == null){
-                return redirect()->back()->withInput()->with('form_alasan', 'p');
-            }else{
-                if($request->has('alasan')){
-                    $data_valid['alasan'] = $request->alasan;
-                }
-                return $this->submit($request, $data_valid);
-            }
-        }else{
-            if($request->has('alasan')){
-                $data_valid['alasan'] = $request->alasan;
-            }
-            return $this->submit($request, $data_valid);
+        if($request->has('alasan')){
+            $data_valid['alasan'] = $request->alasan;
         }
+        return $this->submit($request, $data_valid);
 
     }
 
@@ -150,9 +120,9 @@ class JadwalController extends Controller
         $data_valid = $request->validate([
             'id' => 'required|numeric',
             'tanggal_rencana' => 'required|date_format:d-m-Y',
-            'tanggal_realisasi' => 'required|date_format:d-m-Y',
-            'lama_pekerjaan' => 'required',
-            'personel' => 'required',
+            'tanggal_realisasi' => 'nullable|date_format:d-m-Y',
+            'lama_pekerjaan' => 'nullable',
+            'personel' => 'nullable',
             'keterangan' => 'nullable|not_regex:/\'/i',
         ]);
 
@@ -167,8 +137,9 @@ class JadwalController extends Controller
 
         $data_valid['alasan'] = $validator->validated()['alasan'];
         $data_valid['tanggal_rencana'] = Carbon::parse($data_valid['tanggal_rencana']);
-        $data_valid['tanggal_realisasi'] = Carbon::parse($data_valid['tanggal_realisasi']);
-
+        if(isset($data_valid['tanggal_realisasi']) && $data_valid['tanggal_realisasi']){
+            $data_valid['tanggal_realisasi'] = Carbon::parse($data_valid['tanggal_realisasi']);
+        }
 
         return $this->submit($request, $data_valid);
 
@@ -179,6 +150,22 @@ class JadwalController extends Controller
 
         $jadwal = Jadwal::find($data_valid['id']);
 
+        // Remove tanggal_realisasi and foto_perbaikan from data_valid if they exist
+        unset($data_valid['tanggal_realisasi']);
+        if (isset($data_valid['foto_perbaikan'])) {
+            unset($data_valid['foto_perbaikan']);
+        }
+
+        // Handle foto_perbaikan upload
+        if ($request->hasFile('foto_perbaikan')) {
+            // Delete old photo if exists
+            if ($jadwal->foto_perbaikan && Storage::exists('public/' . $jadwal->foto_perbaikan)) {
+                Storage::delete('public/' . $jadwal->foto_perbaikan);
+            }
+            
+            $foto_path = $request->file('foto_perbaikan')->store('foto_perbaikan', 'public');
+            $jadwal->foto_perbaikan = $foto_path;
+        }
 
         $jadwal->update($data_valid);
 
@@ -188,6 +175,9 @@ class JadwalController extends Controller
 
         if(isset($request->validasi)){
             $jadwal->increment('status');
+            // Auto-set tanggal_realisasi when task is validated/completed
+            $jadwal->tanggal_realisasi = Carbon::now();
+            $jadwal->save();
         }
 
 

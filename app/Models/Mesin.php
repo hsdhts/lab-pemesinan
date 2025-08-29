@@ -24,10 +24,8 @@ class Mesin extends Model
         'stasiun_id',
         'spesifikasi',
         'kode_mesin',
-        'tanggal_pembelian',
         'user_id',
-        'mesin_image',
-        'nameTag_image'
+        'mesin_image'
     ];
 
 

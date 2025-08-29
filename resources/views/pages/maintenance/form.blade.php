@@ -78,35 +78,24 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/maintenance/create/" method="post">
+            <form action="/maintenance/create/" method="post" enctype="multipart/form-data">
             @csrf
                 <div class="modal-body">
 
                     <div class="mb-3">
                         <label for="maintenance_form" class="form-label float-start">Nama Maintenance</label>
-                        <input type="text" class="form-control @error('nama_setup') is-invalid @enderror clear-form" id="maintenance_form" value="{{ old('nama_setup') }}" name="nama_setup">
+                        <input type="text" class="form-control @error('nama_maintenance') is-invalid @enderror clear-form" id="maintenance_form" value="{{ old('nama_maintenance') }}" name="nama_maintenance">
                     </div>
+
+
+
+
 
                     <div class="mb-3">
-                        <label for="periode_form" class="form-label float-start">Estimasi Waktu</label>
-                        <input type="number" class="form-control @error('periode') is-invalid @enderror clear-form" id="periode_form" value="{{ old('periode') }}" name="periode">
+                        <label for="foto_kerusakan" class="form-label float-start">Foto Kerusakan</label>
+                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-form" id="foto_kerusakan" name="foto_kerusakan" accept="image/*">
+                        <div class="form-text">Upload foto kerusakan (opsional)</div>
                     </div>
-
-                    <div class="input-group mb-3">
-                        <button class="btn btn-primary btn-outline-secondary @error('satuan_periode') is-invalid @enderror dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Satuan</button>
-                        <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" onclick="setSatuan('Jam')">Jam</a></li>
-                          <li><a class="dropdown-item" onclick="setSatuan('Hari')">Hari</a></li>
-                          <li><a class="dropdown-item" onclick="setSatuan('Minggu')">Minggu</a></li>
-                          <li><a class="dropdown-item" onclick="setSatuan('Bulan')">Bulan</a></li>
-                          <li><a class="dropdown-item" onclick="setSatuan('Tahun')">Tahun</a></li>
-
-                        </ul>
-                        <input type="text" class="form-control @error('satuan_periode') is-invalid @enderror clear-form" aria-label="Satuan" value="{{ old('satuan_periode') }}" name="satuan_periode" id="satuan_periode" readonly>
-
-                    </div>
-
-
 
                     <div class="my-5">
                         <div class="p-2 fw-bold">Warna</div>
@@ -175,7 +164,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/maintenance/edit/" method="POST">
+            <form action="/maintenance/edit/" method="POST" enctype="multipart/form-data">
 
                 @csrf
             <div class="modal-body">
@@ -183,28 +172,17 @@
                 <input type="hidden" class="clear-form" name="index" id="edit_index">
                     <div class="mb-3">
                         <label for="nama_maintenance_form" class="form-label float-start">Nama Maintenance</label>
-                        <input type="text" class="form-control clear-form" id="edit_maintenance_form" name="nama_setup">
+                        <input type="text" class="form-control clear-form" id="edit_maintenance_form" name="nama_maintenance">
                     </div>
+
+
+
 
                     <div class="mb-3">
-                        <label for="periode" class="form-label float-start">Estimasi Waktu</label>
-                        <input type="number" class="form-control clear-form" id="edit_periode_form" name="periode">
+                        <label for="edit_foto_kerusakan" class="form-label float-start">Foto Kerusakan</label>
+                        <input type="file" class="form-control clear-form" id="edit_foto_kerusakan" name="foto_kerusakan" accept="image/*">
+                        <div class="form-text">Upload foto kerusakan (opsional)</div>
                     </div>
-
-                    <div class="input-group mb-3">
-                        <button class="btn btn-primary btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Satuan</button>
-                        <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" onclick="setEditSatuan('Jam')">Jam</a></li>
-                          <li><a class="dropdown-item" onclick="setEditSatuan('Hari')">Hari</a></li>
-                          <li><a class="dropdown-item" onclick="setEditSatuan('Minggu')">Minggu</a></li>
-                          <li><a class="dropdown-item" onclick="setEditSatuan('Bulan')">Bulan</a></li>
-                          <li><a class="dropdown-item" onclick="setEditSatuan('Tahun')">Tahun</a></li>
-
-                        </ul>
-                        <input type="text" class="form-control clear-form" aria-label="Satuan" name="satuan_periode" value="{{ old('satuan_periode') }}" id="edit_satuan_periode" readonly>
-
-                    </div>
-
 
                     <div class="my-5">
                         <div class="p-2 fw-bold">Warna</div>
@@ -353,7 +331,7 @@
             </form>
 
 
-            <button class="btn btn-sm btn-dark text-nowrap d-inline" data-bs-toggle="modal" data-bs-target="#kt_modal_2" onclick="setEdit({{ $loop->index }}, '{{ $s->get('nama_setup') }}', {{ $s->get('periode') }}, '{{ $s->get('satuan_periode') }}', '{{ $s->get('warna') }}')">
+            <button class="btn btn-sm btn-dark text-nowrap d-inline" data-bs-toggle="modal" data-bs-target="#kt_modal_2" onclick="setEdit({{ $loop->index }}, '{{ $s->get('nama_setup') }}', '{{ $s->get('warna') }}')">
                 <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen055.svg-->
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path opacity="0.3" fill-rule="evenodd" clip-rule="evenodd" d="M2 4.63158C2 3.1782 3.1782 2 4.63158 2H13.47C14.0155 2 14.278 2.66919 13.8778 3.04006L12.4556 4.35821C11.9009 4.87228 11.1726 5.15789 10.4163 5.15789H7.1579C6.05333 5.15789 5.15789 6.05333 5.15789 7.1579V16.8421C5.15789 17.9467 6.05333 18.8421 7.1579 18.8421H16.8421C17.9467 18.8421 18.8421 17.9467 18.8421 16.8421V13.7518C18.8421 12.927 19.1817 12.1387 19.7809 11.572L20.9878 10.4308C21.3703 10.0691 22 10.3403 22 10.8668V19.3684C22 20.8218 20.8218 22 19.3684 22H4.63158C3.1782 22 2 20.8218 2 19.3684V4.63158Z" fill="white"/>
@@ -371,17 +349,7 @@
     <tr>
         <td>
             <table class="table g-1">
-                <tr>
-                    <td>
-                        <b>Estimasi Waktu</b>
-                    </td>
-                    <td>
-                        <b>:</b>
-                    </td>
-                    <td>
-                        {{ $s->get('periode') }}&nbsp;{{ $s->get('satuan_periode') }}
-                    </td>
-                </tr>
+
 
 
                 <tr>
@@ -420,69 +388,12 @@
 
 @section('customJs')
     <script>
-        function setSatuan(periode) {
-            document.getElementById('satuan_periode').value = periode;
-            // Jika satuan periode adalah "Jam", atur tanggal mulai dan akhir menjadi hari yang sama
-            if (periode === 'Jam') {
-                var today = new Date();
-                var dd = String(today.getDate()).padStart(2, '0');
-                var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-                var yyyy = today.getFullYear();
-                var currentDate = dd + '-' + mm + '-' + yyyy;
 
-                document.getElementById('tanggal_form').value = currentDate;
-                document.getElementById('tanggal_end').value = currentDate;
 
-                $(".timepicker").removeClass('d-none');
-
-                $('#tanggal_end').change(function(e) {
-                    e.preventDefault();
-                    let endDate = $(this).val();
-                    var today = new Date();
-                    var dd = String(today.getDate()).padStart(2, '0');
-                    var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-                    var yyyy = today.getFullYear();
-                    var currentDate = dd + '-' + mm + '-' + yyyy;
-                    if (endDate > currentDate) {
-                        Swal.fire({
-                            icon: "warning",
-                            title: "Oops...",
-                            text: "Untuk satuan jam, perbedaan antara start date dan end date harus kurang dari atau sama dengan 1 hari",
-                        });
-                        $('#simpan').attr('disabled', 'disabled')
-                    } else {
-                        $('#simpan').removeAttr('disabled', 'disabled')
-                    }
-                })
-            } else {
-                document.getElementById('tanggal_form').value = '';
-                document.getElementById('tanggal_end').value = '';
-                $('#tanggal_end').off('change');
-                $(".timepicker").addClass('d-none');
-
-            }
-        }
-
-        function setEditSatuan(periode) {
-            document.getElementById('edit_satuan_periode').value = periode;
-            }
-
-        function setEdit(index, nama_setup_maintenance, periode, satuan_periode, warna){
-            if (satuan_periode === 'Jam') {
-                $('.timepicker').removeClass('d-none');
-                document.getElementById('edit_index').value = index;
-                document.getElementById('edit_maintenance_form').value = nama_setup_maintenance;
-                document.getElementById('edit_periode_form').value = periode;
-                document.getElementById('edit_satuan_periode').value = satuan_periode;
-                document.getElementById('edit_warna').value = warna;
-            } else {
-                $('.timepicker').addClass('d-none');
-                document.getElementById('edit_index').value = index;
-                document.getElementById('edit_maintenance_form').value = nama_setup_maintenance;
-                document.getElementById('edit_periode_form').value = periode;
-                document.getElementById('edit_satuan_periode').value = satuan_periode;
-                document.getElementById('edit_warna').value = warna;
-            }
+        function setEdit(index, nama_setup_maintenance, warna){
+            document.getElementById('edit_index').value = index;
+            document.getElementById('edit_maintenance_form').value = nama_setup_maintenance;
+            document.getElementById('edit_warna').value = warna;
         }
 
         function indexMaintenance(index) {

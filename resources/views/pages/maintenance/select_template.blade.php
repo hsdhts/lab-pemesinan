@@ -74,7 +74,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/mesin/maintenance/create/" method="post">
+            <form action="/mesin/maintenance/create/" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="mesin_id" value="{{ $mesin['id'] }}">
                 <div class="modal-body">
@@ -84,21 +84,12 @@
                         <input type="text" class="form-control @error('nama_maintenance') is-invalid @enderror clear-form" id="maintenance_form" value="{{ old('nama_maintenance') }}" name="nama_maintenance" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="periode_form" class="form-label float-start">Estimasi Waktu</label>
-                        <input type="number" class="form-control @error('periode') is-invalid @enderror clear-form" id="periode_form" value="{{ old('periode') }}" name="periode" required>
-                    </div>
 
-                    <div class="input-group mb-3">
-                        <button class="btn btn-primary btn-outline-secondary @error('satuan_periode') is-invalid @enderror dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Satuan</button>
-                        <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" onclick="setSatuan('Jam')">Jam</a></li>
-                          <li><a class="dropdown-item" onclick="setSatuan('Hari')">Hari</a></li>
-                          <li><a class="dropdown-item" onclick="setSatuan('Minggu')">Minggu</a></li>
-                          <li><a class="dropdown-item" onclick="setSatuan('Bulan')">Bulan</a></li>
-                          <li><a class="dropdown-item" onclick="setSatuan('Tahun')">Tahun</a></li>
-                        </ul>
-                        <input type="text" class="form-control @error('satuan_periode') is-invalid @enderror clear-form" aria-label="Satuan" value="{{ old('satuan_periode') }}" name="satuan_periode" id="satuan_periode" readonly required>
+
+                    <div class="mb-3">
+                        <label for="foto_kerusakan" class="form-label float-start">Foto Kerusakan</label>
+                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-form" id="foto_kerusakan" name="foto_kerusakan" accept="image/*">
+                        <div class="form-text">Upload foto kerusakan (opsional)</div>
                     </div>
 
                     <div class="my-5">
@@ -144,9 +135,7 @@
 
 @section('customJs')
     <script>
-function setSatuan(periode) {
-    document.getElementById('satuan_periode').value = periode;
-}
+
 
 function clearValue(){
     x = document.getElementsByClassName('clear-form');

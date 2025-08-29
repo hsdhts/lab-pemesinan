@@ -28,10 +28,6 @@
                     <td>{{ $mesin->stasiun ? $mesin->stasiun->nama_stasiun : 'Belum Ditentukan' }}</td>
                 </tr>
 
-                <tr>
-                    <td><b>Tanggal Pembelian</b></td>
-                    <td>{{ $mesin->tanggal_pembelian }}</td>
-                </tr>
                 <tr> 
 
                 <tr>
@@ -41,12 +37,7 @@
             </td>
                 </tr>
 
-                <tr>
-                    <td><b>Name Tag Mesin</b></td>
-                    <td>
-             <img src="{{ asset('storage/' . $mesin->nameTag_image) }}" alt="Gambar Name Tag" style="max-width: 200px;">
-            </td>
-                </tr>
+
                 
              
                

@@ -59,19 +59,13 @@ class MesinController extends Controller
             'nama_mesin' => 'required|max:255',
             'kode_mesin' => 'nullable|max:6',
             'spesifikasi' => 'nullable|not_regex:/\'/i',
-            'tanggal_pembelian' => 'nullable|max:50',
             'stasiun_id' => 'nullable|exists:stasiuns,id',
             'mesin_image' => 'image|file|max:3072',
-            'nameTag_image' => 'image|file|max:3072',
 
         ]);
 
         if($request->hasFile('mesin_image')) {
             $validData['mesin_image'] = $request->file('mesin_image')->storePublicly('mesin_images', 'public');
-        }
-
-        if($request->hasFile('nameTag_image')) {
-            $validData['nameTag_image'] = $request->file('nameTag_image')->storePublicly('nameTag_images', 'public');
         }
 
         $m = Mesin::create($validData);
@@ -111,10 +105,8 @@ class MesinController extends Controller
             'nama_mesin' => 'required|max:255',
             'kode_mesin' => 'nullable|max:6',
             'spesifikasi' => 'nullable|not_regex:/\'/i',
-            'tanggal_pembelian' => 'nullable|max:50',
             'stasiun_id' => 'nullable|exists:stasiuns,id',
             'mesin_image' => 'image|file|max:1024',
-            'nameTag_image' => 'image|file|max:1024',
         ]);
     
         $mesin = Mesin::findOrFail($dataValid['id']);
@@ -125,14 +117,6 @@ class MesinController extends Controller
 
         // Simpan gambar baru
         $dataValid['mesin_image'] = $request->file('mesin_image')->storePublicly('mesin_images', 'public');
-    }
-
-    if ($request->hasFile('nameTag_image')) {
-        // Hapus gambar lama (jika ada) sebelum menyimpan yang baru
-        Storage::disk('public')->delete($mesin->nameTag_image);
-
-        // Simpan gambar baru
-        $dataValid['nameTag_image'] = $request->file('nameTag_image')->storePublicly('nameTag_images', 'public');
     }
 
     $mesin->update($dataValid);

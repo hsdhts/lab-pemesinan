@@ -39,8 +39,6 @@ class MaintenanceController extends Controller
             $maintenance = Maintenance::create([
                 'nama_maintenance' => $s->get('nama_setup'),
                 'mesin_id' => $mesin->get('id'),
-                'periode' => $s->get('periode'),
-                'satuan_periode' => $s->get('satuan_periode'),
                 'warna' => $s->get('warna'),
             ]);
 
@@ -86,9 +84,8 @@ class MaintenanceController extends Controller
         $validator = Validator::make($request->all(), [
             'mesin_id' => 'required|numeric',
             'nama_maintenance' => 'required',
-            'periode' => 'required|numeric',
-            'satuan_periode' => 'required',
-            'warna' => 'required'
+            'warna' => 'required',
+            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
 
@@ -100,12 +97,20 @@ class MaintenanceController extends Controller
 
         // Jika validasi berhasil, lanjutkan proses pembuatan maintenance
         try {
+            $fotoKerusakanPath = null;
+            
+            // Handle file upload untuk foto_kerusakan
+            if ($request->hasFile('foto_kerusakan')) {
+                $file = $request->file('foto_kerusakan');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fotoKerusakanPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+            }
+            
             $maintenance = Maintenance::create([
                 'mesin_id' => $request->mesin_id,
                 'nama_maintenance' => $request->nama_maintenance,
-                'periode' => $request->periode,
-                'satuan_periode' => $request->satuan_periode,
                 'warna' => $request->warna,
+                'foto_kerusakan' => $fotoKerusakanPath,
             ]);
 
             $objectJadwal->create_jadwal($maintenance->id);
