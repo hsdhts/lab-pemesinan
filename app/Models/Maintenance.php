@@ -46,4 +46,8 @@ class Maintenance extends Model
         return $this->hasOne(Jadwal::class)->latestOfMany('tanggal_rencana');       
     }
 
+    public function jadwalPreventive(){
+        return $this->hasMany(JadwalPreventive::class);
+    }
+
 }

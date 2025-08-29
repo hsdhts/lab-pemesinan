@@ -395,7 +395,7 @@
                     <div class="card-header border-0 bg-primary text-white" style="padding: 1.25rem; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="mb-0 fw-bold text-white" style="font-size: 1rem;">Laporan Maintenance</h6>
+                                <h6 class="mb-0 fw-bold text-white" style="font-size: 1rem;">Laporan Breakdwon</h6>
                                 <small class="text-white opacity-90" style="font-size: 0.85rem;">Status: Selesai</small>
                             </div>
                             <div class="text-end" style="margin-left: 8rem;">

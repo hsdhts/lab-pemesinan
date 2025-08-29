@@ -21,6 +21,7 @@ use App\Http\Controllers\UpdateDbController;
 use App\Http\Controllers\UpdateMaintenanceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StasiunController;
+use App\Http\Controllers\PreventiveMaintenanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -177,6 +178,18 @@ Route::post('/laporan/inspeksi', [LaporanController::class, 'laporan_general_ins
 Route::post('/laporan/maintenance', [LaporanController::class, 'laporan_maintenance'])->middleware('mahasiswa');
 Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_rencana_realisasi'])->middleware('mahasiswa');
 Route::get('/laporan/harian', [LaporanController::class, 'laporan_harian'])->middleware('mahasiswa');
+
+
+// Preventive Maintenance Routes
+Route::get('/preventive', [PreventiveMaintenanceController::class, 'index'])->name('preventive.index')->middleware('auth')->middleware('teknisi');
+Route::get('/preventive/create', [PreventiveMaintenanceController::class, 'create'])->name('preventive.create')->middleware('auth')->middleware('admin');
+Route::post('/preventive', [PreventiveMaintenanceController::class, 'store'])->name('preventive.store')->middleware('admin');
+Route::get('/preventive/{id}', [PreventiveMaintenanceController::class, 'show'])->name('preventive.show')->middleware('auth')->middleware('teknisi');
+Route::get('/preventive/{id}/edit', [PreventiveMaintenanceController::class, 'edit'])->name('preventive.edit')->middleware('auth')->middleware('admin');
+Route::put('/preventive/{id}', [PreventiveMaintenanceController::class, 'update'])->name('preventive.update')->middleware('admin');
+Route::delete('/preventive/{id}', [PreventiveMaintenanceController::class, 'destroy'])->name('preventive.destroy')->middleware('admin');
+Route::post('/preventive/generate-jadwal', [PreventiveMaintenanceController::class, 'generateJadwal'])->name('preventive.generate')->middleware('auth')->middleware('teknisi');
+Route::get('/preventive/jatuh-tempo', [PreventiveMaintenanceController::class, 'getJatuhTempo'])->name('preventive.jatuh-tempo')->middleware('auth')->middleware('teknisi');
 
 
 Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');

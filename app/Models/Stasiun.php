@@ -15,7 +15,7 @@ class Stasiun extends Model
     protected $cascadeDeletes = ['mesins'];
 
     protected $dates = ['deleted_at'];
-    
+
     protected $guarded = ['id'];
 
     protected $fillable = [
@@ -27,5 +27,10 @@ class Stasiun extends Model
     public function mesins()
     {
         return $this->hasMany(Mesin::class);
+    }
+
+    public function jadwalPreventive()
+    {
+        return $this->hasMany(JadwalPreventive::class);
     }
 }

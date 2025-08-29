@@ -47,4 +47,8 @@ class Mesin extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function jadwalPreventive(){
+        return $this->hasMany(JadwalPreventive::class);
+    }
+
 }

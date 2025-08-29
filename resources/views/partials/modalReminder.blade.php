@@ -45,9 +45,9 @@
                                         <span class="text-dark fw-bolder d-block mb-1 fs-6">{{ Illuminate\Support\Carbon::parse($h->tanggal_rencana)->format('d/m/Y') }}</span>
                                     </td>
                                     <td>
-                                        <select class="form-select form-select-sm status-dropdown" data-jadwal-id="{{ $h->id }}" data-original-status="{{ $h->status }}">
-                                            <option value="1" {{ $h->status == 1 ? 'selected' : '' }}>Belum Dikerjakan</option>
-                                            <option value="2" {{ $h->status == 2 ? 'selected' : '' }}>Dalam Pekerjaan</option>
+                                        <select class="form-select form-select-sm status-dropdown status-{{ $h->status }}" data-jadwal-id="{{ $h->id }}" data-original-status="{{ $h->status }}">
+                                            <option value="1" {{ $h->status == 1 ? 'selected' : '' }}>🔴 Belum Dikerjakan</option>
+                                            <option value="2" {{ $h->status == 2 ? 'selected' : '' }}>🟡 Dalam Pekerjaan</option>
                                         </select>
                                     </td>
                                     <td>
@@ -81,7 +81,79 @@
     </div>
 </div>
 
+<style>
+/* Modern Status Dropdown Styling */
+.status-dropdown {
+    border-radius: 8px;
+    border: 2px solid #e4e6ea;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
+.status-dropdown:focus {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Status 1 - Belum Dikerjakan (Red theme) */
+.status-1 {
+    background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+    border-color: #fc8181;
+    color: #c53030;
+}
+
+.status-1:focus {
+    border-color: #e53e3e;
+    box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+}
+
+/* Status 2 - Dalam Pekerjaan (Yellow/Orange theme) */
+.status-2 {
+    background: linear-gradient(135deg, #fffbeb 0%, #fed7aa 100%);
+    border-color: #f6ad55;
+    color: #c05621;
+}
+
+.status-2:focus {
+    border-color: #ed8936;
+    box-shadow: 0 4px 12px rgba(237, 137, 54, 0.3);
+}
+
+/* Option styling */
+.status-dropdown option {
+    padding: 8px 12px;
+    font-weight: 500;
+}
+
+.status-dropdown option[value="1"] {
+    background-color: #fed7d7;
+    color: #c53030;
+}
+
+.status-dropdown option[value="2"] {
+    background-color: #fed7aa;
+    color: #c05621;
+}
+
+/* Hover effects */
+.status-dropdown:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* Animation for status change */
+.status-dropdown {
+    animation: statusPulse 0.3s ease-in-out;
+}
+
+@keyframes statusPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+</style>
 
 <div class="modal fade" tabindex="-1" id="kt_modal_3">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">

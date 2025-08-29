@@ -151,13 +151,126 @@
         box-shadow: 0 8px 25px rgba(255,107,107,0.4);
     }
 }
+
+/* Responsive Design */
+@media (max-width: 1199.98px) {
+    .modern-card {
+        padding: 20px;
+        min-height: 180px;
+    }
+    .modern-title {
+        font-size: 20px;
+    }
+    .modern-icon-bg {
+        width: 60px;
+        height: 60px;
+    }
+    .modern-icon {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .modern-card {
+        padding: 18px;
+        min-height: 160px;
+        margin-bottom: 20px;
+    }
+    .modern-title {
+        font-size: 18px;
+    }
+    .modern-subtitle {
+        font-size: 13px;
+    }
+    .modern-icon-bg {
+        width: 55px;
+        height: 55px;
+    }
+    .modern-icon {
+        font-size: 24px;
+    }
+    .modern-badge {
+        width: 45px;
+        height: 45px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .modern-card {
+        padding: 15px;
+        min-height: 140px;
+        margin-bottom: 15px;
+    }
+    .modern-title {
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+    .modern-subtitle {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+    .modern-icon-container {
+        margin-bottom: 15px;
+    }
+    .modern-icon-bg {
+        width: 50px;
+        height: 50px;
+    }
+    .modern-icon {
+        font-size: 22px;
+    }
+    .modern-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 12px;
+        top: -8px;
+        right: -8px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .modern-card {
+        padding: 12px;
+        min-height: 120px;
+        margin-bottom: 12px;
+    }
+    .modern-title {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    .modern-subtitle {
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+    .modern-icon-container {
+        margin-bottom: 12px;
+    }
+    .modern-icon-bg {
+        width: 45px;
+        height: 45px;
+    }
+    .modern-icon {
+        font-size: 20px;
+    }
+    .modern-badge {
+        width: 35px;
+        height: 35px;
+        font-size: 11px;
+        top: -6px;
+        right: -6px;
+    }
+    .modern-arrow {
+        font-size: 16px;
+    }
+}
 </style>
 
 @include('partials.modalReminder')
 
     <!--begin::Row-->
-    <div class="row g-5 g-xl-8">
-        <div class="col-xl-3">
+    <div class="row g-3 g-md-4 g-xl-5">
+        <div class="col-12 col-sm-6 col-lg-3">
             <!--begin::Modern Statistics Widget-->
             <a href="{{ url('/mesin') }}" class="modern-card card-breakdown text-decoration-none">
                 <div class="modern-card-body">
@@ -179,7 +292,7 @@
             </a>
             <!--end::Modern Statistics Widget-->
         </div>
-        <div class="col-xl-3">
+        <div class="col-12 col-sm-6 col-lg-3">
             <!--begin::Modern Statistics Widget-->
             <a class="modern-card card-today text-decoration-none" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
                 <div class="modern-card-body">
@@ -206,25 +319,20 @@
             </a>
             <!--end::Modern Statistics Widget-->
         </div>
-        <div class="col-xl-3">
+        <div class="col-12 col-sm-6 col-lg-3">
             <!--begin::Modern Statistics Widget-->
-            <a class="modern-card card-machine text-decoration-none" data-bs-toggle="modal" data-bs-target="#kt_modal_3">
+            <a href="{{ url('/preventive') }}" class="modern-card card-machine text-decoration-none">
                 <div class="modern-card-body">
-                    @if($seminggu->count() > 0 and $seminggu->count() < 100)
-                    <span class="modern-badge">{{ $seminggu->count() }}</span>
-                    @elseif($seminggu->count() > 100)
-                    <span class="modern-badge">99+</span>
-                    @endif
 
                     <div class="modern-icon-container">
                         <div class="modern-icon-bg">
-                            <i class="fas fa-cogs modern-icon"></i>
+                            <i class="fas fa-calendar-alt modern-icon"></i>
                         </div>
                     </div>
 
                     <div class="modern-content">
-                        <h3 class="modern-title">MESIN</h3>
-                        <p class="modern-subtitle">Data Total Mesin</p>
+                        <h3 class="modern-title">MAINTENANCE</h3>
+                        <p class="modern-subtitle">Jadwal Maintenance Preventif</p>
                         <div class="modern-arrow">
                             <i class="fas fa-arrow-right"></i>
                         </div>
@@ -233,7 +341,7 @@
             </a>
             <!--end::Modern Statistics Widget-->
         </div>
-        <div class="col-xl-3">
+        <div class="col-12 col-sm-6 col-lg-3">
             <!--begin::Modern Statistics Widget-->
             <a class="modern-card card-user text-decoration-none" data-bs-toggle="modal" data-bs-target="#kt_modal_4">
                 <div class="modern-card-body">
@@ -400,5 +508,74 @@
 
             var chart = new ApexCharts(element, options);
             chart.render();
+
+        // Handle status dropdown changes
+        $(document).on('change', '.status-dropdown', function() {
+            const jadwalId = $(this).data('jadwal-id');
+            const newStatus = $(this).val();
+            const originalStatus = $(this).data('original-status');
+            const dropdown = $(this);
+            
+            // Show loading state
+            dropdown.prop('disabled', true);
+            
+            $.ajax({
+                url: `/jadwal/update-status/${jadwalId}`,
+                method: 'PUT',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({
+                    status: newStatus
+                }),
+                success: function(response) {
+                    if (response.success) {
+                        // Update the original status
+                        dropdown.data('original-status', newStatus);
+                        
+                        // Update CSS class for visual feedback
+                        dropdown.removeClass('status-1 status-2').addClass('status-' + newStatus);
+                        
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Status berhasil diperbarui',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        // Revert to original status
+                        dropdown.val(originalStatus);
+                        
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: response.message || 'Terjadi kesalahan saat memperbarui status'
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    // Revert to original status
+                    dropdown.val(originalStatus);
+                    
+                    let errorMessage = 'Terjadi kesalahan saat memperbarui status';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: errorMessage
+                    });
+                },
+                complete: function() {
+                    // Re-enable dropdown
+                    dropdown.prop('disabled', false);
+                }
+            });
+        });
     </script>
 @endsection
