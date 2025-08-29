@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Mesin;
-use App\Models\Ruang;
+
 use App\Models\Maintenance;
 use App\Models\SetupForm;
 use App\Models\SetupMaintenance;
