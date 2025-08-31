@@ -54,6 +54,78 @@
 <!--end::Alert-->
 @endif
 
+@if(session('success'))
+    <!--begin::Alert-->
+    <div class="alert alert-dismissible bg-success d-flex flex-column flex-sm-row p-5 mb-10 mx-3">
+        <!--begin::Icon-->
+        <span class="svg-icon svg-icon-2hx svg-icon-light me-4 mb-5 mb-sm-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path opacity="0.3" d="M20.5543 4.37824L12.1798 2.02473C12.0626 1.99176 11.9376 1.99176 11.8203 2.02473L3.44572 4.37824C3.18118 4.45258 3 4.6807 3 4.93945V13.569C3 14.6914 3.48613 15.8404 4.4407 16.8379C5.39527 17.8354 6.83118 18.6841 8.7407 19.2845C10.6502 19.8849 12.6503 19.8849 14.5598 19.2845C16.4693 18.6841 17.9052 17.8354 18.8598 16.8379C19.8143 15.8404 20.3005 14.6914 20.3005 13.569V4.93945C20.3005 4.6807 20.1193 4.45258 19.8548 4.37824L20.5543 4.37824Z" fill="black"/>
+                <path d="M10.5606 11.3042L9.57283 10.3018C9.28174 10.0065 8.80522 10.0065 8.51412 10.3018C8.22897 10.5912 8.22897 11.0559 8.51412 11.3452L10.4182 13.2773C10.8099 13.6747 11.451 13.6747 11.8427 13.2773L15.4859 9.58051C15.771 9.29117 15.771 8.82648 15.4859 8.53714C15.1948 8.24176 14.7183 8.24176 14.4272 8.53714L11.7002 11.3042C11.3869 11.6221 10.874 11.6221 10.5606 11.3042Z" fill="black"/>
+            </svg>
+        </span>
+        <!--end::Icon-->
+        <!--begin::Wrapper-->
+        <div class="d-flex flex-column text-light pe-0 pe-sm-10">
+            <!--begin::Title-->
+            <h4 class="mb-2 text-light">Berhasil</h4>
+            <!--end::Title-->
+            <!--begin::Content-->
+            <span>{{ session('success') }}</span>
+            <!--end::Content-->
+        </div>
+        <!--end::Wrapper-->
+        <!--begin::Close-->
+        <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
+            <span class="svg-icon svg-icon-2x svg-icon-light">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="black"/>
+                    <rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="black"/>
+                    <rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="black"/>
+                </svg>
+            </span>
+        </button>
+        <!--end::Close-->
+    </div>
+    <!--end::Alert-->
+@endif
+
+@if(session('error'))
+    <!--begin::Alert-->
+    <div class="alert alert-dismissible bg-danger d-flex flex-column flex-sm-row p-5 mb-10 mx-3">
+        <!--begin::Icon-->
+        <span class="svg-icon svg-icon-2hx svg-icon-light me-4 mb-5 mb-sm-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="black"/>
+                <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)" fill="black"/>
+                <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)" fill="black"/>
+            </svg>
+        </span>
+        <!--end::Icon-->
+        <!--begin::Wrapper-->
+        <div class="d-flex flex-column text-light pe-0 pe-sm-10">
+            <!--begin::Title-->
+            <h4 class="mb-2 text-light">Error</h4>
+            <!--end::Title-->
+            <!--begin::Content-->
+            <span>{{ session('error') }}</span>
+            <!--end::Content-->
+        </div>
+        <!--end::Wrapper-->
+        <!--begin::Close-->
+        <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
+            <span class="svg-icon svg-icon-2x svg-icon-light">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="black"/>
+                    <rect x="7" y="15.3137" width="12" height="2" rx="1" transform="rotate(-45 7 15.3137)" fill="black"/>
+                    <rect x="8.41422" y="7" width="12" height="2" rx="1" transform="rotate(45 8.41422 7)" fill="black"/>
+                </svg>
+            </span>
+        </button>
+        <!--end::Close-->
+    </div>
+    <!--end::Alert-->
+@endif
 
 @endsection
 
@@ -159,7 +231,7 @@
                 </button>
             </form>
 
-            <button type="button" class="btn btn-sm btn-dark text-nowrap d-inline" data-bs-toggle="modal" data-bs-target="#kt_modal_edit" onclick="setEdit('{{ $m->id }}', '{{ $m->nama_maintenance }}', '{{ $m->warna }}')">
+            <button type="button" class="btn btn-sm btn-dark text-nowrap d-inline" data-bs-toggle="modal" data-bs-target="#kt_modal_edit" onclick="setEdit({{ json_encode($m->id) }}, {{ json_encode($m->nama_maintenance) }}, {{ json_encode($m->warna) }}, {{ $m->foto_kerusakan ? json_encode(asset('storage/' . $m->foto_kerusakan)) : 'null' }})">
                 <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen055.svg-->
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path opacity="0.3" fill-rule="evenodd" clip-rule="evenodd" d="M2 4.63158C2 3.1782 3.1782 2 4.63158 2H13.47C14.0155 2 14.278 2.66919 13.8778 3.04006L12.4556 4.35821C11.9009 4.87228 11.1726 5.15789 10.4163 5.15789H7.1579C6.05333 5.15789 5.15789 6.05333 5.15789 7.1579V16.8421C5.15789 17.9467 6.05333 18.8421 7.1579 18.8421H16.8421C17.9467 18.8421 18.8421 17.9467 18.8421 16.8421V13.7518C18.8421 12.927 19.1817 12.1387 19.7809 11.572L20.9878 10.4308C21.3703 10.0691 22 10.3403 22 10.8668V19.3684C22 20.8218 20.8218 22 19.3684 22H4.63158C3.1782 22 2 20.8218 2 19.3684V4.63158Z" fill="white"/>
@@ -181,7 +253,7 @@
                 <tr>
                     <td colspan="3">
                         <b>Foto Kerusakan:</b><br>
-                        <img src="{{ asset('storage/' . $m->foto_kerusakan) }}" alt="Foto Kerusakan" class="img-fluid mt-2" style="max-width: 200px; border-radius: 5px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage('{{ asset('storage/' . $m->foto_kerusakan) }}', '{{ $m->nama_maintenance }}')">
+                        <img src="{{ asset('storage/' . $m->foto_kerusakan) }}" alt="Foto Kerusakan" class="img-fluid mt-2" style="max-width: 200px; border-radius: 5px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage({{ json_encode(asset('storage/' . $m->foto_kerusakan)) }}, {{ json_encode($m->nama_maintenance) }})">
                     </td>
                 </tr>
                 @endif
@@ -243,21 +315,27 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="maintenance_form" class="form-label float-start">Nama Maintenance</label>
-                        <input type="text" class="form-control @error('nama_maintenance') is-invalid @enderror clear-form" id="maintenance_form" value="{{ old('nama_maintenance') }}" name="nama_maintenance">
+                        <label for="maintenance_form" class="form-label float-start">Nama Breakdown</label>
+                        <input type="text" class="form-control @error('nama_maintenance') is-invalid @enderror clear-form" id="maintenance_form" value="{{ old('nama_maintenance') }}" name="nama_maintenance" onkeyup="updateCreatePreview()">
                     </div>
-
-
 
                     <div class="mb-3">
                         <label for="foto_kerusakan" class="form-label float-start">Foto Kerusakan</label>
-                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-form" id="foto_kerusakan" name="foto_kerusakan" accept="image/*">
+                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-form" id="foto_kerusakan" name="foto_kerusakan" accept="image/*" onchange="previewCreateImage(this)">
                         <div class="form-text">Upload foto kerusakan (opsional)</div>
+                        <!-- Preview gambar -->
+                        <div id="create_image_preview" class="mt-2" style="display: none;">
+                            <img id="create_preview_img" src="" alt="Preview" class="img-fluid" style="max-width: 200px; border-radius: 5px;">
+                        </div>
                     </div>
 
                     <div class="my-5">
                         <div class="p-2 fw-bold">Warna</div>
-                        <div class="p-2 d-inline"><input type="color" name="warna" id="create_warna" value="{{ old('warna','#0095E8') }}">
+                        <div class="p-2 d-inline"><input type="color" name="warna" id="create_warna" value="{{ old('warna','#0095E8') }}" onchange="updateCreatePreview()">
+                        </div>
+                        <!-- Preview warna -->
+                        <div class="p-2">
+                            <span id="create_color_preview" style="color: #0095E8; font-weight: bold;">Preview Warna</span>
                         </div>
                     </div>
 
@@ -296,12 +374,12 @@
     </div>
 </div>
 
-<!-- Modal untuk Edit Maintenance -->
+<!-- Modal untuk Edit Breakdown -->
 <div class="modal fade" tabindex="-1" id="kt_modal_edit">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Maintenance</h5>
+                <h5 class="modal-title">Edit Breakdown</h5>
 
                 <!--begin::Close-->
                 <div onclick="clearEditValue()" class="btn btn-icon btn-sm btn-active-light-danger ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -318,27 +396,34 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/mesin/maintenance/edit/" method="post" enctype="multipart/form-data">
-            @method('put')
+            <form action="/mesin/maintenance/edit/direct" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="mesin_id" value="{{ $mesin->id }}">
             <input type="hidden" name="maintenance_id" id="edit_index" value="">
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="edit_maintenance_form" class="form-label float-start">Nama Maintenance</label>
-                        <input type="text" class="form-control @error('nama_maintenance') is-invalid @enderror clear-edit-form" id="edit_maintenance_form" name="nama_maintenance" required>
+                        <label for="edit_maintenance_form" class="form-label float-start">Nama Breakdown</label>
+                        <input type="text" class="form-control @error('nama_maintenance') is-invalid @enderror clear-edit-form" id="edit_maintenance_form" name="nama_maintenance" required onkeyup="updatePreview()">
                     </div>
 
                     <div class="mb-3">
                         <label for="edit_foto_kerusakan" class="form-label float-start">Foto Kerusakan</label>
-                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-edit-form" id="edit_foto_kerusakan" name="foto_kerusakan" accept="image/*">
+                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-edit-form" id="edit_foto_kerusakan" name="foto_kerusakan" accept="image/*" onchange="previewImage(this)">
                         <div class="form-text">Upload foto kerusakan baru (opsional)</div>
+                        <!-- Preview gambar -->
+                        <div id="image_preview" class="mt-2" style="display: none;">
+                            <img id="preview_img" src="" alt="Preview" class="img-fluid" style="max-width: 200px; border-radius: 5px;">
+                        </div>
                     </div>
 
                     <div class="my-5">
                         <div class="p-2 fw-bold">Warna</div>
-                        <div class="p-2 d-inline"><input type="color" name="warna" id="edit_warna" value="#0095E8">
+                        <div class="p-2 d-inline"><input type="color" name="warna" id="edit_warna" value="#0095E8" onchange="updatePreview()">
+                        </div>
+                        <!-- Preview warna -->
+                        <div class="p-2">
+                            <span id="color_preview" style="color: #0095E8; font-weight: bold;">Preview Warna</span>
                         </div>
                     </div>
 
@@ -367,7 +452,7 @@
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
-                        Update Maintenance
+                        Update Breakdown
                     </button>
                 </div>
 
@@ -402,10 +487,23 @@
 
 @section('customJs')
     <script>
-function setEdit(index, nama_setup_maintenance, warna){
+function setEdit(index, nama_maintenance, warna, foto_kerusakan = null){
     document.getElementById('edit_index').value = index;
-    document.getElementById('edit_maintenance_form').value = nama_setup_maintenance;
+    document.getElementById('edit_maintenance_form').value = nama_maintenance;
     document.getElementById('edit_warna').value = warna;
+    
+    // Tampilkan foto yang sudah ada jika tersedia
+    const preview = document.getElementById('image_preview');
+    const previewImg = document.getElementById('preview_img');
+    
+    if (foto_kerusakan) {
+        previewImg.src = foto_kerusakan;
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+    
+    updatePreview(); // Update preview saat modal dibuka
     }
 
 function clearValue(){
@@ -413,6 +511,11 @@ function clearValue(){
     x.forEach(element => {
         element.value = ""
     });
+    // Reset preview untuk create modal
+    document.getElementById('create_image_preview').style.display = 'none';
+    document.getElementById('create_warna').value = '#0095E8';
+    document.getElementById('create_color_preview').style.color = '#0095E8';
+    document.getElementById('create_color_preview').textContent = 'Preview Warna';
 }
 
 function clearEditValue(){
@@ -422,11 +525,87 @@ function clearEditValue(){
     });
     document.getElementById('edit_index').value = "";
     document.getElementById('edit_warna').value = "#0095E8";
+    // Reset preview
+    document.getElementById('image_preview').style.display = 'none';
+    document.getElementById('color_preview').style.color = '#0095E8';
+    document.getElementById('color_preview').textContent = 'Preview Warna';
 }
 
 function showImage(imageSrc, maintenanceName) {
     document.getElementById('modalImage').src = imageSrc;
     document.getElementById('imageModalTitle').textContent = 'Foto Kerusakan - ' + maintenanceName;
+}
+
+// Fungsi untuk preview gambar yang dipilih (edit modal)
+function previewImage(input) {
+    const preview = document.getElementById('image_preview');
+    const previewImg = document.getElementById('preview_img');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+// Fungsi untuk preview gambar yang dipilih (create modal)
+function previewCreateImage(input) {
+    const preview = document.getElementById('create_image_preview');
+    const previewImg = document.getElementById('create_preview_img');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+// Fungsi untuk update preview warna dan nama (edit modal)
+function updatePreview() {
+    const namaBreakdown = document.getElementById('edit_maintenance_form').value;
+    const warna = document.getElementById('edit_warna').value;
+    const colorPreview = document.getElementById('color_preview');
+    
+    // Update warna preview
+    colorPreview.style.color = warna;
+    
+    // Update teks preview dengan nama breakdown atau default
+    if (namaBreakdown.trim() !== '') {
+        colorPreview.textContent = namaBreakdown;
+    } else {
+        colorPreview.textContent = 'Preview Warna';
+    }
+}
+
+// Fungsi untuk update preview warna dan nama (create modal)
+function updateCreatePreview() {
+    const namaBreakdown = document.getElementById('maintenance_form').value;
+    const warna = document.getElementById('create_warna').value;
+    const colorPreview = document.getElementById('create_color_preview');
+    
+    // Update warna preview
+    colorPreview.style.color = warna;
+    
+    // Update teks preview dengan nama breakdown atau default
+    if (namaBreakdown.trim() !== '') {
+        colorPreview.textContent = namaBreakdown;
+    } else {
+        colorPreview.textContent = 'Preview Warna';
+    }
 }
 
 $('.input-group.date').datepicker({

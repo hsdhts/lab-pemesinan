@@ -68,6 +68,7 @@ Route::post('/mesin/maintenance/create/', [UpdateMaintenanceController::class, '
 Route::put('/mesin/maintenance/create/submit/', [UpdateMaintenanceController::class, 'submit_create'])->middleware('mahasiswa');
 Route::put('/mesin/maintenance/edit/', [UpdateMaintenanceController::class, 'edit'])->middleware('mahasiswa');
 Route::put('/mesin/maintenance/edit/submit', [UpdateMaintenanceController::class, 'submit_edit'])->middleware('mahasiswa');
+Route::post('/mesin/maintenance/edit/direct', [UpdateMaintenanceController::class, 'edit_direct'])->middleware('mahasiswa');
 Route::delete('/mesin/maintenance/delete/', [UpdateMaintenanceController::class, 'delete'])->middleware('mahasiswa');
 
 Route::get('/setupMaintenance/{id}', [SetupMaintenanceController::class, 'setup'])->middleware('auth')->middleware('teknisi');

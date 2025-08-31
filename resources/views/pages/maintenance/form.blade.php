@@ -83,7 +83,7 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="maintenance_form" class="form-label float-start">Nama Maintenance</label>
+                        <label for="maintenance_form" class="form-label float-start">Nama Breakdown</label>
                         <input type="text" class="form-control @error('nama_maintenance') is-invalid @enderror clear-form" id="maintenance_form" value="{{ old('nama_maintenance') }}" name="nama_maintenance">
                     </div>
 
@@ -147,7 +147,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Maintenance</h5>
+                <h5 class="modal-title">Edit Breakdown</h5>
 
                 <!--begin::Close-->
                 <div onclick="clearValue()" class="btn btn-icon btn-sm btn-active-light-danger ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -171,7 +171,7 @@
 
                 <input type="hidden" class="clear-form" name="index" id="edit_index">
                     <div class="mb-3">
-                        <label for="nama_maintenance_form" class="form-label float-start">Nama Maintenance</label>
+                        <label for="nama_maintenance_form" class="form-label float-start">Nama Breakdown</label>
                         <input type="text" class="form-control clear-form" id="edit_maintenance_form" name="nama_maintenance">
                     </div>
 
