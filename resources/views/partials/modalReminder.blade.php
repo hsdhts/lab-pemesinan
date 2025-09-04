@@ -25,7 +25,7 @@
                             <!--begin::Table head-->
                             <thead>
                                 <tr class="fw-bolder text-muted">
-                                    <th class="min-w-150px">Maintenance</th>
+                                    <th class="min-w-150px">Breakdown</th>
                                     <th class="min-w-140px">Mesin</th>
                                     <th class="min-w-120px">Tanggal</th>
                                     <th class="min-w-120px">Status</th>

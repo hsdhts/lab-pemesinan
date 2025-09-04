@@ -8,6 +8,7 @@ use App\Models\Maintenance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\JadwalController;
 use App\Models\Sparepart;
@@ -120,10 +121,72 @@ class MaintenanceController extends Controller
         }
     }
 
+    public function maintenance_edit(Request $request){
+        $validator = Validator::make($request->all(), [
+            'maintenance_id' => 'required|numeric',
+            'mesin_id' => 'required|numeric',
+            'nama_maintenance' => 'required',
+            'warna' => 'required',
+            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
 
+        // Cek apakah ada error validasi sebelum menyimpan
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
+        try {
+            $maintenance = Maintenance::find($request->maintenance_id);
 
+            if (!$maintenance) {
+                return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
+            }
 
+            $fotoKerusakanPath = $maintenance->foto_kerusakan; // Keep existing photo
 
+            // Handle file upload untuk foto_kerusakan baru
+            if ($request->hasFile('foto_kerusakan')) {
+                // Delete old photo if exists
+                if ($maintenance->foto_kerusakan && \Storage::disk('public')->exists($maintenance->foto_kerusakan)) {
+                    \Storage::disk('public')->delete($maintenance->foto_kerusakan);
+                }
+
+                $file = $request->file('foto_kerusakan');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $fotoKerusakanPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+            }
+
+            $maintenance->update([
+                'nama_maintenance' => $request->nama_maintenance,
+                'warna' => $request->warna,
+                'foto_kerusakan' => $fotoKerusakanPath,
+            ]);
+
+            return redirect('/jadwal/' . $request->mesin_id)->with('success', 'Data berhasil diupdate.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengupdate data maintenance. Silakan coba lagi.');
+        }
+    }
+
+    public function maintenance_delete(Request $request){
+        try {
+            $maintenance = Maintenance::find($request->maintenance_id);
+
+            if (!$maintenance) {
+                return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
+            }
+
+            // Delete photo if exists
+            if ($maintenance->foto_kerusakan && \Storage::disk('public')->exists($maintenance->foto_kerusakan)) {
+                \Storage::disk('public')->delete($maintenance->foto_kerusakan);
+            }
+
+            $maintenance->delete();
+
+            return redirect('/jadwal/' . $request->mesin_id)->with('success', 'Data maintenance berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data maintenance. Silakan coba lagi.');
+        }
+    }
 
 }

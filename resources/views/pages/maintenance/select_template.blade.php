@@ -80,7 +80,7 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="maintenance_form" class="form-label float-start">Nama Maintenance</label>
+                        <label for="maintenance_form" class="form-label float-start">Nama Breakdown</label>
                         <input type="text" class="form-control @error('nama_maintenance') is-invalid @enderror clear-form" id="maintenance_form" value="{{ old('nama_maintenance') }}" name="nama_maintenance" required>
                     </div>
 

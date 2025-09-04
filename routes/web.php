@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JadwalApproveController;
 use App\Http\Controllers\MesinController;
-use App\Http\Controllers\RuangController;
+
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JadwalSparepartController;
 
@@ -61,7 +61,6 @@ Route::get('/mesin/edit/{id}', [MesinController::class, 'edit'])->middleware('au
 
 Route::put('/mesin/update', [MesinController::class, 'update'])->middleware('admin');
 Route::delete('/mesin/destroy', [MesinController::class, 'destroy'])->middleware('admin');
-Route::post('/mesin/ruang/create', [MesinController::class, 'create_ruang'])->middleware('admin');
 
 
 Route::get('/mesin/maintenance/{id}', [MaintenanceController::class, 'maintenance_mesin'])->middleware('auth')->middleware('teknisi');
@@ -69,10 +68,8 @@ Route::post('/mesin/maintenance/create/', [UpdateMaintenanceController::class, '
 Route::put('/mesin/maintenance/create/submit/', [UpdateMaintenanceController::class, 'submit_create'])->middleware('mahasiswa');
 Route::put('/mesin/maintenance/edit/', [UpdateMaintenanceController::class, 'edit'])->middleware('mahasiswa');
 Route::put('/mesin/maintenance/edit/submit', [UpdateMaintenanceController::class, 'submit_edit'])->middleware('mahasiswa');
+Route::post('/mesin/maintenance/edit/direct', [UpdateMaintenanceController::class, 'edit_direct'])->middleware('mahasiswa');
 Route::delete('/mesin/maintenance/delete/', [UpdateMaintenanceController::class, 'delete'])->middleware('mahasiswa');
-
-
-
 
 Route::get('/setupMaintenance/{id}', [SetupMaintenanceController::class, 'setup'])->middleware('auth')->middleware('teknisi');
 Route::post('/setupMaintenance/create', [SetupMaintenanceController::class, 'createPadaSetup'])->middleware('mahasiswa');
@@ -83,13 +80,6 @@ Route::delete('/setupMaintenance/destroy', [SetupMaintenanceController::class, '
 Route::post('/setupForm/create/', [SetupFormController::class, 'createPadaSetup'])->middleware('mahasiswa');
 Route::put('/setupForm/edit/', [SetupFormController::class, 'editPadaSetup'])->middleware('mahasiswa');
 Route::delete('/setupForm/delete/', [SetupFormController::class, 'deletePadaSetup'])->middleware('mahasiswa');
-
-
-
-Route::get('/ruang', [RuangController::class, 'index'])->middleware('auth')->middleware('teknisi');
-Route::post('/ruang/create', [RuangController::class, 'create'])->middleware('admin');
-Route::put('/ruang/update', [RuangController::class, 'update'])->middleware('admin');
-Route::delete('/ruang/destroy', [RuangController::class, 'destroy'])->middleware('admin');
 
 
 Route::get('/approve', [JadwalApproveController::class, 'index'])->middleware('auth')->middleware('manager')->middleware('admin');
@@ -148,18 +138,11 @@ Route::get('/stasiun/edit/{id}', [StasiunController::class, 'edit'])->middleware
 Route::put('/stasiun/update', [StasiunController::class, 'update'])->middleware('admin');
 Route::delete('/stasiun/destroy', [StasiunController::class, 'destroy'])->middleware('admin');
 
-/*
-diilangin, diganti pake model jadwal biasa
-Route::get('/sparepart/maintenance/{id}', [MaintenanceController::class, 'tampil_sparepart']);
-Route::post('/sparepart/maintenance/', [MaintenanceController::class, 'tambah_sparepart']);
-Route::delete('/sparepart/maintenance/delete/', [MaintenanceController::class, 'hapus_sparepart']);
-*/
 
 Route::post('/sparepart/jadwal/', [JadwalSparepartController::class, 'tambah_sparepart'])->middleware('teknisi');
 Route::delete('/sparepart/jadwal/delete/', [JadwalSparepartController::class, 'hapus_sparepart'])->middleware('teknisi');
 
 
-// Tambahkan route ini SEBELUM route /jadwal/{id}
 Route::get('/jadwal/all', [JadwalController::class, 'indexAll'])->middleware('auth');
 Route::get('/jadwal/{id}', [JadwalController::class, 'index'])->middleware('auth');
 Route::get('/jadwal/detail/{id}', [JadwalController::class, 'detail'])->middleware('auth');
