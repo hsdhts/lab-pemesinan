@@ -3,6 +3,7 @@
 @section('tableHead')
     <th>No</th>
     <th>Mesin</th>
+    <th>Stasiun</th>
     <th>Gambar Mesin</th>
     <th>Aksi</th>
 @endsection
@@ -31,10 +32,21 @@
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
             { data: 'nama_mesin', name: 'nama_mesin' },
             {
+                data: 'stasiun',
+                name: 'stasiun',
+                render: function(data, type, full, meta) {
+                    if (data && data !== 'Belum Ditentukan' && data !== '') {
+                        return '<span class="badge badge-info">' + data + '</span>';
+                    } else {
+                        return '<span class="badge badge-secondary">Belum Ditentukan</span>';
+                    }
+                }
+            },
+            {
                 data: 'mesin_image',
                 name: 'mesin_image',
                 render: function(data, type, full, meta) {
-                    return '<img src="{{ asset('storage') }}/'+data+'" alt="Gambar Mesin" style="max-width: 100px; max-height: 100px; cursor: pointer;" onclick="setModalImage(\'' + data + '\', \'gambarMesinModal\')">';
+                    return '<img src="{{ asset("storage") }}/'+data+'" alt="Gambar Mesin" style="max-width: 100px; max-height: 100px; cursor: pointer;" onclick="setModalImage(\'' + data + '\', \'gambarMesinModal\')">';
                 }
             },
            
