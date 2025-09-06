@@ -102,7 +102,7 @@
                     @if($jadwalPreventive->jadwal_berikutnya && $jadwalPreventive->jadwal_berikutnya->isPast())
                         <div class="alert alert-warning mt-3">
                             <i class="fas fa-exclamation-triangle"></i>
-                            <strong>Perhatian!</strong> Jadwal preventive maintenance ini sudah jatuh tempo. 
+                            <strong>Perhatian!</strong> Jadwal preventive maintenance ini sudah jatuh tempo.
                             Silakan generate jadwal maintenance untuk melakukan tindakan preventive.
                         </div>
                     @endif
@@ -118,9 +118,9 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Tanggal Rencana</th>
+                                                <th>Tanggal Breakdown</th>
                                                 <th>Status</th>
-                                                <th>Tanggal Realisasi</th>
+                                                <th>Tanggal Selesai</th>
                                                 <th>Keterangan</th>
                                                 <th>Aksi</th>
                                             </tr>

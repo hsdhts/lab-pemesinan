@@ -428,7 +428,7 @@
                             <div class="row g-2">
                                 <div class="col-6">
                                     <div class="bg-light rounded p-2">
-                                        <small class="text-muted d-block" style="font-size: 0.75rem;">Tanggal Rencana</small>
+                                        <small class="text-muted d-block" style="font-size: 0.75rem;">Tanggal Breakdown</small>
                                         <div class="fw-semibold" style="font-size: 0.85rem; color: #374151;">{{ Illuminate\Support\Carbon::parse($jd->tanggal_rencana)->format('d M Y') }}</div>
                                     </div>
                                 </div>
@@ -558,7 +558,7 @@
 
                 <table class="table table-row-dashed table-row-gray-300 gy-5 gs-4">
                     <tr>
-                        <th class="fw-bold">Jenis Maintenance</th>
+                        <th class="fw-bold">Jenis Breakdown</th>
                         <td id="approve_maintenance"></td>
                     </tr>
                     <tr>
@@ -566,11 +566,11 @@
                         <td id="approve_mesin"></td>
                     </tr>
                     <tr>
-                        <th class="fw-bold">Tanggal Rencana</th>
+                        <th class="fw-bold">Tanggal Breakdown</th>
                         <td id="approve_tanggal_rencana"></td>
                     </tr>
                     <tr>
-                        <th class="fw-bold">Tanggal Realisasi</th>
+                        <th class="fw-bold">Tanggal Selesai</th>
                         <td id="approve_tanggal_realisasi"></td>
                     </tr>
                     <tr>

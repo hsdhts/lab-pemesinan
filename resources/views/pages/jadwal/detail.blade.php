@@ -146,9 +146,10 @@
         <h4 class="text-muted">Periode : {{ $maintenance->periode }} {{ $maintenance->satuan_periode }}</h4>
     </div>
         <input type="hidden" name="id" value="{{ old('id', $jadwal->id)}}">
+        <input type="hidden" name="tanggal_rencana" value="{{ Illuminate\Support\Carbon::parse($jadwal->tanggal_rencana)->format('d-m-Y') }}">
 
 <div class="input-group my-4">
-    <span class="form-label float-start">Tanggal Rencana</span>
+    <span class="form-label float-start">Tanggal Breakdown</span>
     <div class="input-group">
         <input type="text" class="form-control" value="{{ Illuminate\Support\Carbon::parse($jadwal->tanggal_rencana)->format('d-m-Y') }}" readonly disabled>
     </div>
@@ -156,7 +157,7 @@
 
 @if($jadwal->tanggal_realisasi)
 <div class="input-group my-4">
-    <span class="form-label float-start">Tanggal Realisasi</span>
+    <span class="form-label float-start">Tanggal Selesai</span>
     <div class="input-group">
         <input type="text" class="form-control" value="{{ Illuminate\Support\Carbon::parse($jadwal->tanggal_realisasi)->format('d-m-Y H:i') }}" readonly disabled>
     </div>
@@ -369,9 +370,78 @@ var options = {
     menubar: false,
 };
 
-
-
 tinymce.init(options);
+
+// Handle form submission with AJAX to prevent page refresh
+$(document).ready(function() {
+    $('form[action="/jadwal/update/"]').on('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        const form = $(this);
+        const submitBtn = form.find('button[type="submit"]');
+        const originalText = submitBtn.html();
+
+        // Show loading state
+        submitBtn.prop('disabled', true);
+        submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...');
+
+        // Get TinyMCE content
+        const keteranganContent = tinymce.get('kt_docs_tinymce_basic').getContent();
+
+        // Create FormData object
+        const formData = new FormData(this);
+        formData.set('keterangan', keteranganContent);
+
+        // Send AJAX request
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                // Show success message
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: 'Data berhasil disimpan.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6'
+                }).then(() => {
+                    // Optionally reload the page or redirect
+                    window.location.reload();
+                });
+            },
+            error: function(xhr) {
+                let errorMessage = 'Terjadi kesalahan saat menyimpan data.';
+
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
+                    errorMessage = Object.values(errors).flat().join('\n');
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+
+                // Show error message
+                Swal.fire({
+                    title: 'Error!',
+                    text: errorMessage,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#d33'
+                });
+            },
+            complete: function() {
+                // Restore button state
+                submitBtn.prop('disabled', false);
+                submitBtn.html(originalText);
+            }
+        });
+    });
+});
 
 @error('sparepart')
 Swal.fire({
