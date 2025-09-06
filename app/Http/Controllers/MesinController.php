@@ -26,12 +26,19 @@ class MesinController extends Controller
                 ->addColumn('user', function (Mesin $mesin) {
                     return $mesin->user ? $mesin->user->nama : ''; // Periksa apakah user tidak null
                 })
-
                 ->addColumn('stasiun', function (Mesin $mesin) {
                     return $mesin->stasiun ? $mesin->stasiun->nama_stasiun : 'Belum Ditentukan'; // Periksa apakah stasiun tidak null
                 })
                 ->addColumn('aksi', function ($mesin) {
                     return view('partials.tombolAksiMesin', ['editPath' => '/mesin/edit/', 'id' => $mesin->id, 'deletePath' => '/mesin/destroy/']);
+                })
+                ->filterColumn('nama_mesin', function($query, $keyword) {
+                    $query->where('nama_mesin', 'like', "%{$keyword}%");
+                })
+                ->filterColumn('stasiun', function($query, $keyword) {
+                    $query->whereHas('stasiun', function($q) use ($keyword) {
+                        $q->where('nama_stasiun', 'like', "%{$keyword}%");
+                    });
                 })
                 ->rawColumns(['nama_mesin', 'aksi'])
                 ->addIndexColumn()

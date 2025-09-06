@@ -20,6 +20,22 @@
     .dataTables_processing{
             z-index: 5;
     }
+    
+    /* Custom search styling */
+    .searching {
+        background-color: #fff3cd !important;
+        border-color: #ffeaa7 !important;
+        transition: all 0.3s ease;
+    }
+    
+    #customSearch {
+        transition: all 0.3s ease;
+    }
+    
+    #customSearch:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
     </style>
 
 @endsection
