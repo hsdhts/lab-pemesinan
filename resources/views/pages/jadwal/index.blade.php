@@ -18,8 +18,14 @@
       <td>{{ $mesin->kode_mesin }}</td>
     </tr>
     <tr>
-      <td><b>Tanggal Pembelian </b></td>
-      <td>{{ $mesin->tanggal_pembelian }}</td>
+      <td><b>Stasiun </b></td>
+      <td>
+        @if($mesin->stasiun)
+          <span class="badge badge-light-primary">{{ $mesin->stasiun->nama_stasiun }}</span>
+        @else
+          <span class="badge badge-light-secondary">Belum Ditentukan</span>
+        @endif
+      </td>
     </tr>
 
     <tr>

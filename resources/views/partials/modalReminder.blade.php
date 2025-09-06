@@ -27,6 +27,7 @@
                                 <tr class="fw-bolder text-muted">
                                     <th class="min-w-150px">Breakdown</th>
                                     <th class="min-w-140px">Mesin</th>
+                                    <th class="min-w-120px">Stasiun</th>
                                     <th class="min-w-120px">Tanggal</th>
                                     <th class="min-w-120px">Status</th>
                                     <th class="min-w-100px">Aksi</th>
@@ -39,7 +40,16 @@
                                         <a href="/jadwal/detail/{{ $h->id }}" class="text-dark fw-bolder text-hover-primary fs-6">{{ $h->maintenance->nama_maintenance }}</a>
                                     </td>
                                     <td>
-                                        <span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $h->maintenance->mesin->nama_mesin }}</span>
+                                        <span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $h->maintenance->mesin ? $h->maintenance->mesin->nama_mesin : 'Mesin tidak ditemukan' }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted fw-bold d-block mb-1 fs-7">
+                                            @if($h->maintenance->mesin && $h->maintenance->mesin->stasiun)
+                                                <span class="badge badge-light-primary">{{ $h->maintenance->mesin->stasiun->nama_stasiun }}</span>
+                                            @else
+                                                <span class="badge badge-light-secondary">Belum Ditentukan</span>
+                                            @endif
+                                        </span>
                                     </td>
                                     <td>
                                         <span class="text-dark fw-bolder d-block mb-1 fs-6">{{ Illuminate\Support\Carbon::parse($h->tanggal_rencana)->format('d/m/Y') }}</span>
@@ -183,7 +193,7 @@
 											<tr class="fw-bolder text-muted">
 												<th class="min-w-140px">Mesin</th>
 												<th class="min-w-120px">Kode Mesin</th>
-												<th class="min-w-120px">Tanggal Pembelian</th>
+												<th class="min-w-120px">Stasiun</th>
 
 											</tr>
 										</thead>
@@ -201,7 +211,7 @@
 													<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $m->kode_mesin }}</span>
 												</td>
 												<td>
-													<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $m->tanggal_pembelian }}</span>
+													<span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $m->stasiunId }}</span>
 												</td>
 
 												<td>
