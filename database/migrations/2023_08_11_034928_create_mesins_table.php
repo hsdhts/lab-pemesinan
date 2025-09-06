@@ -15,7 +15,7 @@ class CreateMesinsTable extends Migration
     public function up()
     {
         Schema::create('mesins', function (Blueprint $table) {
-            
+
             $table->id();
             $table->string('nama_mesin');
             $table->foreignId('kategori_id')->default(1);
@@ -28,7 +28,7 @@ class CreateMesinsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-           
+
         });
     }
 
@@ -42,5 +42,5 @@ class CreateMesinsTable extends Migration
         Schema::dropIfExists('mesins');
     }
 
-   
+
 }

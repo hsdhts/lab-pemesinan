@@ -26,7 +26,7 @@
     }
     @endphp
 
-    <title>Laboratorium @if($halaman != ''): {{$halaman}} @endif</title>
+    <title>Laboratorium TM @if($halaman != ''): {{$halaman}} @endif</title>
   </head>
   <body>
     <header class="navbar navbar-expand-sm navbar-dark bg-primary container-fluid sticky-top">

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Mesin;
-use App\Models\Kategori;
+use App\Models\Stasiun;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Cache;
@@ -17,7 +17,7 @@ class MesinController extends Controller
     //
     public function index(Request $request) {
         if ($request->ajax()) {
-            $mesin = Mesin::with(['kategori', 'user']);
+            $mesin = Mesin::with(['user', 'stasiun']);
     
             return DataTables::of($mesin)
                 ->addColumn('nama_mesin', function ($mesin) {
@@ -26,8 +26,9 @@ class MesinController extends Controller
                 ->addColumn('user', function (Mesin $mesin) {
                     return $mesin->user ? $mesin->user->nama : ''; // Periksa apakah user tidak null
                 })
-                ->addColumn('kategori', function (Mesin $mesin) {
-                    return $mesin->kategori ? $mesin->kategori->nama_kategori : 'Tak Terkategori'; // Periksa apakah kategori tidak null
+
+                ->addColumn('stasiun', function (Mesin $mesin) {
+                    return $mesin->stasiun ? $mesin->stasiun->nama_stasiun : 'Belum Ditentukan'; // Periksa apakah stasiun tidak null
                 })
                 ->addColumn('aksi', function ($mesin) {
                     return view('partials.tombolAksiMesin', ['editPath' => '/mesin/edit/', 'id' => $mesin->id, 'deletePath' => '/mesin/destroy/']);
@@ -47,6 +48,7 @@ class MesinController extends Controller
         return view('pages.mesin.create',
         [
             'user' => User::all(),
+            'stasiuns' => Stasiun::all(),
             'halaman' => 'Mesin'
         ]
     );
@@ -57,18 +59,13 @@ class MesinController extends Controller
             'nama_mesin' => 'required|max:255',
             'kode_mesin' => 'nullable|max:6',
             'spesifikasi' => 'nullable|not_regex:/\'/i',
-            'tanggal_pembelian' => 'nullable|max:50',
+            'stasiun_id' => 'nullable|exists:stasiuns,id',
             'mesin_image' => 'image|file|max:3072',
-            'nameTag_image' => 'image|file|max:3072',
 
         ]);
 
         if($request->hasFile('mesin_image')) {
             $validData['mesin_image'] = $request->file('mesin_image')->storePublicly('mesin_images', 'public');
-        }
-
-        if($request->hasFile('nameTag_image')) {
-            $validData['nameTag_image'] = $request->file('nameTag_image')->storePublicly('nameTag_images', 'public');
         }
 
         $m = Mesin::create($validData);
@@ -89,11 +86,13 @@ class MesinController extends Controller
     public function edit($id){
         $mesin = Mesin::findOrFail($id);
         $user = User::all();
+        $stasiuns = Stasiun::all();
     
         return view('pages.mesin.update', [
             'halaman' => 'Mesin',
             'mesin' => $mesin,
-            'user' => $user
+            'user' => $user,
+            'stasiuns' => $stasiuns
         ]);
     }
     
@@ -106,9 +105,8 @@ class MesinController extends Controller
             'nama_mesin' => 'required|max:255',
             'kode_mesin' => 'nullable|max:6',
             'spesifikasi' => 'nullable|not_regex:/\'/i',
-            'tanggal_pembelian' => 'nullable|max:50',
+            'stasiun_id' => 'nullable|exists:stasiuns,id',
             'mesin_image' => 'image|file|max:1024',
-            'nameTag_image' => 'image|file|max:1024',
         ]);
     
         $mesin = Mesin::findOrFail($dataValid['id']);
@@ -119,14 +117,6 @@ class MesinController extends Controller
 
         // Simpan gambar baru
         $dataValid['mesin_image'] = $request->file('mesin_image')->storePublicly('mesin_images', 'public');
-    }
-
-    if ($request->hasFile('nameTag_image')) {
-        // Hapus gambar lama (jika ada) sebelum menyimpan yang baru
-        Storage::disk('public')->delete($mesin->nameTag_image);
-
-        // Simpan gambar baru
-        $dataValid['nameTag_image'] = $request->file('nameTag_image')->storePublicly('nameTag_images', 'public');
     }
 
     $mesin->update($dataValid);

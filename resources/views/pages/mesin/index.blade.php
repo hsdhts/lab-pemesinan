@@ -3,8 +3,8 @@
 @section('tableHead')
     <th>No</th>
     <th>Mesin</th>
+    <th>Stasiun</th>
     <th>Gambar Mesin</th>
-    <th>Name Tag</th>
     <th>Aksi</th>
 @endsection
 
@@ -32,18 +32,21 @@
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
             { data: 'nama_mesin', name: 'nama_mesin' },
             {
+                data: 'stasiun',
+                name: 'stasiun',
+                render: function(data, type, full, meta) {
+                    if (data && data !== 'Belum Ditentukan' && data !== '') {
+                        return '<span class="badge badge-info">' + data + '</span>';
+                    } else {
+                        return '<span class="badge badge-secondary">Belum Ditentukan</span>';
+                    }
+                }
+            },
+            {
                 data: 'mesin_image',
                 name: 'mesin_image',
                 render: function(data, type, full, meta) {
-                    return '<img src="{{ asset('storage') }}/'+data+'" alt="Gambar Mesin" style="max-width: 100px; max-height: 100px; cursor: pointer;" onclick="setModalImage(\'' + data + '\', \'gambarMesinModal\')">';
-                }
-            },
-
-            {
-                data: 'nameTag_image',
-                name: 'nameTag_image',
-                render: function(data, type, full, meta) {
-                    return '<img src="{{ asset('storage') }}/'+data+'" alt="Gambar Name Tag" style="max-width: 100px; max-height: 100px; cursor: pointer;" onclick="setModalImage(\'' + data + '\', \'gambarMesinModal\')">';
+                    return '<img src="{{ asset("storage") }}/'+data+'" alt="Gambar Mesin" style="max-width: 100px; max-height: 100px; cursor: pointer;" onclick="setModalImage(\'' + data + '\', \'gambarMesinModal\')">';
                 }
             },
            
@@ -71,17 +74,5 @@
     </div>
 </div>
 
-<!-- Modal Name Tag Mesin -->
-<div class="modal fade" id="nameTagMesinModal" tabindex="-1" role="dialog" aria-labelledby="nameTagMesinModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="nameTagMesinModalLabel">Name Tag Mesin</h5>
-            </div>
-            <div class="modal-body">
-                <img id="nameTagMesinModalImage" src="" alt="Name Tag Mesin" class="img-fluid">
-            </div>
-        </div>
-    </div>
-</div>
+
 @endsection

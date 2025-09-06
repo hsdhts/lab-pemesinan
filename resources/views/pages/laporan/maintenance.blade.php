@@ -43,17 +43,6 @@
             margin-bottom: 5px;
             font-size: 8pt;
         }
-        .alasan{
-            width: 100%;
-            margin-bottom: 20px;
-            border: 1px solid black;
-            border-radius: 3px;
-            min-height: 50px;
-            font-size: 11pt;
-            padding: 6px;
-            box-sizing: border-box;
-            font-size: 9pt;
-        }
         .judul{
             text-align: center;
             margin: 2px auto;
@@ -64,14 +53,14 @@
 <body>
 
     <h4 class="judul">LAPORAN PENYELESAIAN PEKERJAAN</h4>
-    <h6 class="judul">Teknik Mesin, Universitas Sriwijaya</h6>
+    <h6 class="judul">Pendidikan Teknik Mesin, Universitas Sriwijaya</h6>
     <table class="tabel1">
 
         @php
             setlocale(LC_ALL, 'IND');
         @endphp
         <tr>
-            <td>Tanggal Realisasi</td><td>@if($jadwal->tanggal_realisasi){{ Illuminate\Support\Carbon::parse($jadwal->tanggal_realisasi)->formatLocalized('%d %B %Y') }} @else - @endif </td><td>Internal Servis</td><td>{{ $jadwal->maintenance->periode }} {{ $jadwal->maintenance->satuan_periode }}</td>
+            <td>Tanggal Selesai</td><td>@if($jadwal->tanggal_realisasi){{ Illuminate\Support\Carbon::parse($jadwal->tanggal_realisasi)->formatLocalized('%d %B %Y') }} @else - @endif </td><td>Internal Servis</td><td>{{ $jadwal->maintenance->periode }} {{ $jadwal->maintenance->satuan_periode }}</td>
         </tr>
         <tr>
             <td>Nama Mesin</td><td>{{ $jadwal->maintenance->mesin->nama_mesin }}</td><td>Jenis Pekerjaan</td><td>{{ $jadwal->maintenance->nama_maintenance }}</td>
@@ -90,12 +79,6 @@
         {!! $jadwal->keterangan !!}
     </div>
 
-    @if($jadwal->alasan)
-        <h5 style="margin-bottom: 2px;">Alasan Terlambat : </h5>
-        <div class="alasan">
-            {{ $jadwal->alasan }}
-        </div>
-    @endif
     @php
         $sparepart = $jadwal->sparepart;
     @endphp

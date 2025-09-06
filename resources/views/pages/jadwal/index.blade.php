@@ -18,14 +18,18 @@
       <td>{{ $mesin->kode_mesin }}</td>
     </tr>
     <tr>
-      <td><b>Tanggal Pembelian </b></td>
-      <td>{{ $mesin->tanggal_pembelian }}</td>
+      <td><b>Stasiun </b></td>
+      <td>
+        @if($mesin->stasiun)
+          <span class="badge badge-light-primary">{{ $mesin->stasiun->nama_stasiun }}</span>
+        @else
+          <span class="badge badge-light-secondary">Belum Ditentukan</span>
+        @endif
+      </td>
     </tr>
 
     <tr>
-        <td><b>Kategori</b></td>
-        <td>{{ $mesin->kategori->nama_kategori }}</td>
-    </tr>
+ </tr>
     <tr>
       <td colspan="2">
         <b>Spesifikasi</b><br>
@@ -63,7 +67,6 @@
 
           <div class="modal-body">
 
-
             <h4 id="tanggal_jadwal" class="mb-5 pb-2"></h4>
 
             <table id="tabel_jadwal_maintenance" class="table fs-4 table-row-dashed table-row-gray-300 gy-2">
@@ -73,7 +76,7 @@
           </div>
 
 
-          
+
           <div class="modal-footer">
               <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
           </div>
@@ -82,8 +85,8 @@
 </div>
 
 <!--End Modal-->
- 
- 
+
+
   <div id="calendar"></div>
 @endsection
 
@@ -99,19 +102,19 @@
 new Calendar('#calendar', {
   language: 'id',
   dataSource: [
-     
+
     @foreach($maintenance as $m)
         @foreach($m->jadwal as $j)
              {
               @php
                $tanggal_rencana = Illuminate\Support\Carbon::parse($j->tanggal_rencana);
               @endphp
-              startDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}), 
+              startDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}),
               endDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}),
               nama: '{{ $m->nama_maintenance }}',
               color: '{{ $m->warna }}',
               id: {{ $j->id }},
-            }, 
+            },
         @endforeach
     @endforeach
 
@@ -121,13 +124,13 @@ new Calendar('#calendar', {
 
 // Register events
 document.querySelector('#calendar').addEventListener('clickDay', function(e) {
-  
+
 
   var bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ];
 
   $('#tampil_jadwal').modal('show');
 
-  
+
   //appendLog("Click on day: " + e.date.toLocaleDateString() + " (" + e.events.length + " events)")
   var a = e.events;
   var tanggal = e.date.getDate()+' '+bulan[e.date.getMonth()]+' '+e.date.getFullYear();

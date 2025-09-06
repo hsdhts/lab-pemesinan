@@ -5,10 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JadwalApproveController;
 use App\Http\Controllers\MesinController;
-use App\Http\Controllers\RuangController;
+
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JadwalSparepartController;
-use App\Http\Controllers\KategoriController;
+
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\SetupFormController;
 use App\Http\Controllers\SparepartController;
@@ -20,8 +20,8 @@ use App\Http\Controllers\SetupMaintenanceController;
 use App\Http\Controllers\UpdateDbController;
 use App\Http\Controllers\UpdateMaintenanceController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\KernelHydroCycloneController;
-use App\Http\Controllers\HydroCycloneLossesController;
+use App\Http\Controllers\StasiunController;
+use App\Http\Controllers\PreventiveMaintenanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,8 +53,6 @@ Route::get('/user/edit/{id}', [UserController::class, 'edit'])->middleware('supe
 Route::put('/user/update/', [UserController::class, 'update'])->middleware('superadmin');
 Route::delete('/user/delete/', [UserController::class, 'delete'])->middleware('superadmin');
 
-
-
 Route::get('/mesin', [MesinController::class, 'index'])->middleware('auth')->middleware('teknisi');
 Route::get('/mesin/create', [MesinController::class, 'create'])->middleware('auth')->middleware('admin');
 Route::post('/mesin/create', [MesinController::class, 'tambah'])->middleware('admin');
@@ -63,7 +61,6 @@ Route::get('/mesin/edit/{id}', [MesinController::class, 'edit'])->middleware('au
 
 Route::put('/mesin/update', [MesinController::class, 'update'])->middleware('admin');
 Route::delete('/mesin/destroy', [MesinController::class, 'destroy'])->middleware('admin');
-Route::post('/mesin/ruang/create', [MesinController::class, 'create_ruang'])->middleware('admin');
 
 
 Route::get('/mesin/maintenance/{id}', [MaintenanceController::class, 'maintenance_mesin'])->middleware('auth')->middleware('teknisi');
@@ -71,44 +68,24 @@ Route::post('/mesin/maintenance/create/', [UpdateMaintenanceController::class, '
 Route::put('/mesin/maintenance/create/submit/', [UpdateMaintenanceController::class, 'submit_create'])->middleware('mahasiswa');
 Route::put('/mesin/maintenance/edit/', [UpdateMaintenanceController::class, 'edit'])->middleware('mahasiswa');
 Route::put('/mesin/maintenance/edit/submit', [UpdateMaintenanceController::class, 'submit_edit'])->middleware('mahasiswa');
+Route::post('/mesin/maintenance/edit/direct', [UpdateMaintenanceController::class, 'edit_direct'])->middleware('mahasiswa');
 Route::delete('/mesin/maintenance/delete/', [UpdateMaintenanceController::class, 'delete'])->middleware('mahasiswa');
-
-
-Route::get('/kategori', [KategoriController::class, 'index'])->middleware('auth')->middleware('teknisi');
-Route::post('/kategori/create', [KategoriController::class, 'create'])->middleware('mahasiswa');
-Route::put('/kategori/update', [KategoriController::class, 'updateOnKategori'])->middleware('mahasiswa');
-Route::delete('/kategori/destroy', [KategoriController::class, 'destroy'])->middleware('mahasiswa');
-
-Route::post('/kategori/setupMaintenance/create', [SetupMaintenanceController::class, 'createPadaKategori'])->middleware('mahasiswa');
-Route::put('/kategori/setupMaintenance/edit', [SetupMaintenanceController::class, 'editPadaKategori'])->middleware('mahasiswa');
-Route::delete('/kategori/setupMaintenance/destroy', [SetupMaintenanceController::class, 'hapusPadaKategori'])->middleware('mahasiswa');
 
 Route::get('/setupMaintenance/{id}', [SetupMaintenanceController::class, 'setup'])->middleware('auth')->middleware('teknisi');
 Route::post('/setupMaintenance/create', [SetupMaintenanceController::class, 'createPadaSetup'])->middleware('mahasiswa');
 Route::put('/setupMaintenance/edit', [SetupMaintenanceController::class, 'editPadaSetup'])->middleware('mahasiswa');
 Route::delete('/setupMaintenance/destroy', [SetupMaintenanceController::class, 'hapusPadaSetup'])->middleware('mahasiswa');
-Route::put('/setupMaintenance/kategori/update', [KategoriController::class, 'updateOnSetup'])->middleware('mahasiswa');
 
 
 Route::post('/setupForm/create/', [SetupFormController::class, 'createPadaSetup'])->middleware('mahasiswa');
 Route::put('/setupForm/edit/', [SetupFormController::class, 'editPadaSetup'])->middleware('mahasiswa');
 Route::delete('/setupForm/delete/', [SetupFormController::class, 'deletePadaSetup'])->middleware('mahasiswa');
 
-Route::post('/kategori/setupForm/create/', [SetupFormController::class, 'createPadaKategori'])->middleware('mahasiswa');
-Route::put('/kategori/setupForm/edit/', [SetupFormController::class, 'editPadaKategori'])->middleware('mahasiswa');
-Route::delete('/kategori/setupForm/delete/', [SetupFormController::class, 'deletePadaKategori'])->middleware('mahasiswa');
-
-Route::get('/ruang', [RuangController::class, 'index'])->middleware('auth')->middleware('teknisi');
-Route::post('/ruang/create', [RuangController::class, 'create'])->middleware('admin');
-Route::put('/ruang/update', [RuangController::class, 'update'])->middleware('admin');
-Route::delete('/ruang/destroy', [RuangController::class, 'destroy'])->middleware('admin');
-
 
 Route::get('/approve', [JadwalApproveController::class, 'index'])->middleware('auth')->middleware('manager')->middleware('admin');
 Route::post('/approve/jadwal', [JadwalApproveController::class, 'approve'])->middleware('manager')->middleware('admin');
 Route::put('/approve/jadwal/tetap', [JadwalApproveController::class, 'approve_tetap'])->middleware('manager')->middleware('admin');
 Route::put('/approve/jadwal/ubah', [JadwalApproveController::class, 'approve_ubah'])->middleware('manager')->middleware('admin');
-
 
 
 Route::post('/maintenance/form/pilih/', [SetupMesinController::class, 'pilih_template'])->middleware('teknisi');
@@ -157,16 +134,29 @@ Route::get('/sparepart/maintenance/{id}', [MaintenanceController::class, 'tampil
 Route::post('/sparepart/maintenance/', [MaintenanceController::class, 'tambah_sparepart']);
 Route::delete('/sparepart/maintenance/delete/', [MaintenanceController::class, 'hapus_sparepart']);
 */
+Route::delete('/protocol/destroy', [ProtocolController::class, 'destroy'])->middleware('admin');
+
+
+Route::get('/stasiun', [StasiunController::class, 'index'])->middleware('auth')->middleware('teknisi');
+Route::get('/stasiun/create', [StasiunController::class, 'create'])->middleware('auth')->middleware('admin');
+Route::post('/stasiun/create', [StasiunController::class, 'tambah'])->middleware('admin');
+Route::get('/stasiun/detail/{id}', [StasiunController::class, 'detail'])->middleware('auth')->middleware('teknisi');
+Route::get('/stasiun/edit/{id}', [StasiunController::class, 'edit'])->middleware('auth')->middleware('admin');
+Route::put('/stasiun/update', [StasiunController::class, 'update'])->middleware('admin');
+Route::delete('/stasiun/destroy', [StasiunController::class, 'destroy'])->middleware('admin');
+
 
 Route::post('/sparepart/jadwal/', [JadwalSparepartController::class, 'tambah_sparepart'])->middleware('teknisi');
 Route::delete('/sparepart/jadwal/delete/', [JadwalSparepartController::class, 'hapus_sparepart'])->middleware('teknisi');
 
 
+Route::get('/jadwal/all', [JadwalController::class, 'indexAll'])->middleware('auth');
 Route::get('/jadwal/{id}', [JadwalController::class, 'index'])->middleware('auth');
 Route::get('/jadwal/detail/{id}', [JadwalController::class, 'detail'])->middleware('auth');
 Route::put('/jadwal/update/', [JadwalController::class, 'update'])->middleware('teknisi')->middleware('bukan admin');
 Route::put('/jadwal/update_alasan/', [JadwalController::class, 'update_with_alasan'])->middleware('teknisi')->middleware('bukan admin');
 Route::post('/jadwal/update_alasan_batal/', [JadwalController::class, 'update_with_alasan_batal'])->middleware('teknisi')->middleware('bukan admin');
+Route::put('/jadwal/update-status/{id}', [JadwalController::class, 'updateStatus'])->middleware('auth');
 
 
 Route::get('/update_tahunan', [UpdateDbController::class, 'index'])->middleware('auth')->middleware('manager');
@@ -177,27 +167,22 @@ Route::get('/laporan', [LaporanController::class, 'index'])->middleware('auth')-
 Route::post('/laporan/inspeksi', [LaporanController::class, 'laporan_general_inspection'])->middleware('mahasiswa');
 Route::post('/laporan/maintenance', [LaporanController::class, 'laporan_maintenance'])->middleware('mahasiswa');
 Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_rencana_realisasi'])->middleware('mahasiswa');
+Route::get('/laporan/harian', [LaporanController::class, 'laporan_harian'])->middleware('mahasiswa');
+
+
+// Preventive Maintenance Routes
+Route::get('/preventive', [PreventiveMaintenanceController::class, 'index'])->name('preventive.index')->middleware('auth')->middleware('teknisi');
+Route::get('/preventive/create', [PreventiveMaintenanceController::class, 'create'])->name('preventive.create')->middleware('auth')->middleware('admin');
+Route::post('/preventive', [PreventiveMaintenanceController::class, 'store'])->name('preventive.store')->middleware('admin');
+Route::get('/preventive/{id}', [PreventiveMaintenanceController::class, 'show'])->name('preventive.show')->middleware('auth')->middleware('teknisi');
+Route::get('/preventive/{id}/edit', [PreventiveMaintenanceController::class, 'edit'])->name('preventive.edit')->middleware('auth')->middleware('admin');
+Route::put('/preventive/{id}', [PreventiveMaintenanceController::class, 'update'])->name('preventive.update')->middleware('admin');
+Route::delete('/preventive/{id}', [PreventiveMaintenanceController::class, 'destroy'])->name('preventive.destroy')->middleware('admin');
+Route::post('/preventive/generate-jadwal', [PreventiveMaintenanceController::class, 'generateJadwal'])->name('preventive.generate')->middleware('auth')->middleware('teknisi');
+Route::get('/preventive/jatuh-tempo', [PreventiveMaintenanceController::class, 'getJatuhTempo'])->name('preventive.jatuh-tempo')->middleware('auth')->middleware('teknisi');
 
 
 Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
 Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
 Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
 Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
-
-
-Route::get('/kernel-hydrocyclone', [KernelHydroCycloneController::class, 'index'])->middleware('auth')->middleware('teknisi');
-Route::get('/kernel-hydrocyclone/create', [KernelHydroCycloneController::class, 'create'])->middleware('auth')->middleware('admin');
-Route::post('/kernel-hydrocyclone/create', [KernelHydroCycloneController::class, 'store'])->middleware('admin');
-Route::get('/kernel-hydrocyclone/show/{id}', [KernelHydroCycloneController::class, 'show'])->middleware('auth');
-Route::get('/kernel-hydrocyclone/edit/{id}', [KernelHydroCycloneController::class, 'edit'])->middleware('auth')->middleware('admin');
-Route::put('/kernel-hydrocyclone/update', [KernelHydroCycloneController::class, 'update'])->middleware('admin');
-Route::delete('/kernel-hydrocyclone/destroy', [KernelHydroCycloneController::class, 'destroy'])->middleware('admin');
-
-
-Route::get('/hydrocyclone-losses', [HydroCycloneLossesController::class, 'index'])->middleware('auth')->middleware('teknisi');
-Route::get('/hydrocyclone-losses/create', [HydroCycloneLossesController::class, 'create'])->middleware('auth')->middleware('admin');
-Route::post('/hydrocyclone-losses/create', [HydroCycloneLossesController::class, 'store'])->middleware('admin');
-Route::get('/hydrocyclone-losses/show/{id}', [HydroCycloneLossesController::class, 'show'])->middleware('auth');
-Route::get('/hydrocyclone-losses/edit/{id}', [HydroCycloneLossesController::class, 'edit'])->middleware('auth')->middleware('admin');
-Route::put('/hydrocyclone-losses/update', [HydroCycloneLossesController::class, 'update'])->middleware('admin');
-Route::delete('/hydrocyclone-losses/destroy', [HydroCycloneLossesController::class, 'destroy'])->middleware('admin');

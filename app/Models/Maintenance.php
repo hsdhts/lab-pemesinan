@@ -17,7 +17,14 @@ class Maintenance extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'mesin_id',
+        'nama_maintenance',
+        'deskripsi',
+        'interval',
+        'warna',
+        'foto_kerusakan'
+    ]; 
 
     public function mesin(){
         return $this->belongsTo(Mesin::class);
@@ -37,6 +44,10 @@ class Maintenance extends Model
 
     public function rencana_terakhir(){
         return $this->hasOne(Jadwal::class)->latestOfMany('tanggal_rencana');       
+    }
+
+    public function jadwalPreventive(){
+        return $this->hasMany(JadwalPreventive::class);
     }
 
 }

@@ -77,12 +77,21 @@
         </div>
 
         <div class="mb-3">
-    <label for="tanggal_pembelian" class="form-label">Tanggal Pembelian</label>
-    <input type="date" class="form-control @error('tanggal_pembelian') is-invalid @enderror" id="sparepart" placeholder="Tanggal Pembelian" value="{{ old('tanggal_pembelian') }}" name="tanggal_pembelian">
-    @error('tanggal_pembelian')    
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div> 
+            <label for="stasiun_id" class="form-label">Stasiun</label>
+            <select class="form-control @error('stasiun_id') is-invalid @enderror" id="stasiun_id" name="stasiun_id">
+                <option value="">Pilih Stasiun (Opsional)</option>
+                @foreach($stasiuns as $stasiun)
+                    <option value="{{ $stasiun->id }}" {{ old('stasiun_id') == $stasiun->id ? 'selected' : '' }}>
+                        {{ $stasiun->nama_stasiun }} - {{ $stasiun->kode_stasiun }}
+                    </option>
+                @endforeach
+            </select>
+            @error('stasiun_id')    
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+ 
 
         <div class="mb-3">
         <label for="mesin_image" class="form-label">Gambar Mesin</label>
@@ -92,13 +101,7 @@
         @enderror
     </div>
 
-        <div class="mb-3">
-        <label for="nameTag_image" class="form-label">Name Tag Mesin</label>
-        <input type="file" class="form-control @error('nameTag_image') is-invalid @enderror" id="nameTag_image" name="nameTag_image">
-        @error('nameTag_image')
-        <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
+
 
     <div class="mb-3">
             <label for="spesifikasi" class="form-label">Spesifikasi (opsional)</label>

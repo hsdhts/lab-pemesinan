@@ -7,20 +7,30 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use ShiftOneLabs\LaravelCascadeDeletes\CascadesDeletes;
 
-
-class Ruang extends Model
+class Stasiun extends Model
 {
     use HasFactory;
     use SoftDeletes, CascadesDeletes;
 
-    protected $cascadeDeletes = ['mesin'];
+    protected $cascadeDeletes = ['mesins'];
 
     protected $dates = ['deleted_at'];
 
-
     protected $guarded = ['id'];
 
-    public function mesin(){
+    protected $fillable = [
+        'nama_stasiun',
+        'kode_stasiun',
+        'deskripsi'
+    ];
+
+    public function mesins()
+    {
         return $this->hasMany(Mesin::class);
+    }
+
+    public function jadwalPreventive()
+    {
+        return $this->hasMany(JadwalPreventive::class);
     }
 }
