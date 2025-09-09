@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
+use App\Services\ImageOptimizationService;
 
 class JadwalController extends Controller
 {
@@ -156,15 +157,29 @@ class JadwalController extends Controller
             unset($data_valid['foto_perbaikan']);
         }
 
-        // Handle foto_perbaikan upload
+        // Handle foto_perbaikan upload with optimization
         if ($request->hasFile('foto_perbaikan')) {
+            $imageService = new ImageOptimizationService();
+            
             // Delete old photo if exists
-            if ($jadwal->foto_perbaikan && Storage::exists('public/' . $jadwal->foto_perbaikan)) {
-                Storage::delete('public/' . $jadwal->foto_perbaikan);
+            if ($jadwal->foto_perbaikan) {
+                $imageService->deleteImage($jadwal->foto_perbaikan);
             }
             
-            $foto_path = $request->file('foto_perbaikan')->store('foto_perbaikan', 'public');
-            $jadwal->foto_perbaikan = $foto_path;
+            // Optimize and store new image
+            $foto_path = $imageService->optimizeAndStore(
+                $request->file('foto_perbaikan'),
+                'foto_perbaikan',
+                1200, // max width
+                800,  // max height
+                85    // quality
+            );
+            
+            if ($foto_path) {
+                $jadwal->foto_perbaikan = $foto_path;
+                // Create thumbnail for faster loading
+                $imageService->createThumbnail($foto_path);
+            }
         }
 
         $jadwal->update($data_valid);

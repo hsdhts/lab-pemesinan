@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Services\ImageOptimizationService;
 
 class UpdateMaintenanceController extends Controller
 {
@@ -22,10 +23,22 @@ class UpdateMaintenanceController extends Controller
             'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Handle file upload if exists
+        // Handle file upload with optimization
         $foto_kerusakan = null;
         if ($request->hasFile('foto_kerusakan')) {
-            $foto_kerusakan = $request->file('foto_kerusakan')->store('maintenance_photos', 'public');
+            $imageService = new ImageOptimizationService();
+            $foto_kerusakan = $imageService->optimizeAndStore(
+                $request->file('foto_kerusakan'),
+                'maintenance_photos',
+                1200, // max width
+                800,  // max height
+                85    // quality
+            );
+            
+            // Create thumbnail for faster loading
+            if ($foto_kerusakan) {
+                $imageService->createThumbnail($foto_kerusakan);
+            }
         }
 
         // Create maintenance record
