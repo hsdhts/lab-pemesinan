@@ -12,8 +12,7 @@ use App\Http\Controllers\JadwalSparepartController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\SetupFormController;
 use App\Http\Controllers\SparepartController;
-use App\Http\Controllers\PelumasController;
-use App\Http\Controllers\ProtocolController;
+
 use App\Http\Controllers\SetupMesinController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\SetupMaintenanceController;
@@ -114,20 +113,7 @@ Route::put('/sparepart/update', [SparepartController::class, 'update'])->middlew
 Route::delete('/sparepart/destroy', [SparepartController::class, 'destroy'])->middleware('admin');
 
 
-Route::get('/pelumas', [PelumasController::class, 'index'])->middleware('auth')->middleware('teknisi');
-Route::get('/pelumas/create', [PelumasController::class, 'create'])->middleware('auth')->middleware('admin');
-Route::post('/pelumas/create', [PelumasController::class, 'tambah'])->middleware('admin');
-Route::get('/pelumas/edit/{id}', [PelumasController::class, 'edit'])->middleware('auth')->middleware('admin');
-Route::put('/pelumas/update', [PelumasController::class, 'update'])->middleware('admin');
-Route::delete('/pelumas/destroy', [PelumasController::class, 'destroy'])->middleware('admin');
 
-
-Route::get('/protocol', [ProtocolController::class, 'index'])->middleware('auth')->middleware('teknisi');
-Route::get('/protocol/create', [ProtocolController::class, 'create'])->middleware('auth')->middleware('admin');
-Route::post('/protocol/create', [ProtocolController::class, 'tambah'])->middleware('admin');
-Route::get('/protocol/edit/{id}', [ProtocolController::class, 'edit'])->middleware('auth')->middleware('admin');
-Route::put('/protocol/update', [ProtocolController::class, 'update'])->middleware('admin');
-Route::delete('/protocol/destroy', [ProtocolController::class, 'destroy'])->middleware('admin');
 
 
 Route::get('/stasiun', [StasiunController::class, 'index'])->middleware('auth')->middleware('teknisi');
