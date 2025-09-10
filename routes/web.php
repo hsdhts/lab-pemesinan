@@ -113,9 +113,6 @@ Route::put('/sparepart/update', [SparepartController::class, 'update'])->middlew
 Route::delete('/sparepart/destroy', [SparepartController::class, 'destroy'])->middleware('admin');
 
 
-
-
-
 Route::get('/stasiun', [StasiunController::class, 'index'])->middleware('auth')->middleware('teknisi');
 Route::get('/stasiun/create', [StasiunController::class, 'create'])->middleware('auth')->middleware('admin');
 Route::post('/stasiun/create', [StasiunController::class, 'tambah'])->middleware('admin');
