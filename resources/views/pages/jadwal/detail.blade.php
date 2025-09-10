@@ -200,42 +200,10 @@
 
 
 
-<div class="container m-5">
-
-    <table class="table fs-3 table-row-dashed table-row-gray-600 gy-5 gx-4 gs-7">
-
-        <tr>
-            <td class="text-end"><h2>Form</h2></td>
-            <td class="text-center">Syarat</td>
-            <td></td>
-        </tr>
 
 
 
-        @foreach ($isi_form as $i)
-        <tr>
-            <td class="text-end"><b>{{ $i->form->nama_form }}</b></td>
-            <td class="text-center">{{ $i->form->syarat }}</td>
-            <td>
-                <input type="text" class="form-control" @if(old('isi_form')) value="{{ old('isi_form')[$i->id] }}" @else value="{{ $i->nilai }}" @endif name="isi_form[{{ $i->id }}]" required  @if($jadwal->status > 2 || $jadwal->trashed()) disabled @endif>
-            </td>
-        </tr>
-        @endforeach
 
-
-    </table>
-
-</div>
-
-
-@if($jadwal->status == 2 && Gate::allows('mahasiswa'))
-    <div class="form-check my-4">
-        <input class="form-check-input" type="checkbox" value="divalidasi" name="validasi" id="flexCheckDefault">
-        <label class="form-check-label h2" for="flexCheckDefault">
-        KONFIRMASI
-        </label>
-    </div>
-@endif
 
 
 <div class="container-fluid text-end">
@@ -392,6 +360,10 @@ $(document).ready(function() {
         const formData = new FormData(this);
         formData.set('keterangan', keteranganContent);
 
+        // Add status update to mark as verified by superadmin
+        formData.append('status', '3');
+        formData.append('auto_verify', '1');
+
         // Send AJAX request
         $.ajax({
             url: form.attr('action'),
@@ -406,7 +378,7 @@ $(document).ready(function() {
                 // Show success message
                 Swal.fire({
                     title: 'Berhasil!',
-                    text: 'Data berhasil disimpan.',
+                    text: 'Data berhasil disimpan dan telah diverifikasi oleh superadmin.',
                     icon: 'success',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#3085d6'

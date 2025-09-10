@@ -24,10 +24,15 @@ class HomeController extends Controller
     public function index(){
         $user = Auth::user();
         
-        // Dapatkan stasiun user berdasarkan mesin yang dimiliki
+        // Cache key berdasarkan user dan level untuk optimasi
+        $cacheKey = 'dashboard_data_' . $user->id . '_' . $user->level;
+        
+        // Dapatkan stasiun user berdasarkan mesin yang dimiliki dengan caching
         $userStasiuns = collect();
         if($user->level == 'Mahasiswa' || $user->level == 'Teknisi') {
-            $userStasiuns = $user->mesin()->with('stasiun')->get()->pluck('stasiun.id')->filter()->unique();
+            $userStasiuns = Cache::remember('user_stasiuns_' . $user->id, 300, function() use ($user) {
+                return $user->mesin()->with('stasiun')->get()->pluck('stasiun.id')->filter()->unique();
+            });
         }
 
         if($user->level != 'Mahasiswa'){
@@ -78,37 +83,42 @@ class HomeController extends Controller
             $totalMaintenance = Maintenance::whereRelation('mesin', 'user_id', $user_id)->count();
         }
 
-        // Chart data dengan filtering stasiun
-        $chartQuery = Jadwal::whereYear('tanggal_rencana', now(7)->year);
-        if(($user->level == 'Teknisi' || $user->level == 'Mahasiswa') && $userStasiuns->isNotEmpty()) {
-            $chartQuery->whereHas('maintenance.mesin', function($q) use ($userStasiuns) {
-                $q->whereIn('stasiun_id', $userStasiuns);
-            });
-        } elseif($user->level == 'Mahasiswa') {
-            $chartQuery->whereRelation('maintenance.mesin','user_id', $user->id);
-        }
-        
-        $jadwal_chart_rencana = $chartQuery->get()->groupBy(function($val) {
-            return Carbon::parse($val->tanggal_rencana)->month;
-            })->sort()->map(function($item){
-                return $item->count();
-            });
+        // Chart data dengan filtering stasiun - Optimasi dengan raw query dan caching
+        $jadwal_chart_rencana = Cache::remember('chart_rencana_' . $user->id . '_' . now()->year, 600, function() use ($user, $userStasiuns) {
+            $chartQuery = Jadwal::selectRaw('MONTH(tanggal_rencana) as month, COUNT(*) as count')
+                ->whereYear('tanggal_rencana', now()->year)
+                ->groupBy('month')
+                ->orderBy('month');
+                
+            if(($user->level == 'Teknisi' || $user->level == 'Mahasiswa') && $userStasiuns->isNotEmpty()) {
+                $chartQuery->whereHas('maintenance.mesin', function($q) use ($userStasiuns) {
+                    $q->whereIn('stasiun_id', $userStasiuns);
+                });
+            } elseif($user->level == 'Mahasiswa') {
+                $chartQuery->whereRelation('maintenance.mesin','user_id', $user->id);
+            }
+            
+            return $chartQuery->pluck('count', 'month');
+        });
 
         //ddd($jadwal_chart_rencana);
-        $chartRealisasiQuery = Jadwal::whereYear('tanggal_realisasi', now(7)->year)->where('status', '=', 4);
-        if(($user->level == 'Teknisi' || $user->level == 'Mahasiswa') && $userStasiuns->isNotEmpty()) {
-            $chartRealisasiQuery->whereHas('maintenance.mesin', function($q) use ($userStasiuns) {
-                $q->whereIn('stasiun_id', $userStasiuns);
-            });
-        } elseif($user->level == 'Mahasiswa') {
-            $chartRealisasiQuery->whereRelation('maintenance.mesin','user_id', $user->id);
-        }
-        
-        $jadwal_chart_realisasi = $chartRealisasiQuery->get()->groupBy(function($val) {
-                return Carbon::parse($val->tanggal_rencana)->month;
-            })->sort()->map(function($item){
-                return $item->count();
-            });
+        $jadwal_chart_realisasi = Cache::remember('chart_realisasi_' . $user->id . '_' . now()->year, 600, function() use ($user, $userStasiuns) {
+            $chartRealisasiQuery = Jadwal::selectRaw('MONTH(tanggal_realisasi) as month, COUNT(*) as count')
+                ->whereYear('tanggal_realisasi', now()->year)
+                ->where('status', '=', 4)
+                ->groupBy('month')
+                ->orderBy('month');
+                
+            if(($user->level == 'Teknisi' || $user->level == 'Mahasiswa') && $userStasiuns->isNotEmpty()) {
+                $chartRealisasiQuery->whereHas('maintenance.mesin', function($q) use ($userStasiuns) {
+                    $q->whereIn('stasiun_id', $userStasiuns);
+                });
+            } elseif($user->level == 'Mahasiswa') {
+                $chartRealisasiQuery->whereRelation('maintenance.mesin','user_id', $user->id);
+            }
+            
+            return $chartRealisasiQuery->pluck('count', 'month');
+        });
 
 
         return view('home', ['halaman' => 'Home',

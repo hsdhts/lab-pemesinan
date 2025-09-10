@@ -101,6 +101,8 @@ class JadwalController extends Controller
             'personel' => 'nullable',
             'keterangan' => 'nullable|not_regex:/\'/i',
             'foto_perbaikan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'nullable|numeric',
+            'auto_verify' => 'nullable|string',
         ]);
 
         $data_valid['tanggal_rencana'] = Carbon::parse($data_valid['tanggal_rencana']);
@@ -188,7 +190,16 @@ class JadwalController extends Controller
             $jadwal->increment('status');
         }
 
-        if(isset($request->validasi)){
+        // Handle auto verification from frontend
+        if($request->has('auto_verify') && $request->auto_verify == '1'){
+            $jadwal->status = 3; // Set to verified by superadmin
+            $jadwal->tanggal_realisasi = Carbon::now();
+            $jadwal->save();
+        } elseif($request->has('status') && $request->status == '3'){
+            $jadwal->status = 3; // Set to verified by superadmin
+            $jadwal->tanggal_realisasi = Carbon::now();
+            $jadwal->save();
+        } elseif(isset($request->validasi)){
             $jadwal->increment('status');
             // Auto-set tanggal_realisasi when task is validated/completed
             $jadwal->tanggal_realisasi = Carbon::now();
