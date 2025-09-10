@@ -16,7 +16,7 @@ class Teknisi
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->guest() || !(auth()->user()->level === 'Superadmin' || auth()->user()->level == 'Admin' || auth()->user()->level == 'Manager' || auth()->user()->level == 'Mahasiswa' || auth()->user()->level == 'Teknisi')){
+        if(auth()->guest() || !(auth()->user()->level === 'Superadmin' || auth()->user()->level == 'Admin' || auth()->user()->level == 'Manager' || auth()->user()->level == 'Teknisi')){
             abort(403);
         }
         return $next($request);

@@ -129,9 +129,7 @@ License: For each use you must have a valid license purchased only from above li
 
 						@if(auth()->user()->level === 'Teknisi')
 						<span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Teknisi</span>
-						@elseif(auth()->user()->level === 'Mahasiswa')
-						<span class="badge badge-light-warning fw-bolder fs-8 px-2 py-1 ms-2">Mahasiswa</span>
-						@elseif(auth()->user()->level === 'Manager')
+									@elseif(auth()->user()->level === 'Manager')
 						<span class="badge badge-light-danger fw-bolder fs-8 px-2 py-1 ms-2">Manager</span>
 						@elseif(auth()->user()->level === 'Admin')
 						<span class="badge badge-light-info fw-bolder fs-8 px-2 py-1 ms-2">Admin</span>

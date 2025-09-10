@@ -1,4 +1,4 @@
-								<!--begin::Topbar-->
+<!--begin::Topbar-->
 								<div class="d-flex align-items-stretch flex-shrink-0">
 									<!--begin::Toolbar wrapper-->
 									<div class="d-flex align-items-stretch flex-shrink-0">
@@ -71,8 +71,7 @@
 
 																@if(auth()->user()->level === 'Teknisi')
 																<span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Teknisi</span>
-																@elseif(auth()->user()->level === 'Mahasiswa')
-																<span class="badge badge-light-warning fw-bolder fs-8 px-2 py-1 ms-2">Mahasiswa</span>
+																
 																@elseif(auth()->user()->level === 'Manager')
 																<span class="badge badge-light-danger fw-bolder fs-8 px-2 py-1 ms-2">Manager</span>
 																@elseif(auth()->user()->level === 'Admin')

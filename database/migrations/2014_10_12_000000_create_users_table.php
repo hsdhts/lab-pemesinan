@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('nama');
-            $table->enum('level', ['Teknisi', 'Mahasiswa', 'Manager', 'Admin', 'Superadmin']);
+            $table->enum('level', ['Teknisi', 'Manager', 'Admin', 'Superadmin']);
             $table->string('foto')->nullable();
             $table->string('password')->default(bcrypt('utility'));
             $table->dateTime('last_login')->default(now('Asia/Bangkok'));

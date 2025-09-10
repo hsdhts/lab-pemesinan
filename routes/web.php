@@ -63,22 +63,22 @@ Route::delete('/mesin/destroy', [MesinController::class, 'destroy'])->middleware
 
 
 Route::get('/mesin/maintenance/{id}', [MaintenanceController::class, 'maintenance_mesin'])->middleware('auth')->middleware('teknisi');
-Route::post('/mesin/maintenance/create/', [UpdateMaintenanceController::class, 'create'])->middleware('mahasiswa');
-Route::put('/mesin/maintenance/create/submit/', [UpdateMaintenanceController::class, 'submit_create'])->middleware('mahasiswa');
-Route::put('/mesin/maintenance/edit/', [UpdateMaintenanceController::class, 'edit'])->middleware('mahasiswa');
-Route::put('/mesin/maintenance/edit/submit', [UpdateMaintenanceController::class, 'submit_edit'])->middleware('mahasiswa');
-Route::post('/mesin/maintenance/edit/direct', [UpdateMaintenanceController::class, 'edit_direct'])->middleware('mahasiswa');
-Route::delete('/mesin/maintenance/delete/', [UpdateMaintenanceController::class, 'delete'])->middleware('mahasiswa');
+Route::post('/mesin/maintenance/create/', [UpdateMaintenanceController::class, 'create'])->middleware('teknisi');
+Route::put('/mesin/maintenance/create/submit/', [UpdateMaintenanceController::class, 'submit_create'])->middleware('teknisi');
+Route::put('/mesin/maintenance/edit/', [UpdateMaintenanceController::class, 'edit'])->middleware('teknisi');
+Route::put('/mesin/maintenance/edit/submit', [UpdateMaintenanceController::class, 'submit_edit'])->middleware('teknisi');
+Route::post('/mesin/maintenance/edit/direct', [UpdateMaintenanceController::class, 'edit_direct'])->middleware('teknisi');
+Route::delete('/mesin/maintenance/delete/', [UpdateMaintenanceController::class, 'delete'])->middleware('teknisi');
 
 Route::get('/setupMaintenance/{id}', [SetupMaintenanceController::class, 'setup'])->middleware('auth')->middleware('teknisi');
-Route::post('/setupMaintenance/create', [SetupMaintenanceController::class, 'createPadaSetup'])->middleware('mahasiswa');
-Route::put('/setupMaintenance/edit', [SetupMaintenanceController::class, 'editPadaSetup'])->middleware('mahasiswa');
-Route::delete('/setupMaintenance/destroy', [SetupMaintenanceController::class, 'hapusPadaSetup'])->middleware('mahasiswa');
+Route::post('/setupMaintenance/create', [SetupMaintenanceController::class, 'createPadaSetup'])->middleware('teknisi');
+Route::put('/setupMaintenance/edit', [SetupMaintenanceController::class, 'editPadaSetup'])->middleware('teknisi');
+Route::delete('/setupMaintenance/destroy', [SetupMaintenanceController::class, 'hapusPadaSetup'])->middleware('teknisi');
 
 
-Route::post('/setupForm/create/', [SetupFormController::class, 'createPadaSetup'])->middleware('mahasiswa');
-Route::put('/setupForm/edit/', [SetupFormController::class, 'editPadaSetup'])->middleware('mahasiswa');
-Route::delete('/setupForm/delete/', [SetupFormController::class, 'deletePadaSetup'])->middleware('mahasiswa');
+Route::post('/setupForm/create/', [SetupFormController::class, 'createPadaSetup'])->middleware('teknisi');
+Route::put('/setupForm/edit/', [SetupFormController::class, 'editPadaSetup'])->middleware('teknisi');
+Route::delete('/setupForm/delete/', [SetupFormController::class, 'deletePadaSetup'])->middleware('teknisi');
 
 
 Route::get('/approve', [JadwalApproveController::class, 'index'])->middleware('auth')->middleware('manager')->middleware('admin');
@@ -88,22 +88,20 @@ Route::put('/approve/jadwal/ubah', [JadwalApproveController::class, 'approve_uba
 
 
 Route::post('/maintenance/form/pilih/', [SetupMesinController::class, 'pilih_template'])->middleware('teknisi');
-Route::post('/maintenance/form/pilih/kirim/', [SetupMesinController::class, 'ambil_template'])->middleware('mahasiswa');
-Route::get('/maintenance/form/pilih/', [SetupMesinController::class, 'tampil_template'])->middleware('auth')->middleware('mahasiswa');
+Route::post('/maintenance/form/pilih/kirim/', [SetupMesinController::class, 'ambil_template'])->middleware('teknisi');
+Route::get('/maintenance/form/pilih/', [SetupMesinController::class, 'tampil_template'])->middleware('auth')->middleware('teknisi');
 
-Route::post('/maintenance/ubah_template/', [SetupMesinController::class, 'ubah_template'])->middleware('mahasiswa');
+Route::post('/maintenance/ubah_template/', [SetupMesinController::class, 'ubah_template'])->middleware('teknisi');
 
-Route::post('/maintenance/create/', [SetupMesinController::class, 'create_maintenance'])->middleware('mahasiswa');
-Route::post('/maintenance/edit/', [SetupMesinController::class, 'edit_maintenance'])->middleware('mahasiswa');
-Route::post('/maintenance/delete/', [SetupMesinController::class, 'delete_maintenance'])->middleware('mahasiswa');
+Route::post('/maintenance/create/', [SetupMesinController::class, 'create_maintenance'])->middleware('teknisi');
+Route::post('/maintenance/edit/', [SetupMesinController::class, 'edit_maintenance'])->middleware('teknisi');
+Route::post('/maintenance/delete/', [SetupMesinController::class, 'delete_maintenance'])->middleware('teknisi');
 
-Route::put('/maintenance/submit/', [MaintenanceController::class, 'update'])->middleware('mahasiswa');
+Route::put('/maintenance/submit/', [MaintenanceController::class, 'update'])->middleware('teknisi');
 
-Route::post('/maintenance/form/create/', [SetupMesinController::class, 'create_maintenance_form'])->middleware('mahasiswa');
-Route::post('/maintenance/form/update/', [SetupMesinController::class, 'update_maintenance_form'])->middleware('mahasiswa');
-Route::post('/maintenance/form/delete/', [SetupMesinController::class, 'delete_maintenance_form'])->middleware('mahasiswa');
-
-//Route::post('/maintenance/action/create/', [MaintenanceController::class, 'maintenance_add']);
+Route::post('/maintenance/form/create/', [SetupMesinController::class, 'create_maintenance_form'])->middleware('teknisi');
+Route::post('/maintenance/form/update/', [SetupMesinController::class, 'update_maintenance_form'])->middleware('teknisi');
+Route::post('/maintenance/form/delete/', [SetupMesinController::class, 'delete_maintenance_form'])->middleware('teknisi');
 
 Route::get('/sparepart', [SparepartController::class, 'index'])->middleware('auth')->middleware('teknisi');
 Route::get('/sparepart/create', [SparepartController::class, 'create'])->middleware('auth')->middleware('admin');
@@ -111,7 +109,6 @@ Route::post('/sparepart/create', [SparepartController::class, 'tambah'])->middle
 Route::get('/sparepart/edit/{id}', [SparepartController::class, 'edit'])->middleware('auth')->middleware('admin');
 Route::put('/sparepart/update', [SparepartController::class, 'update'])->middleware('admin');
 Route::delete('/sparepart/destroy', [SparepartController::class, 'destroy'])->middleware('admin');
-
 
 Route::get('/stasiun', [StasiunController::class, 'index'])->middleware('auth')->middleware('teknisi');
 Route::get('/stasiun/create', [StasiunController::class, 'create'])->middleware('auth')->middleware('admin');
@@ -139,11 +136,11 @@ Route::get('/update_tahunan', [UpdateDbController::class, 'index'])->middleware(
 Route::post('/update_tahunan', [UpdateDbController::class, 'update_jadwal'])->middleware('manager');
 
 
-Route::get('/laporan', [LaporanController::class, 'index'])->middleware('auth')->middleware('mahasiswa');
-Route::post('/laporan/inspeksi', [LaporanController::class, 'laporan_general_inspection'])->middleware('mahasiswa');
-Route::post('/laporan/maintenance', [LaporanController::class, 'laporan_maintenance'])->middleware('mahasiswa');
-Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_rencana_realisasi'])->middleware('mahasiswa');
-Route::get('/laporan/harian', [LaporanController::class, 'laporan_harian'])->middleware('mahasiswa');
+Route::get('/laporan', [LaporanController::class, 'index'])->middleware('auth')->middleware('teknisi');
+Route::post('/laporan/inspeksi', [LaporanController::class, 'laporan_general_inspection'])->middleware('teknisi');
+Route::post('/laporan/maintenance', [LaporanController::class, 'laporan_maintenance'])->middleware('teknisi');
+Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_rencana_realisasi'])->middleware('teknisi');
+Route::get('/laporan/harian', [LaporanController::class, 'laporan_harian'])->middleware('teknisi');
 
 
 // Preventive Maintenance Routes

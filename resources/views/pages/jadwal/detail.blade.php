@@ -112,7 +112,7 @@
 
   @endif
 
-@canany(['mahasiswa', 'admin'])
+@canany(['teknisi', 'admin'])
 <form action="/laporan/maintenance" class="text-center" method="POST">
 @csrf
 

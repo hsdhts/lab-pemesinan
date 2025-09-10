@@ -33,7 +33,7 @@
     <select id="level" name="level" class="form-select">
         <option value="{{ old('level', $user->level) }}" selected>{{ old('level', $user->level) }}</option>
         <option value="Teknisi">Teknisi</option>
-        <option value="Mahasiswa">Mahasiswa</option>
+        
         <option value="Manager">Manager</option>
         <option value="Admin">Admin</option>
       </select>
