@@ -69,16 +69,11 @@
 															<div class="fw-bolder d-flex align-items-center fs-5">
 																{{ auth()->user()->nama }}
 
-																@if(auth()->user()->level === 'Teknisi')
-																<span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Teknisi</span>
-																
-																@elseif(auth()->user()->level === 'Manager')
-																<span class="badge badge-light-danger fw-bolder fs-8 px-2 py-1 ms-2">Manager</span>
-																@elseif(auth()->user()->level === 'Admin')
-																<span class="badge badge-light-info fw-bolder fs-8 px-2 py-1 ms-2">Admin</span>
-																@else
-																<span class="badge badge-dark fw-bolder fs-8 px-2 py-1 ms-2">Superadmin</span>
-																@endif
+																@if(auth()->user()->level === 'Admin')
+												<span class="badge badge-light-info fw-bolder fs-8 px-2 py-1 ms-2">Admin</span>
+												@else
+												<span class="badge badge-dark fw-bolder fs-8 px-2 py-1 ms-2">Superadmin</span>
+												@endif
 																
 															
 															</div>

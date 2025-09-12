@@ -27,81 +27,40 @@ class HomeController extends Controller
         // Cache key berdasarkan user dan level untuk optimasi
         $cacheKey = 'dashboard_data_' . $user->id . '_' . $user->level;
         
-        // Dapatkan stasiun user berdasarkan mesin yang dimiliki dengan caching
-        $userStasiuns = collect();
-        if($user->level == 'Teknisi') {
-            $userStasiuns = Cache::remember('user_stasiuns_' . $user->id, 300, function() use ($user) {
-                return $user->mesin()->with('stasiun')->get()->pluck('stasiun.id')->filter()->unique();
-            });
-        }
+        // Tampilkan semua data untuk Admin dan Superadmin
+        $query = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin.stasiun'])
+                    ->where('status', '<', 3);
+        
+        $hari_ini = $query->get();
 
-        if($user->level != 'Teknisi'){
-            // Untuk non-teknisi, tampilkan semua data atau filter berdasarkan stasiun jika teknisi
-            $query = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin.stasiun'])
-                        ->where('status', '<', 3);
-            
-            if($user->level == 'Teknisi' && $userStasiuns->isNotEmpty()) {
-                $query->whereHas('maintenance.mesin', function($q) use ($userStasiuns) {
-                    $q->whereIn('stasiun_id', $userStasiuns);
-                });
-            }
-            
-            $hari_ini = $query->get();
+        $mesinQuery = Mesin::with(['user', 'stasiun']);
+        $seminggu = $mesinQuery->get();
+        
+        $sebulan = User::where('users.level', '!=', 'Superadmin')->get();
+        
+        $totalJadwalQuery = Jadwal::query();
+        $totalJadwal = $totalJadwalQuery->get();
+        
+        $maintenanceQuery = Maintenance::query();
+        $totalMaintenance = $maintenanceQuery->count();
 
-            $mesinQuery = Mesin::with(['user', 'stasiun']);
-            if($user->level == 'Teknisi' && $userStasiuns->isNotEmpty()) {
-                $mesinQuery->whereIn('stasiun_id', $userStasiuns);
-            }
-            $seminggu = $mesinQuery->get();
-            
-            $sebulan = User::where('users.level', '!=', 'Superadmin')->get();
-            
-            $totalJadwalQuery = Jadwal::query();
-            if($user->level == 'Teknisi' && $userStasiuns->isNotEmpty()) {
-                $totalJadwalQuery->whereHas('maintenance.mesin', function($q) use ($userStasiuns) {
-                    $q->whereIn('stasiun_id', $userStasiuns);
-                });
-            }
-            $totalJadwal = $totalJadwalQuery->get();
-            
-            $maintenanceQuery = Maintenance::query();
-            if($user->level == 'Teknisi' && $userStasiuns->isNotEmpty()) {
-                $maintenanceQuery->whereHas('mesin', function($q) use ($userStasiuns) {
-                    $q->whereIn('stasiun_id', $userStasiuns);
-                });
-            }
-            $totalMaintenance = $maintenanceQuery->count();
-        }
-
-        // Chart data dengan filtering stasiun - Optimasi dengan raw query dan caching
-        $jadwal_chart_rencana = Cache::remember('chart_rencana_' . $user->id . '_' . now()->year, 600, function() use ($user, $userStasiuns) {
+        // Chart data untuk Admin dan Superadmin - Optimasi dengan raw query dan caching
+        $jadwal_chart_rencana = Cache::remember('chart_rencana_' . $user->id . '_' . now()->year, 600, function() {
             $chartQuery = Jadwal::selectRaw('MONTH(tanggal_rencana) as month, COUNT(*) as count')
                 ->whereYear('tanggal_rencana', now()->year)
                 ->groupBy('month')
                 ->orderBy('month');
-                
-            if($user->level == 'Teknisi' && $userStasiuns->isNotEmpty()) {
-                $chartQuery->whereHas('maintenance.mesin', function($q) use ($userStasiuns) {
-                    $q->whereIn('stasiun_id', $userStasiuns);
-                });
-            }
             
             return $chartQuery->pluck('count', 'month');
         });
 
         //ddd($jadwal_chart_rencana);
-        $jadwal_chart_realisasi = Cache::remember('chart_realisasi_' . $user->id . '_' . now()->year, 600, function() use ($user, $userStasiuns) {
+        $jadwal_chart_realisasi = Cache::remember('chart_realisasi_' . $user->id . '_' . now()->year, 600, function() {
             $chartRealisasiQuery = Jadwal::selectRaw('MONTH(tanggal_realisasi) as month, COUNT(*) as count')
                 ->whereYear('tanggal_realisasi', now()->year)
                 ->where('status', '=', 4)
                 ->groupBy('month')
                 ->orderBy('month');
-                
-            if($user->level == 'Teknisi' && $userStasiuns->isNotEmpty()) {
-                $chartRealisasiQuery->whereHas('maintenance.mesin', function($q) use ($userStasiuns) {
-                    $q->whereIn('stasiun_id', $userStasiuns);
-                });
-            }
             
             return $chartRealisasiQuery->pluck('count', 'month');
         });

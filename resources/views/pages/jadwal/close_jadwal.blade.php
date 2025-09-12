@@ -818,7 +818,7 @@ function resetFilter() {
     itemsPerPage = 12;
     currentPage = 1;
 
-    applyFiltersAndSort();
+    filterTable();
 }
 
 // Enhanced search function with debouncing
@@ -826,7 +826,7 @@ let searchTimeout;
 function handleSearch() {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
-        applyFiltersAndSort();
+        filterTable();
     }, 300); // 300ms delay for better performance
 }
 
@@ -878,7 +878,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (mesinSelect) {
         // Filter saat mengubah pilihan mesin
-        mesinSelect.addEventListener('change', applyFiltersAndSort);
+        mesinSelect.addEventListener('change', filterTable);
     }
 
     // Add reset button functionality
@@ -929,25 +929,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, index * 100);
     });
 
-    // Initialize data and pagination
-    initializeData();
-
-    // Add event listeners for sorting and pagination controls
-    const sortSelect = document.getElementById('sortSelect');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
-            changeSort(this.value);
-        });
-    }
-
-    const itemsPerPageSelect = document.getElementById('itemsPerPageSelect');
-    if (itemsPerPageSelect) {
-        itemsPerPageSelect.addEventListener('change', function() {
-            changeItemsPerPage(this.value);
-        });
-    }
-
-    // Inisialisasi filter saat halaman dimuat
     filterTable();
 });
 

@@ -112,7 +112,7 @@
 
   @endif
 
-@canany(['teknisi', 'admin'])
+@canany(['admin'])
 <form action="/laporan/maintenance" class="text-center" method="POST">
 @csrf
 
@@ -225,7 +225,7 @@
         </a>
 
 
-@if(!$jadwal->trashed() && (Gate::allows('superadmin') || Gate::denies('admin')))
+@if(!$jadwal->trashed() && (Gate::allows('superadmin', 'admin') || Gate::allows('admin')))
 
 <button type="submit" class="btn btn-lg btn-primary d-inline" @if($jadwal->status > 2 && !$jadwal->trashed()) disabled @endif>
     <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil008.svg-->
@@ -250,7 +250,7 @@
         <td class="fw-bold fs-1">Pemakaian Sparepart</td>
 
         <td class="text-end">
-            @if($jadwal->status < 3 && !$jadwal->trashed() && (Gate::allows('superadmin') || Gate::denies('admin')))
+            @if($jadwal->status < 3 && !$jadwal->trashed() && (Gate::allows('superadmin') || Gate::allows('admin')))
             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
                     <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="white"/>
@@ -371,9 +371,6 @@ $(document).ready(function() {
             data: formData,
             processData: false,
             contentType: false,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
             success: function(response) {
                 // Show success message
                 Swal.fire({
