@@ -47,6 +47,7 @@ License: For each use you must have a valid license purchased only from above li
 		 <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
 		<!--end::Global Stylesheets Bundle-->
 
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="\assets\sweetAlert\sweetalert2.all.min.js"></script>
 		@include('partials.customJs')
 	</head>
@@ -127,13 +128,7 @@ License: For each use you must have a valid license purchased only from above li
 					<span>Role :&nbsp;</span>
 					@auth
 
-						@if(auth()->user()->level === 'Teknisi')
-						<span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Teknisi</span>
-						@elseif(auth()->user()->level === 'Mahasiswa')
-						<span class="badge badge-light-warning fw-bolder fs-8 px-2 py-1 ms-2">Mahasiswa</span>
-						@elseif(auth()->user()->level === 'Manager')
-						<span class="badge badge-light-danger fw-bolder fs-8 px-2 py-1 ms-2">Manager</span>
-						@elseif(auth()->user()->level === 'Admin')
+						@if(auth()->user()->level === 'Admin')
 						<span class="badge badge-light-info fw-bolder fs-8 px-2 py-1 ms-2">Admin</span>
 						@elseif(auth()->user()->level === 'Superadmin')
 						<span class="badge badge-dark fw-bolder fs-8 px-2 py-1 ms-2">Superadmin</span>

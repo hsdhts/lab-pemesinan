@@ -88,8 +88,12 @@
 
                     <div class="mb-3">
                         <label for="foto_kerusakan" class="form-label float-start">Foto Kerusakan</label>
-                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-form" id="foto_kerusakan" name="foto_kerusakan" accept="image/*">
-                        <div class="form-text">Upload foto kerusakan (opsional)</div>
+                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-form" id="foto_kerusakan" name="foto_kerusakan[]" accept="image/*" multiple onchange="previewMultipleImages(this)">
+                        <div class="form-text">Upload foto kerusakan - Bisa pilih beberapa foto sekaligus</div>
+                        <!-- Preview multiple images -->
+                        <div id="image_preview_container" class="mt-2" style="display: none;">
+                            <div class="row" id="image_previews"></div>
+                        </div>
                     </div>
 
                     <div class="my-5">
@@ -136,12 +140,137 @@
 @section('customJs')
     <script>
 
+// Global variables to store selected files
+let selectedFiles = [];
 
 function clearValue(){
     x = document.getElementsByClassName('clear-form');
     x.forEach(element => {
         element.value = ""
     });
+    // Reset preview
+    document.getElementById('image_preview_container').style.display = 'none';
+    document.getElementById('image_previews').innerHTML = '';
+    // Reset selected files array
+    selectedFiles = [];
 }
+
+// Function to preview multiple images
+function previewMultipleImages(input) {
+    if (input.files && input.files.length > 0) {
+        // Add new files to existing array
+        Array.from(input.files).forEach(file => {
+            if (file.type.startsWith('image/')) {
+                selectedFiles.push(file);
+            }
+        });
+
+        // Clear input to allow selecting same files again
+        input.value = '';
+
+        // Re-render all previews
+        renderPreviews();
+    }
+}
+
+// Function to render previews
+function renderPreviews() {
+    const previewContainer = document.getElementById('image_previews');
+    const containerDisplay = document.getElementById('image_preview_container');
+    
+    // Clear previous previews
+    previewContainer.innerHTML = '';
+    
+    if (selectedFiles.length > 0) {
+        containerDisplay.style.display = 'block';
+        
+        selectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-md-3 col-sm-4 col-6 mb-3';
+                colDiv.setAttribute('data-file-index', index);
+
+                colDiv.innerHTML = `
+                    <div class="position-relative">
+                        <img src="${e.target.result}" alt="Preview ${index + 1}" class="img-fluid rounded" style="width: 100%; height: 120px; object-fit: cover; cursor: pointer;" onclick="showImageModal('${e.target.result}', 'Preview ${index + 1}')">
+                        <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="removePreviewImage(this, ${index})" style="width: 25px; height: 25px; padding: 0; border-radius: 50%;">
+                            <i class="fas fa-times" style="font-size: 12px;"></i>
+                        </button>
+                        <div class="text-center mt-1">
+                            <small class="text-muted">${file.name}</small>
+                        </div>
+                    </div>
+                `;
+                
+                previewContainer.appendChild(colDiv);
+            };
+            reader.readAsDataURL(file);
+        });
+    } else {
+        containerDisplay.style.display = 'none';
+    }
+}
+
+// Function to remove preview image
+function removePreviewImage(button, index) {
+    // Remove file from array
+    selectedFiles.splice(index, 1);
+    
+    // Re-render all previews
+    renderPreviews();
+}
+
+// Function to show image in modal
+function showImageModal(src, title) {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('imagePreviewModal');
+    if (!modal) {
+        const modalHtml = `
+            <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="imagePreviewModalLabel">Preview Foto</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <img id="imagePreviewModalImg" src="" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        modal = document.getElementById('imagePreviewModal');
+    }
+
+    document.getElementById('imagePreviewModalLabel').textContent = title;
+    document.getElementById('imagePreviewModalImg').src = src;
+
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+}
+
+// Handle form submission to transfer files from array to input
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form[action="/mesin/maintenance/create/"]');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            console.log('Form submitted, selected files:', selectedFiles.length);
+            const fileInput = document.getElementById('foto_kerusakan');
+            if (selectedFiles.length > 0) {
+                const dt = new DataTransfer();
+                selectedFiles.forEach(file => {
+                    console.log('Adding file:', file.name, file.type);
+                    dt.items.add(file);
+                });
+                fileInput.files = dt.files;
+                console.log('Files transferred to input:', fileInput.files.length);
+            }
+        });
+    }
+});
+
     </script>
 @endsection

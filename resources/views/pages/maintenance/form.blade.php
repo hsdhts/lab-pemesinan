@@ -54,9 +54,6 @@
 <!--end::Alert-->
 @endif
 
-
-
-
 <div class="modal fade" tabindex="-1" id="kt_modal_1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -87,14 +84,14 @@
                         <input type="text" class="form-control @error('nama_maintenance') is-invalid @enderror clear-form" id="maintenance_form" value="{{ old('nama_maintenance') }}" name="nama_maintenance">
                     </div>
 
-
-
-
-
                     <div class="mb-3">
                         <label for="foto_kerusakan" class="form-label float-start">Foto Kerusakan</label>
-                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-form" id="foto_kerusakan" name="foto_kerusakan" accept="image/*">
-                        <div class="form-text">Upload foto kerusakan (opsional)</div>
+                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-form" id="foto_kerusakan" name="foto_kerusakan[]" accept="image/*" multiple>
+                        <div class="form-text">Upload foto kerusakan (opsional) - Anda dapat memilih beberapa foto sekaligus</div>
+                        <!-- Preview container untuk multiple images -->
+                        <div id="create_image_preview_container" class="mt-3" style="display: none;">
+                            <div class="row" id="create_image_previews"></div>
+                        </div>
                     </div>
 
                     <div class="my-5">
@@ -103,8 +100,6 @@
                         </div>
 
                       </div>
-
-
             </div>
 
             <div class="modal-footer">
@@ -180,8 +175,17 @@
 
                     <div class="mb-3">
                         <label for="edit_foto_kerusakan" class="form-label float-start">Foto Kerusakan</label>
-                        <input type="file" class="form-control clear-form" id="edit_foto_kerusakan" name="foto_kerusakan" accept="image/*">
-                        <div class="form-text">Upload foto kerusakan (opsional)</div>
+                        <input type="file" class="form-control clear-form" id="edit_foto_kerusakan" name="foto_kerusakan[]" accept="image/*" multiple>
+                        <div class="form-text">Upload foto kerusakan baru - Anda dapat memilih beberapa foto sekaligus</div>
+                        <!-- Preview container untuk multiple images -->
+                        <div id="edit_image_preview_container" class="mt-3" style="display: none;">
+                            <div class="row" id="edit_image_previews"></div>
+                        </div>
+                        <!-- Container untuk foto yang sudah ada -->
+                        <div id="existing_images_container" class="mt-3" style="display: none;">
+                            <label class="form-label">Foto yang sudah ada:</label>
+                            <div class="row" id="existing_images"></div>
+                        </div>
                     </div>
 
                     <div class="my-5">
@@ -254,7 +258,7 @@
                     </svg>
                 </span>
         <!--end::Svg Icon-->
-                <span>Maintenance</span>
+                <span>Breakdown</span>
             </button>
     @endif
 
@@ -300,11 +304,11 @@
 @section('content_right')
     @if($attach->get('aksi') == 'tambah')
         <div class="p-5 bg-primary h1 text-light fw-bolder text-center rounded">
-            Tambahkan Maintenance
+            Tambahkan Breakdown
         </div>
     @elseif($attach->get('aksi') == 'edit')
     <div class="p-5 bg-primary h1 text-light fw-bolder text-center rounded">
-        Ubah Maintenance
+        Ubah Breakdown
     </div>
     @endif
 @if($setup->isNotEmpty())
@@ -408,11 +412,23 @@
         }
 
 
+        // Global variables to store selected files
+        let createSelectedFiles = [];
+        let editSelectedFiles = [];
+
         function clearValue(){
             x = document.getElementsByClassName('clear-form');
             x.forEach(element => {
                 element.value = ""
             });
+            // Reset preview
+            document.getElementById('create_image_preview_container').style.display = 'none';
+            document.getElementById('create_image_previews').innerHTML = '';
+            document.getElementById('edit_image_preview_container').style.display = 'none';
+            document.getElementById('edit_image_previews').innerHTML = '';
+            // Reset selected files arrays
+            createSelectedFiles = [];
+            editSelectedFiles = [];
         }
 
 
@@ -433,6 +449,199 @@
 
         $('.time').datetimepicker({
             format: 'LT'
+        });
+
+        document.getElementById('foto_kerusakan').addEventListener('change', function(e) {
+            previewCreateMultipleImages(e.target);
+        });
+
+        document.getElementById('edit_foto_kerusakan').addEventListener('change', function(e) {
+            previewEditMultipleImages(e.target);
+        });
+
+        // Function to preview multiple images for create form
+        function previewCreateMultipleImages(input) {
+            if (input.files && input.files.length > 0) {
+                // Add new files to existing array
+                Array.from(input.files).forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        createSelectedFiles.push(file);
+                    }
+                });
+
+                input.value = '';
+
+                // Re-render all previews
+                renderCreatePreviews();
+            }
+        }
+
+        // Function to preview multiple images for edit form
+        function previewEditMultipleImages(input) {
+            if (input.files && input.files.length > 0) {
+                Array.from(input.files).forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        editSelectedFiles.push(file);
+                    }
+                });
+
+                input.value = '';
+
+                // Re-render all previews
+                renderEditPreviews();
+            }
+        }
+
+        // Function to render create previews
+        function renderCreatePreviews() {
+            const previewContainer = document.getElementById('create_image_previews');
+            const containerDisplay = document.getElementById('create_image_preview_container');
+
+            // Clear previous previews
+            previewContainer.innerHTML = '';
+
+            if (createSelectedFiles.length > 0) {
+                containerDisplay.style.display = 'block';
+
+                createSelectedFiles.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const colDiv = document.createElement('div');
+                        colDiv.className = 'col-md-3 col-sm-4 col-6 mb-3';
+                        colDiv.setAttribute('data-file-index', index);
+
+                        colDiv.innerHTML = `
+                            <div class="position-relative">
+                                <img src="${e.target.result}" alt="Preview ${index + 1}" class="img-fluid rounded" style="width: 100%; height: 150px; object-fit: cover; cursor: pointer;" onclick="showImageModal('${e.target.result}', 'Preview ${index + 1}')">
+                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="removeCreatePreviewImage(this, ${index})" style="width: 25px; height: 25px; padding: 0; border-radius: 50%;">
+                                    <i class="fas fa-times" style="font-size: 12px;"></i>
+                                </button>
+                                <div class="text-center mt-1">
+                                    <small class="text-muted">${file.name}</small>
+                                </div>
+                            </div>
+                        `;
+
+                        previewContainer.appendChild(colDiv);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                containerDisplay.style.display = 'none';
+            }
+        }
+
+        // Function to render edit previews
+        function renderEditPreviews() {
+            const previewContainer = document.getElementById('edit_image_previews');
+            const containerDisplay = document.getElementById('edit_image_preview_container');
+
+            // Clear previous previews
+            previewContainer.innerHTML = '';
+
+            if (editSelectedFiles.length > 0) {
+                containerDisplay.style.display = 'block';
+
+                editSelectedFiles.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const colDiv = document.createElement('div');
+                        colDiv.className = 'col-md-3 col-sm-4 col-6 mb-3';
+                        colDiv.setAttribute('data-file-index', index);
+
+                        colDiv.innerHTML = `
+                            <div class="position-relative">
+                                <img src="${e.target.result}" alt="Preview ${index + 1}" class="img-fluid rounded" style="width: 100%; height: 150px; object-fit: cover; cursor: pointer;" onclick="showImageModal('${e.target.result}', 'Preview ${index + 1}')">
+                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="removeEditPreviewImage(this, ${index})" style="width: 25px; height: 25px; padding: 0; border-radius: 50%;">
+                                    <i class="fas fa-times" style="font-size: 12px;"></i>
+                                </button>
+                                <div class="text-center mt-1">
+                                    <small class="text-muted">${file.name}</small>
+                                </div>
+                            </div>
+                        `;
+
+                        previewContainer.appendChild(colDiv);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                containerDisplay.style.display = 'none';
+            }
+        }
+
+        // Function to remove create preview image
+        function removeCreatePreviewImage(button, index) {
+            createSelectedFiles.splice(index, 1);
+
+            renderCreatePreviews();
+        }
+
+        function removeEditPreviewImage(button, index) {
+            editSelectedFiles.splice(index, 1);
+
+            renderEditPreviews();
+        }
+
+        function showImageModal(src, title) {
+            // Create modal if it doesn't exist
+            let modal = document.getElementById('imagePreviewModal');
+            if (!modal) {
+                const modalHtml = `
+                    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="imagePreviewModalLabel">Preview Foto</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <img id="imagePreviewModalImg" src="" alt="" class="img-fluid">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('imagePreviewModal');
+            }
+
+            document.getElementById('imagePreviewModalLabel').textContent = title;
+            document.getElementById('imagePreviewModalImg').src = src;
+
+            const bootstrapModal = new bootstrap.Modal(modal);
+            bootstrapModal.show();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const createForm = document.querySelector('form[action="/maintenance/create/"]');
+            const editForm = document.querySelector('form[action="/maintenance/edit/"]');
+
+            if (createForm) {
+                createForm.addEventListener('submit', function(e) {
+                    const fileInput = document.getElementById('foto_kerusakan');
+                    if (createSelectedFiles.length > 0) {
+                        const dt = new DataTransfer();
+                        createSelectedFiles.forEach(file => {
+                            dt.items.add(file);
+                        });
+                        fileInput.files = dt.files;
+                    }
+                });
+            }
+
+            if (editForm) {
+                editForm.addEventListener('submit', function(e) {
+                    const fileInput = document.getElementById('edit_foto_kerusakan');
+                    if (editSelectedFiles.length > 0) {
+                        const dt = new DataTransfer();
+                        editSelectedFiles.forEach(file => {
+                            dt.items.add(file);
+                        });
+                        fileInput.files = dt.files;
+                    }
+                });
+            }
         });
 
     </script>

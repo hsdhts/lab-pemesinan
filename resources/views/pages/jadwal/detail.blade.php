@@ -112,7 +112,7 @@
 
   @endif
 
-@canany(['mahasiswa', 'admin'])
+@canany(['admin'])
 <form action="/laporan/maintenance" class="text-center" method="POST">
 @csrf
 
@@ -200,42 +200,10 @@
 
 
 
-<div class="container m-5">
-
-    <table class="table fs-3 table-row-dashed table-row-gray-600 gy-5 gx-4 gs-7">
-
-        <tr>
-            <td class="text-end"><h2>Form</h2></td>
-            <td class="text-center">Syarat</td>
-            <td></td>
-        </tr>
 
 
 
-        @foreach ($isi_form as $i)
-        <tr>
-            <td class="text-end"><b>{{ $i->form->nama_form }}</b></td>
-            <td class="text-center">{{ $i->form->syarat }}</td>
-            <td>
-                <input type="text" class="form-control" @if(old('isi_form')) value="{{ old('isi_form')[$i->id] }}" @else value="{{ $i->nilai }}" @endif name="isi_form[{{ $i->id }}]" required  @if($jadwal->status > 2 || $jadwal->trashed()) disabled @endif>
-            </td>
-        </tr>
-        @endforeach
 
-
-    </table>
-
-</div>
-
-
-@if($jadwal->status == 2 && Gate::allows('mahasiswa'))
-    <div class="form-check my-4">
-        <input class="form-check-input" type="checkbox" value="divalidasi" name="validasi" id="flexCheckDefault">
-        <label class="form-check-label h2" for="flexCheckDefault">
-        KONFIRMASI
-        </label>
-    </div>
-@endif
 
 
 <div class="container-fluid text-end">
@@ -257,7 +225,7 @@
         </a>
 
 
-@if(!$jadwal->trashed() && (Gate::allows('superadmin') || Gate::denies('admin')))
+@if(!$jadwal->trashed() && (Gate::allows('superadmin', 'admin') || Gate::allows('admin')))
 
 <button type="submit" class="btn btn-lg btn-primary d-inline" @if($jadwal->status > 2 && !$jadwal->trashed()) disabled @endif>
     <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil008.svg-->
@@ -282,7 +250,7 @@
         <td class="fw-bold fs-1">Pemakaian Sparepart</td>
 
         <td class="text-end">
-            @if($jadwal->status < 3 && !$jadwal->trashed() && (Gate::allows('superadmin') || Gate::denies('admin')))
+            @if($jadwal->status < 3 && !$jadwal->trashed() && (Gate::allows('superadmin') || Gate::allows('admin')))
             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
                     <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="white"/>
@@ -392,6 +360,10 @@ $(document).ready(function() {
         const formData = new FormData(this);
         formData.set('keterangan', keteranganContent);
 
+        // Add status update to mark as verified by superadmin
+        formData.append('status', '3');
+        formData.append('auto_verify', '1');
+
         // Send AJAX request
         $.ajax({
             url: form.attr('action'),
@@ -406,7 +378,7 @@ $(document).ready(function() {
                 // Show success message
                 Swal.fire({
                     title: 'Berhasil!',
-                    text: 'Data berhasil disimpan.',
+                    text: 'Data berhasil disimpan dan telah diverifikasi oleh superadmin.',
                     icon: 'success',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#3085d6'

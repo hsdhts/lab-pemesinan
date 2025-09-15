@@ -7,12 +7,8 @@ use Illuminate\Http\Request;
 
 class SetupMaintenanceController extends Controller
 {
-    //
-
-    // This method is no longer needed as categories have been removed
-
     private function create($request){
-    
+
         $dataValid = $request->validate([
             'nama_setup_maintenance' => 'required',
             'periode' => 'required|numeric|min:1',
@@ -20,14 +16,12 @@ class SetupMaintenanceController extends Controller
             'warna' => 'required'
         ]);
 
-
         SetupMaintenance::create($dataValid);
 
     }
 
-
     private function delete($request){
-        
+
         $dataValid = $request->validate([
             'id' => 'required|numeric',
         ]);
@@ -48,7 +42,7 @@ class SetupMaintenanceController extends Controller
     }
 
     public function createPadaSetup(Request $request){
-    
+
         $this->create($request);
         return redirect('/')->with('tambah', 'p');
     }
@@ -64,10 +58,4 @@ class SetupMaintenanceController extends Controller
 
         return redirect('/')->with('edit', 'p');
     }
-
-
-
-
-
-
 }

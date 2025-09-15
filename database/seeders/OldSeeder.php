@@ -31,7 +31,7 @@ class OldSeeder extends Seeder
                 User::create([
                     'username' => 'fadhilah',
                     'nama' => 'Fadhilah Alya',
-                    'level' => 'Teknisi',
+                    'level' => 'Admin',
                     'password' => bcrypt('1234'),
                     'last_login' => Carbon::parse('12-05-2023 23:34:45'),
                 ]);

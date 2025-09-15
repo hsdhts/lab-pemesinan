@@ -253,7 +253,21 @@
                 <tr>
                     <td colspan="3">
                         <b>Foto Kerusakan:</b><br>
-                        <img src="{{ asset('storage/' . $m->foto_kerusakan) }}" alt="Foto Kerusakan" class="img-fluid mt-2" style="max-width: 200px; border-radius: 5px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage({{ json_encode(asset('storage/' . $m->foto_kerusakan)) }}, {{ json_encode($m->nama_maintenance) }})">
+                        @php
+                            $fotoArray = is_string($m->foto_kerusakan) ? json_decode($m->foto_kerusakan, true) : $m->foto_kerusakan;
+                            if (!is_array($fotoArray)) {
+                                $fotoArray = [$m->foto_kerusakan];
+                            }
+                        @endphp
+                        <div class="row mt-2">
+                            @foreach($fotoArray as $index => $foto)
+                                @if($foto)
+                                <div class="col-md-3 col-sm-4 col-6 mb-2">
+                                    <img src="{{ asset('storage/' . $foto) }}" alt="Foto Kerusakan {{ $index + 1 }}" class="img-fluid" style="width: 100%; height: 120px; object-fit: cover; border-radius: 5px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage({{ json_encode(asset('storage/' . $foto)) }}, {{ json_encode($m->nama_maintenance . ' - Foto ' . ($index + 1)) }})">
+                                </div>
+                                @endif
+                            @endforeach
+                        </div>
                     </td>
                 </tr>
                 @endif
@@ -321,11 +335,11 @@
 
                     <div class="mb-3">
                         <label for="foto_kerusakan" class="form-label float-start">Foto Kerusakan</label>
-                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-form" id="foto_kerusakan" name="foto_kerusakan" accept="image/*" onchange="previewCreateImage(this)">
-                        <div class="form-text">Upload foto kerusakan (opsional)</div>
-                        <!-- Preview gambar -->
-                        <div id="create_image_preview" class="mt-2" style="display: none;">
-                            <img id="create_preview_img" src="" alt="Preview" class="img-fluid" style="max-width: 200px; border-radius: 5px;">
+                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-form" id="foto_kerusakan" name="foto_kerusakan[]" accept="image/*" multiple onchange="previewCreateMultipleImages(this)">
+                        <div class="form-text">Upload foto kerusakan - Bisa pilih beberapa foto sekaligus</div>
+                        <!-- Preview multiple images -->
+                        <div id="create_image_preview_container" class="mt-2" style="display: none;">
+                            <div class="row" id="create_image_previews"></div>
                         </div>
                     </div>
 
@@ -409,11 +423,17 @@
 
                     <div class="mb-3">
                         <label for="edit_foto_kerusakan" class="form-label float-start">Foto Kerusakan</label>
-                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-edit-form" id="edit_foto_kerusakan" name="foto_kerusakan" accept="image/*" onchange="previewImage(this)">
-                        <div class="form-text">Upload foto kerusakan baru (opsional)</div>
-                        <!-- Preview gambar -->
-                        <div id="image_preview" class="mt-2" style="display: none;">
-                            <img id="preview_img" src="" alt="Preview" class="img-fluid" style="max-width: 200px; border-radius: 5px;">
+                        <input type="file" class="form-control @error('foto_kerusakan') is-invalid @enderror clear-edit-form" id="edit_foto_kerusakan" name="foto_kerusakan[]" accept="image/*" multiple onchange="previewEditMultipleImages(this)">
+                        <div class="form-text">Upload foto kerusakan baru (opsional) - Bisa pilih beberapa foto sekaligus</div>
+                        <!-- Preview existing images -->
+                        <div id="existing_images_container" class="mt-2" style="display: none;">
+                            <label class="form-label">Foto yang sudah ada:</label>
+                            <div class="row" id="existing_images"></div>
+                        </div>
+                        <!-- Preview new images -->
+                        <div id="edit_image_preview_container" class="mt-2" style="display: none;">
+                            <label class="form-label">Preview foto baru:</label>
+                            <div class="row" id="edit_image_previews"></div>
                         </div>
                     </div>
 
@@ -487,22 +507,62 @@
 
 @section('customJs')
     <script>
+
+let createSelectedFiles = [];
+let editSelectedFiles = [];
+
 function setEdit(index, nama_maintenance, warna, foto_kerusakan = null){
     document.getElementById('edit_index').value = index;
     document.getElementById('edit_maintenance_form').value = nama_maintenance;
     document.getElementById('edit_warna').value = warna;
-    
+
     // Tampilkan foto yang sudah ada jika tersedia
-    const preview = document.getElementById('image_preview');
-    const previewImg = document.getElementById('preview_img');
-    
+    const existingContainer = document.getElementById('existing_images_container');
+    const existingImages = document.getElementById('existing_images');
+
+    // Clear existing images
+    existingImages.innerHTML = '';
+
     if (foto_kerusakan) {
-        previewImg.src = foto_kerusakan;
-        preview.style.display = 'block';
+        // Handle multiple images or single image
+        let fotoArray;
+        try {
+            fotoArray = JSON.parse(foto_kerusakan);
+            if (!Array.isArray(fotoArray)) {
+                fotoArray = [foto_kerusakan];
+            }
+        } catch (e) {
+            fotoArray = [foto_kerusakan];
+        }
+
+        fotoArray.forEach((foto, index) => {
+            if (foto) {
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-md-3 col-sm-4 col-6 mb-2';
+                colDiv.innerHTML = `
+                    <div class="position-relative">
+                        <img src="${foto}" alt="Existing ${index + 1}" class="img-fluid" style="width: 100%; height: 120px; object-fit: cover; border-radius: 5px; cursor: pointer;" onclick="showImage('${foto}', 'Foto ${index + 1}')">
+                        <div class="text-center mt-1">
+                            <small class="text-muted">Foto ${index + 1}</small>
+                        </div>
+                    </div>
+                `;
+                existingImages.appendChild(colDiv);
+            }
+        });
+
+        existingContainer.style.display = 'block';
     } else {
-        preview.style.display = 'none';
+        existingContainer.style.display = 'none';
     }
+
+    // Clear new image previews
+    document.getElementById('edit_image_preview_container').style.display = 'none';
+    document.getElementById('edit_image_previews').innerHTML = '';
     
+    // Reset selected files array for edit
+    editSelectedFiles = [];
+
     updatePreview(); // Update preview saat modal dibuka
     }
 
@@ -512,10 +572,13 @@ function clearValue(){
         element.value = ""
     });
     // Reset preview untuk create modal
-    document.getElementById('create_image_preview').style.display = 'none';
+    document.getElementById('create_image_preview_container').style.display = 'none';
+    document.getElementById('create_image_previews').innerHTML = '';
     document.getElementById('create_warna').value = '#0095E8';
     document.getElementById('create_color_preview').style.color = '#0095E8';
     document.getElementById('create_color_preview').textContent = 'Preview Warna';
+    // Reset selected files array
+    createSelectedFiles = [];
 }
 
 function clearEditValue(){
@@ -526,9 +589,14 @@ function clearEditValue(){
     document.getElementById('edit_index').value = "";
     document.getElementById('edit_warna').value = "#0095E8";
     // Reset preview
-    document.getElementById('image_preview').style.display = 'none';
+    document.getElementById('existing_images_container').style.display = 'none';
+    document.getElementById('existing_images').innerHTML = '';
+    document.getElementById('edit_image_preview_container').style.display = 'none';
+    document.getElementById('edit_image_previews').innerHTML = '';
     document.getElementById('color_preview').style.color = '#0095E8';
     document.getElementById('color_preview').textContent = 'Preview Warna';
+    // Reset selected files array
+    editSelectedFiles = [];
 }
 
 function showImage(imageSrc, maintenanceName) {
@@ -536,54 +604,178 @@ function showImage(imageSrc, maintenanceName) {
     document.getElementById('imageModalTitle').textContent = 'Foto Kerusakan - ' + maintenanceName;
 }
 
-// Fungsi untuk preview gambar yang dipilih (edit modal)
-function previewImage(input) {
-    const preview = document.getElementById('image_preview');
-    const previewImg = document.getElementById('preview_img');
-    
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            previewImg.src = e.target.result;
-            preview.style.display = 'block';
-        }
-        
-        reader.readAsDataURL(input.files[0]);
-    } else {
-        preview.style.display = 'none';
+function previewCreateMultipleImages(input) {
+    const previewContainer = document.getElementById('create_image_previews');
+    const containerDisplay = document.getElementById('create_image_preview_container');
+
+    if (input.files && input.files.length > 0) {
+        // Add new files to existing array
+        Array.from(input.files).forEach(file => {
+            if (file.type.startsWith('image/')) {
+                createSelectedFiles.push(file);
+            }
+        });
+
+        // Clear input to allow selecting same files again
+        input.value = '';
+
+        // Re-render all previews
+        renderCreatePreviews();
     }
 }
 
-// Fungsi untuk preview gambar yang dipilih (create modal)
-function previewCreateImage(input) {
-    const preview = document.getElementById('create_image_preview');
-    const previewImg = document.getElementById('create_preview_img');
+function renderCreatePreviews() {
+    const previewContainer = document.getElementById('create_image_previews');
+    const containerDisplay = document.getElementById('create_image_preview_container');
     
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
+    // Clear previous previews
+    previewContainer.innerHTML = '';
+    
+    if (createSelectedFiles.length > 0) {
+        containerDisplay.style.display = 'block';
         
-        reader.onload = function(e) {
-            previewImg.src = e.target.result;
-            preview.style.display = 'block';
-        }
-        
-        reader.readAsDataURL(input.files[0]);
+        createSelectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-md-3 col-sm-4 col-6 mb-3';
+                colDiv.setAttribute('data-file-index', index);
+
+                colDiv.innerHTML = `
+                    <div class="position-relative">
+                        <img src="${e.target.result}" alt="Preview ${index + 1}" class="img-fluid rounded" style="width: 100%; height: 120px; object-fit: cover; cursor: pointer;" onclick="showImageModal('${e.target.result}', 'Preview ${index + 1}')">
+                        <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="removeCreatePreviewImage(this, ${index})" style="width: 25px; height: 25px; padding: 0; border-radius: 50%;">
+                            <i class="fas fa-times" style="font-size: 12px;"></i>
+                        </button>
+                        <div class="text-center mt-1">
+                            <small class="text-muted">${file.name}</small>
+                        </div>
+                    </div>
+                `;
+
+                previewContainer.appendChild(colDiv);
+            };
+            reader.readAsDataURL(file);
+        });
     } else {
-        preview.style.display = 'none';
+        containerDisplay.style.display = 'none';
     }
 }
 
-// Fungsi untuk update preview warna dan nama (edit modal)
+function previewEditMultipleImages(input) {
+    const previewContainer = document.getElementById('edit_image_previews');
+    const containerDisplay = document.getElementById('edit_image_preview_container');
+
+    if (input.files && input.files.length > 0) {
+        // Add new files to existing array
+        Array.from(input.files).forEach(file => {
+            if (file.type.startsWith('image/')) {
+                editSelectedFiles.push(file);
+            }
+        });
+
+        // Clear input to allow selecting same files again
+        input.value = '';
+
+        // Re-render all previews
+        renderEditPreviews();
+    }
+}
+
+function renderEditPreviews() {
+    const previewContainer = document.getElementById('edit_image_previews');
+    const containerDisplay = document.getElementById('edit_image_preview_container');
+    
+    // Clear previous previews
+    previewContainer.innerHTML = '';
+    
+    if (editSelectedFiles.length > 0) {
+        containerDisplay.style.display = 'block';
+        
+        editSelectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-md-3 col-sm-4 col-6 mb-3';
+                colDiv.setAttribute('data-file-index', index);
+
+                colDiv.innerHTML = `
+                    <div class="position-relative">
+                        <img src="${e.target.result}" alt="Preview ${index + 1}" class="img-fluid rounded" style="width: 100%; height: 120px; object-fit: cover; cursor: pointer;" onclick="showImageModal('${e.target.result}', 'Preview ${index + 1}')">
+                        <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="removeEditPreviewImage(this, ${index})" style="width: 25px; height: 25px; padding: 0; border-radius: 50%;">
+                            <i class="fas fa-times" style="font-size: 12px;"></i>
+                        </button>
+                        <div class="text-center mt-1">
+                            <small class="text-muted">${file.name}</small>
+                        </div>
+                    </div>
+                `;
+
+                previewContainer.appendChild(colDiv);
+            };
+            reader.readAsDataURL(file);
+        });
+    } else {
+        containerDisplay.style.display = 'none';
+    }
+}
+
+// Function to remove preview image from create form
+function removeCreatePreviewImage(button, fileIndex) {
+    // Remove file from array
+    createSelectedFiles.splice(fileIndex, 1);
+    
+    // Re-render previews
+    renderCreatePreviews();
+}
+
+// Function to remove preview image from edit form
+function removeEditPreviewImage(button, fileIndex) {
+    // Remove file from array
+    editSelectedFiles.splice(fileIndex, 1);
+    
+    // Re-render previews
+    renderEditPreviews();
+}
+
+// Function to show image in modal
+function showImageModal(src, title) {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('imagePreviewModal');
+    if (!modal) {
+        const modalHtml = `
+            <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="imagePreviewModalLabel">Preview Foto</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <img id="imagePreviewModalImg" src="" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        modal = document.getElementById('imagePreviewModal');
+    }
+
+    document.getElementById('imagePreviewModalLabel').textContent = title;
+    document.getElementById('imagePreviewModalImg').src = src;
+
+    const bootstrapModal = new bootstrap.Modal(modal);
+    bootstrapModal.show();
+}
+
 function updatePreview() {
     const namaBreakdown = document.getElementById('edit_maintenance_form').value;
     const warna = document.getElementById('edit_warna').value;
     const colorPreview = document.getElementById('color_preview');
-    
-    // Update warna preview
+
     colorPreview.style.color = warna;
-    
-    // Update teks preview dengan nama breakdown atau default
+
     if (namaBreakdown.trim() !== '') {
         colorPreview.textContent = namaBreakdown;
     } else {
@@ -591,16 +783,13 @@ function updatePreview() {
     }
 }
 
-// Fungsi untuk update preview warna dan nama (create modal)
 function updateCreatePreview() {
     const namaBreakdown = document.getElementById('maintenance_form').value;
     const warna = document.getElementById('create_warna').value;
     const colorPreview = document.getElementById('create_color_preview');
-    
-    // Update warna preview
+
     colorPreview.style.color = warna;
-    
-    // Update teks preview dengan nama breakdown atau default
+
     if (namaBreakdown.trim() !== '') {
         colorPreview.textContent = namaBreakdown;
     } else {
@@ -614,6 +803,47 @@ $('.input-group.date').datepicker({
     language: "id",
     autoclose: true,
     todayHighlight: true
+});
+
+// Handle form submission to include selected files
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle create form submission
+    const createForm = document.querySelector('form[action="/mesin/maintenance/create/"]');
+    if (createForm) {
+        createForm.addEventListener('submit', function(e) {
+            console.log('Create form submitted, selected files:', createSelectedFiles.length);
+            const fileInput = document.getElementById('foto_kerusakan');
+            if (createSelectedFiles.length > 0) {
+                // Create new DataTransfer object to hold files
+                const dt = new DataTransfer();
+                createSelectedFiles.forEach(file => {
+                    console.log('Adding file:', file.name, file.type);
+                    dt.items.add(file);
+                });
+                fileInput.files = dt.files;
+                console.log('Files transferred to input:', fileInput.files.length);
+            }
+        });
+    }
+    
+    // Handle edit form submission
+    const editForm = document.querySelector('form[action="/mesin/maintenance/edit/direct"]');
+    if (editForm) {
+        editForm.addEventListener('submit', function(e) {
+            console.log('Edit form submitted, selected files:', editSelectedFiles.length);
+            const fileInput = document.getElementById('edit_foto_kerusakan');
+            if (editSelectedFiles.length > 0) {
+                // Create new DataTransfer object to hold files
+                const dt = new DataTransfer();
+                editSelectedFiles.forEach(file => {
+                    console.log('Adding file:', file.name, file.type);
+                    dt.items.add(file);
+                });
+                fileInput.files = dt.files;
+                console.log('Files transferred to input:', fileInput.files.length);
+            }
+        });
+    }
 });
 
 

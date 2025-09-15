@@ -21,7 +21,6 @@ class SetupMesinController extends Controller
 
         $mesin = Mesin::with(['maintenance', 'form'])->find($data_valid['id']);
 
-        // Langsung redirect ke halaman maintenance yang menampilkan list existing dan form tambah
         return redirect('/mesin/maintenance/' . $mesin->id);
     }
 
@@ -43,12 +42,9 @@ class SetupMesinController extends Controller
             'id' => 'required|numeric',
         ]);
 
-        // Instead of loading all templates, create an empty setup for user to fill manually
-        // This prevents automatic creation of multiple maintenance records
         $setup = collect([]);
 
         $mesin = collect(Cache::get('mesin'));
-        // Category functionality removed
 
         Cache::forget('attach');
         Cache::put('setup', $setup, now()->addMinutes(30));
@@ -73,19 +69,23 @@ class SetupMesinController extends Controller
         $data_valid = $request->validate([
             'nama_maintenance' => 'required',
             'warna' => 'required',
-            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan' => 'nullable|array',
+            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $fotoKerusakanPath = null;
+        $fotoKerusakanPaths = [];
 
-        // Handle file upload untuk foto_kerusakan
         if ($request->hasFile('foto_kerusakan')) {
-            $file = $request->file('foto_kerusakan');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $fotoKerusakanPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+            foreach ($request->file('foto_kerusakan') as $file) {
+                $fileName = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
+                $fotoPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+                if ($fotoPath) {
+                    $fotoKerusakanPaths[] = $fotoPath;
+                }
+            }
         }
 
-        $data_valid['foto_kerusakan'] = $fotoKerusakanPath;
+        $data_valid['foto_kerusakan'] = !empty($fotoKerusakanPaths) ? json_encode($fotoKerusakanPaths) : null;
         $data_valid['setupForm'] = collect([]);
 
         $setup->push(collect($data_valid));
@@ -111,7 +111,8 @@ class SetupMesinController extends Controller
             'index' => 'required|numeric',
             'nama_maintenance' => 'required',
             'warna' => 'required',
-            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan' => 'nullable|array',
+            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]));
 
         $index_maintenance = $data_valid['index'];
@@ -120,14 +121,17 @@ class SetupMesinController extends Controller
 
         $data_valid->forget('index');
 
-        // Handle file upload untuk foto_kerusakan
         if ($request->hasFile('foto_kerusakan')) {
-            $file = $request->file('foto_kerusakan');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $fotoKerusakanPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
-            $data_valid['foto_kerusakan'] = $fotoKerusakanPath;
+            $fotoKerusakanPaths = [];
+            foreach ($request->file('foto_kerusakan') as $file) {
+                $fileName = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
+                $fotoPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+                if ($fotoPath) {
+                    $fotoKerusakanPaths[] = $fotoPath;
+                }
+            }
+            $data_valid['foto_kerusakan'] = !empty($fotoKerusakanPaths) ? json_encode($fotoKerusakanPaths) : null;
         } else {
-            // Jika tidak ada file baru, pertahankan foto lama
             $data_valid['foto_kerusakan'] = $maintenance->get('foto_kerusakan');
         }
 
@@ -214,7 +218,6 @@ class SetupMesinController extends Controller
         ]));
 
         $setup[$data_valid['maintenance_index']]->get('setupForm')[$data_valid['form_index']] = $form;
-        // dd($setup[$data_valid['maintenance_index']]->get('setupForm')[$data_valid['form_index']]->get('nama_setup_form'));
 
        $mesin = collect(Cache::get('mesin'));
        $attach = collect(Cache::get('attach'));
@@ -250,8 +253,4 @@ class SetupMesinController extends Controller
         $mesin = collect(Cache::get('mesin'));
         return redirect('/mesin/maintenance/' . $mesin->get('id'))->with('reminder', 'p');
     }
-
-
-
-
 }

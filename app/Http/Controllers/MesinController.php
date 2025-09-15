@@ -8,26 +8,25 @@ use App\Models\Stasiun;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Storage;
 
 
 
 class MesinController extends Controller
 {
-    //
     public function index(Request $request) {
         if ($request->ajax()) {
             $mesin = Mesin::with(['user', 'stasiun']);
-    
+
             return DataTables::of($mesin)
                 ->addColumn('nama_mesin', function ($mesin) {
                     return '<a class="text-dark" href="/mesin/detail/' . $mesin->id . '">' . $mesin->nama_mesin . '</a>';
                 })
                 ->addColumn('user', function (Mesin $mesin) {
-                    return $mesin->user ? $mesin->user->nama : ''; // Periksa apakah user tidak null
+                    return $mesin->user ? $mesin->user->nama : '';
                 })
                 ->addColumn('stasiun', function (Mesin $mesin) {
-                    return $mesin->stasiun ? $mesin->stasiun->nama_stasiun : 'Belum Ditentukan'; // Periksa apakah stasiun tidak null
+                    return $mesin->stasiun ? $mesin->stasiun->nama_stasiun : 'Belum Ditentukan';
                 })
                 ->addColumn('aksi', function ($mesin) {
                     return view('partials.tombolAksiMesin', ['editPath' => '/mesin/edit/', 'id' => $mesin->id, 'deletePath' => '/mesin/destroy/']);
@@ -44,13 +43,13 @@ class MesinController extends Controller
                 ->addIndexColumn()
                 ->toJson();
         }
-    
+
         return view('pages.mesin.index', ['halaman' => 'Mesin', 'link_to_create' => '/mesin/create']);
     }
-    
+
 
     public function create(){
-    
+
         //dd("abdwjgakwd");
         return view('pages.mesin.create',
         [
@@ -86,7 +85,7 @@ class MesinController extends Controller
     public function detail($id){
 
         $mesin = Mesin::findOrFail($id);
-    
+
         return view('pages.mesin.detail', ['halaman' => 'Mesin', 'mesin' => $mesin]);
     }
 
@@ -94,7 +93,7 @@ class MesinController extends Controller
         $mesin = Mesin::findOrFail($id);
         $user = User::all();
         $stasiuns = Stasiun::all();
-    
+
         return view('pages.mesin.update', [
             'halaman' => 'Mesin',
             'mesin' => $mesin,
@@ -102,9 +101,6 @@ class MesinController extends Controller
             'stasiuns' => $stasiuns
         ]);
     }
-    
-    
-
 
     public function update(Request $request){
         $dataValid = $request->validate([
@@ -115,14 +111,12 @@ class MesinController extends Controller
             'stasiun_id' => 'nullable|exists:stasiuns,id',
             'mesin_image' => 'image|file|max:1024',
         ]);
-    
+
         $mesin = Mesin::findOrFail($dataValid['id']);
 
     if ($request->hasFile('mesin_image')) {
-        // Hapus gambar lama (jika ada) sebelum menyimpan yang baru
         Storage::disk('public')->delete($mesin->mesin_image);
 
-        // Simpan gambar baru
         $dataValid['mesin_image'] = $request->file('mesin_image')->storePublicly('mesin_images', 'public');
     }
 
@@ -133,7 +127,7 @@ class MesinController extends Controller
 
 
     public function destroy(Request $request){
-        
+
         $id = $request->validate([
             'id' => 'required|numeric'
         ]);
@@ -141,7 +135,6 @@ class MesinController extends Controller
         Mesin::destroy($id);
 
         return redirect('/mesin')->with('hapus', 'p');
-
     }
-   
+
 }
