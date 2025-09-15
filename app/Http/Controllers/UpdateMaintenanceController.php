@@ -20,26 +20,34 @@ class UpdateMaintenanceController extends Controller
             'mesin_id' => 'required|numeric',
             'nama_maintenance' => 'required|string|max:255',
             'warna' => 'required|string',
-            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan' => 'nullable|array',
+            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Handle file upload with optimization
-        $foto_kerusakan = null;
+        // Handle multiple file uploads with optimization
+        $foto_kerusakan_paths = [];
         if ($request->hasFile('foto_kerusakan')) {
             $imageService = new ImageOptimizationService();
-            $foto_kerusakan = $imageService->optimizeAndStore(
-                $request->file('foto_kerusakan'),
-                'maintenance_photos',
-                1200, // max width
-                800,  // max height
-                85    // quality
-            );
-            
-            // Create thumbnail for faster loading
-            if ($foto_kerusakan) {
-                $imageService->createThumbnail($foto_kerusakan);
+
+            foreach ($request->file('foto_kerusakan') as $file) {
+                $foto_path = $imageService->optimizeAndStore(
+                    $file,
+                    'maintenance_photos',
+                    1200, // max width
+                    800,  // max height
+                    85    // quality
+                );
+
+                if ($foto_path) {
+                    $foto_kerusakan_paths[] = $foto_path;
+                    // Create thumbnail for faster loading
+                    $imageService->createThumbnail($foto_path);
+                }
             }
         }
+
+        // Convert array to JSON string for database storage
+        $foto_kerusakan = !empty($foto_kerusakan_paths) ? json_encode($foto_kerusakan_paths) : null;
 
         // Create maintenance record
         $maintenance = Maintenance::create([
@@ -49,11 +57,10 @@ class UpdateMaintenanceController extends Controller
             'foto_kerusakan' => $foto_kerusakan
         ]);
 
-        // Create jadwal for this maintenance
         $objectJadwal = new JadwalController();
         $objectJadwal->create_jadwal($maintenance->id);
 
-        return redirect('/mesin/maintenance/' . $request->mesin_id)->with('success', 'Maintenance berhasil ditambahkan!');
+        return redirect('/mesin/maintenance/' . $request->mesin_id)->with('success', 'Breakdown berhasil ditambahkan!');
     }
 
     public function edit(Request $request){
@@ -82,7 +89,6 @@ class UpdateMaintenanceController extends Controller
                    })
            ]);
            });
-           //ddd('aku rapopo');
            $attach = collect(['aksi' => 'edit', 'maintenance_id' => $data_valid['maintenance_id']]);
 
            Cache::put('attach', $attach, now()->addMinutes(30));
@@ -152,7 +158,7 @@ class UpdateMaintenanceController extends Controller
 
             }
 
-            // Remove all future scheduled maintenance for this maintenance_id
+
             Jadwal::where('maintenance_id', $attach['maintenance_id'])->where('tanggal_rencana', '>=', now())->forceDelete();
 
             // Update past scheduled maintenance status
@@ -160,12 +166,6 @@ class UpdateMaintenanceController extends Controller
             $jadwal->increment('status', 20);
 
             Maintenance::destroy($attach['maintenance_id']);
-            // DATA YANG SEBELUMNYA DILAKUKAN SOFT DELETE, TARUH LOGIKANNYA DISINI
-            // SILAHKAN DITENTUKAN APAKAH DATA YANG SEBELUMNYA PERLU DITAMPILKAN ATAU TIDAK.
-
-            //$maintenance->forceDelete();
-
-
             return redirect('/jadwal/'.$mesin['id']);
 
 
@@ -185,7 +185,6 @@ class UpdateMaintenanceController extends Controller
                 return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
             }
 
-            // Delete photo if exists
             if ($maintenance->foto_kerusakan && Storage::disk('public')->exists($maintenance->foto_kerusakan)) {
                 Storage::disk('public')->delete($maintenance->foto_kerusakan);
             }
@@ -204,7 +203,8 @@ class UpdateMaintenanceController extends Controller
             'mesin_id' => 'required|numeric',
             'nama_maintenance' => 'required|string|max:255',
             'warna' => 'required|string',
-            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan' => 'nullable|array',
+            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -218,18 +218,41 @@ class UpdateMaintenanceController extends Controller
                 return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
             }
 
-            $fotoKerusakanPath = $maintenance->foto_kerusakan; // Keep existing photo
+            $fotoKerusakanPath = $maintenance->foto_kerusakan;
 
-            // Handle file upload untuk foto_kerusakan baru
             if ($request->hasFile('foto_kerusakan')) {
-                // Delete old photo if exists
-                if ($maintenance->foto_kerusakan && Storage::disk('public')->exists($maintenance->foto_kerusakan)) {
-                    Storage::disk('public')->delete($maintenance->foto_kerusakan);
+                if ($maintenance->foto_kerusakan) {
+                    $oldPhotos = json_decode($maintenance->foto_kerusakan, true);
+                    if (is_array($oldPhotos)) {
+                        foreach ($oldPhotos as $oldPhoto) {
+                            if (Storage::disk('public')->exists($oldPhoto)) {
+                                Storage::disk('public')->delete($oldPhoto);
+                            }
+                        }
+                    } elseif (Storage::disk('public')->exists($maintenance->foto_kerusakan)) {
+                        Storage::disk('public')->delete($maintenance->foto_kerusakan);
+                    }
                 }
 
-                $file = $request->file('foto_kerusakan');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $fotoKerusakanPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+                $imageService = new ImageOptimizationService();
+                $foto_kerusakan_paths = [];
+
+                foreach ($request->file('foto_kerusakan') as $file) {
+                    $foto_path = $imageService->optimizeAndStore(
+                        $file,
+                        'maintenance_photos',
+                        1200, // max width
+                        800,  // max height
+                        85    // quality
+                    );
+
+                    if ($foto_path) {
+                        $foto_kerusakan_paths[] = $foto_path;
+                        $imageService->createThumbnail($foto_path);
+                    }
+                }
+
+                $fotoKerusakanPath = !empty($foto_kerusakan_paths) ? json_encode($foto_kerusakan_paths) : null;
             }
 
             $maintenance->update([

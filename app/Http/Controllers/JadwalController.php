@@ -153,22 +153,18 @@ class JadwalController extends Controller
 
         $jadwal = Jadwal::find($data_valid['id']);
 
-        // Remove tanggal_realisasi and foto_perbaikan from data_valid if they exist
         unset($data_valid['tanggal_realisasi']);
         if (isset($data_valid['foto_perbaikan'])) {
             unset($data_valid['foto_perbaikan']);
         }
 
-        // Handle foto_perbaikan upload with optimization
         if ($request->hasFile('foto_perbaikan')) {
             $imageService = new ImageOptimizationService();
-            
-            // Delete old photo if exists
+
             if ($jadwal->foto_perbaikan) {
                 $imageService->deleteImage($jadwal->foto_perbaikan);
             }
-            
-            // Optimize and store new image
+
             $foto_path = $imageService->optimizeAndStore(
                 $request->file('foto_perbaikan'),
                 'foto_perbaikan',
@@ -176,10 +172,9 @@ class JadwalController extends Controller
                 800,  // max height
                 85    // quality
             );
-            
+
             if ($foto_path) {
                 $jadwal->foto_perbaikan = $foto_path;
-                // Create thumbnail for faster loading
                 $imageService->createThumbnail($foto_path);
             }
         }
@@ -190,7 +185,6 @@ class JadwalController extends Controller
             $jadwal->increment('status');
         }
 
-        // Handle auto verification from frontend
         if($request->has('auto_verify') && $request->auto_verify == '1'){
             $jadwal->status = 3; // Set to verified by superadmin
             $jadwal->tanggal_realisasi = Carbon::now();
@@ -240,7 +234,7 @@ class JadwalController extends Controller
             }
 
             $jadwal = Jadwal::find($id);
-            
+
             if (!$jadwal) {
                 return response()->json([
                     'success' => false,

@@ -14,7 +14,7 @@ class AddFotoKerusakanToMaintenancesTable extends Migration
     public function up()
     {
         Schema::table('maintenances', function (Blueprint $table) {
-            $table->string('foto_kerusakan')->nullable()->after('warna');
+            $table->json('foto_kerusakan')->nullable()->after('warna');
         });
     }
 

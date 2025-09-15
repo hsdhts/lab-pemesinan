@@ -23,24 +23,24 @@ class HomeController extends Controller
 
     public function index(){
         $user = Auth::user();
-        
+
         // Cache key berdasarkan user dan level untuk optimasi
         $cacheKey = 'dashboard_data_' . $user->id . '_' . $user->level;
-        
+
         // Tampilkan semua data untuk Admin dan Superadmin
         $query = Jadwal::with(['maintenance', 'maintenance.mesin', 'maintenance.mesin.stasiun'])
                     ->where('status', '<', 3);
-        
+
         $hari_ini = $query->get();
 
         $mesinQuery = Mesin::with(['user', 'stasiun']);
         $seminggu = $mesinQuery->get();
-        
+
         $sebulan = User::where('users.level', '!=', 'Superadmin')->get();
-        
+
         $totalJadwalQuery = Jadwal::query();
         $totalJadwal = $totalJadwalQuery->get();
-        
+
         $maintenanceQuery = Maintenance::query();
         $totalMaintenance = $maintenanceQuery->count();
 
@@ -50,7 +50,7 @@ class HomeController extends Controller
                 ->whereYear('tanggal_rencana', now()->year)
                 ->groupBy('month')
                 ->orderBy('month');
-            
+
             return $chartQuery->pluck('count', 'month');
         });
 
@@ -61,7 +61,7 @@ class HomeController extends Controller
                 ->where('status', '=', 4)
                 ->groupBy('month')
                 ->orderBy('month');
-            
+
             return $chartRealisasiQuery->pluck('count', 'month');
         });
 
@@ -75,9 +75,6 @@ class HomeController extends Controller
          'total_jadwal' => $totalJadwal,
          'total_maintenance' => $totalMaintenance,
         ]);
-
-
-
     }
 
 
@@ -95,17 +92,8 @@ class HomeController extends Controller
 
     public function load_test(){
 
-
-//dd($collection);
-
-        // Category functionality removed - setup data no longer available
         $setup = collect();
         Cache::put('setup', $setup, 60);
-
-
-        //$maintenance = new Maintenance($setup->toArray());
-        //dd($maintenance);
-       // dd($kategori);
         return view('test_page.load_setup');
     }
 
@@ -134,13 +122,8 @@ class HomeController extends Controller
 
         $data = ['mesin' => $mesin, 'jadwal' => $jadwal];
 
-        //return view('reports.inspeksi', $data);
-
         $pdf = PDF::loadView('reports.inspeksi', $data);
 
         return $pdf->download('invoice.pdf');
     }
-
-
-
 }

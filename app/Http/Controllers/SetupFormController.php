@@ -17,9 +17,7 @@ class SetupFormController extends Controller
 
         SetupForm::create($data_valid);
 
-
     }
-
 
     private function edit($request){
         $data_valid = $request->validate([
@@ -40,21 +38,17 @@ class SetupFormController extends Controller
 
     }
 
-
     public function createPadaSetup(Request $request){
         $this->create($request);
 
         return redirect('/')->with('tambah', 'p');
     }
-    
 
     public function editPadaSetup(Request $request){
         $this->edit($request);
 
         return redirect('/')->with('edit', 'p');
     }
-
-
 
     public function deletePadaSetup(Request $request){
         $this->delete($request);

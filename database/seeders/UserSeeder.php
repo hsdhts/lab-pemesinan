@@ -15,10 +15,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        //
-    
-
-    
         User::create([
             'username' => 'admin',
             'nama' => 'Just Admin',

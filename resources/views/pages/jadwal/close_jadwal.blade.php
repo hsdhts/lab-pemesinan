@@ -735,17 +735,13 @@ function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, t
             }
         });
 
-        // Update counter total records
         updateRecordCounter(visibleItems);
 
-        // Tampilkan pesan jika tidak ada data yang ditemukan
         updateNoDataMessage(visibleItems);
 
-        // Update load more button visibility
         updateLoadMoreButton(visibleItems);
     }
 
-// Fungsi untuk update counter total records
     function updateRecordCounter(visibleItems) {
         const totalRecordsElement = document.getElementById('totalRecords');
         if (totalRecordsElement) {
@@ -753,17 +749,14 @@ function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, t
         }
     }
 
-    // Fungsi untuk menampilkan pesan "tidak ada data"
     function updateNoDataMessage(visibleItems) {
         const listContainer = document.getElementById('historyList');
 
-        // Hapus pesan "tidak ada data" yang sudah ada
         const existingMessage = document.getElementById('noDataMessage');
         if (existingMessage) {
             existingMessage.remove();
         }
 
-        // Tambahkan pesan jika tidak ada data yang terlihat
         if (visibleItems === 0) {
             const noDataDiv = document.createElement('div');
             noDataDiv.id = 'noDataMessage';
@@ -781,7 +774,6 @@ function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, t
         }
     }
 
-    // Fungsi untuk update visibility load more button
     function updateLoadMoreButton(visibleItems) {
         const loadMoreContainer = document.getElementById('loadMoreContainer');
         if (loadMoreContainer) {
@@ -793,10 +785,7 @@ function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, t
         }
     }
 
-    // Fungsi untuk load more items (pagination simulation)
     function loadMoreItems() {
-        // This is a placeholder for pagination functionality
-        // In a real implementation, you would load more data from the server
         const loadMoreBtn = document.getElementById('loadMoreBtn');
         loadMoreBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Loading...';
 
@@ -806,14 +795,12 @@ function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, t
         }, 1000);
     }
 
-// Fungsi untuk reset filter
 function resetFilter() {
     document.getElementById('searchInput').value = '';
     document.querySelector('select[name="mesin_filter"]').value = '';
     document.getElementById('sortSelect').value = 'tanggal_desc';
     document.getElementById('itemsPerPageSelect').value = '12';
 
-    // Reset global variables
     currentSort = 'tanggal_desc';
     itemsPerPage = 12;
     currentPage = 1;
@@ -821,7 +808,6 @@ function resetFilter() {
     filterTable();
 }
 
-// Enhanced search function with debouncing
 let searchTimeout;
 function handleSearch() {
     clearTimeout(searchTimeout);

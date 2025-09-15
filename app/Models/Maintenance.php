@@ -24,6 +24,10 @@ class Maintenance extends Model
         'interval',
         'warna',
         'foto_kerusakan'
+    ];
+
+    protected $casts = [
+        'foto_kerusakan' => 'array'
     ]; 
 
     public function mesin(){
