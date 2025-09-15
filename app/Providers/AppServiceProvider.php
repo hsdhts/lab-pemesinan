@@ -41,12 +41,8 @@ class AppServiceProvider extends ServiceProvider
             return $user->level === 'Superadmin' || $user->level === 'Manager';
         });
 
-        Gate::define('mahasiswa', function (User $user) {
-            return $user->level === 'Superadmin' || $user->level === 'Manager' || $user->level === 'Mahasiswa';
-        });
-
         Gate::define('teknisi', function (User $user) {
-            return $user->level === 'Superadmin' || $user->level === 'Manager' || $user->level === 'Mahasiswa' || $user->level === 'Teknisi';
+            return $user->level === 'Superadmin' || $user->level === 'Manager' || $user->level === 'Teknisi';
         });
 
 

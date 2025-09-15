@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
+use App\Services\ImageOptimizationService;
 
 class JadwalController extends Controller
 {
@@ -100,6 +101,8 @@ class JadwalController extends Controller
             'personel' => 'nullable',
             'keterangan' => 'nullable|not_regex:/\'/i',
             'foto_perbaikan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'nullable|numeric',
+            'auto_verify' => 'nullable|string',
         ]);
 
         $data_valid['tanggal_rencana'] = Carbon::parse($data_valid['tanggal_rencana']);
@@ -150,21 +153,30 @@ class JadwalController extends Controller
 
         $jadwal = Jadwal::find($data_valid['id']);
 
-        // Remove tanggal_realisasi and foto_perbaikan from data_valid if they exist
         unset($data_valid['tanggal_realisasi']);
         if (isset($data_valid['foto_perbaikan'])) {
             unset($data_valid['foto_perbaikan']);
         }
 
-        // Handle foto_perbaikan upload
         if ($request->hasFile('foto_perbaikan')) {
-            // Delete old photo if exists
-            if ($jadwal->foto_perbaikan && Storage::exists('public/' . $jadwal->foto_perbaikan)) {
-                Storage::delete('public/' . $jadwal->foto_perbaikan);
+            $imageService = new ImageOptimizationService();
+
+            if ($jadwal->foto_perbaikan) {
+                $imageService->deleteImage($jadwal->foto_perbaikan);
             }
-            
-            $foto_path = $request->file('foto_perbaikan')->store('foto_perbaikan', 'public');
-            $jadwal->foto_perbaikan = $foto_path;
+
+            $foto_path = $imageService->optimizeAndStore(
+                $request->file('foto_perbaikan'),
+                'foto_perbaikan',
+                1200, // max width
+                800,  // max height
+                85    // quality
+            );
+
+            if ($foto_path) {
+                $jadwal->foto_perbaikan = $foto_path;
+                $imageService->createThumbnail($foto_path);
+            }
         }
 
         $jadwal->update($data_valid);
@@ -173,7 +185,15 @@ class JadwalController extends Controller
             $jadwal->increment('status');
         }
 
-        if(isset($request->validasi)){
+        if($request->has('auto_verify') && $request->auto_verify == '1'){
+            $jadwal->status = 3; // Set to verified by superadmin
+            $jadwal->tanggal_realisasi = Carbon::now();
+            $jadwal->save();
+        } elseif($request->has('status') && $request->status == '3'){
+            $jadwal->status = 3; // Set to verified by superadmin
+            $jadwal->tanggal_realisasi = Carbon::now();
+            $jadwal->save();
+        } elseif(isset($request->validasi)){
             $jadwal->increment('status');
             // Auto-set tanggal_realisasi when task is validated/completed
             $jadwal->tanggal_realisasi = Carbon::now();
@@ -214,7 +234,7 @@ class JadwalController extends Controller
             }
 
             $jadwal = Jadwal::find($id);
-            
+
             if (!$jadwal) {
                 return response()->json([
                     'success' => false,

@@ -10,30 +10,28 @@ use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
-    // dibuat tampilan view nya dulu
-
     public function login(){
-        
+
         return view('pages.user.login');
     }
 
 
     public function logout(Request $request){
-        
-        
+
+
     Auth::logout();
- 
+
     $request->session()->invalidate();
- 
+
     $request->session()->regenerateToken();
- 
+
     return redirect('/login');
 
     }
 
 
     public function masuk(Request $request){
-        
+
         $data_valid = $request->validate([
             'username' => 'required',
             'password' => 'required'
@@ -44,14 +42,14 @@ class UserController extends Controller
             User::find(auth()->user()->id)->update(['last_login' => now('Asia/Bangkok')]);
 
             $request->session()->regenerate();
- 
+
             return redirect()->intended('/');
         }
- 
+
         return back()->withErrors([
             'login' => 'Login Gagal! Pastikan username dan password benar!',
         ]);
-        
+
     }
 
 
@@ -68,32 +66,30 @@ class UserController extends Controller
             'nama' => 'required',
             'avatar' => 'image|file|max:3072',
         ]);
-    
+
         if ($request->hasFile('avatar')) {
             $data_valid['foto'] = $request->file('avatar')->storePublicly('foto-profil', 'public');
-    
-            // Hapus foto lama jika ada
+
             if (auth()->user()->foto !== null) {
                 Storage::disk('public')->delete(auth()->user()->foto);
             }
         } elseif ($request->avatar_remove) {
-            // Hapus foto lama
             if (auth()->user()->foto !== null) {
                 Storage::disk('public')->delete(auth()->user()->foto);
             }
             $data_valid['foto'] = null;
         }
-    
+
         User::find($data_valid['id'])->update($data_valid);
-    
+
         return redirect('/akun');
     }
-    
+
 
 
 
     public function ganti_password(Request $request){
-   
+
         $data_valid = $request->validate([
             'id' => 'required|numeric'
         ]);
@@ -102,7 +98,7 @@ class UserController extends Controller
             $data_valid['password'] = $request->password_lama;
             if(Auth::attempt($data_valid)){
                 $data_valid['password'] = bcrypt($request->password_baru);
-                User::find($data_valid['id'])->update($data_valid);        
+                User::find($data_valid['id'])->update($data_valid);
                 return $this->logout($request)->with(['ganti password' => 'Silahkan login dengan password yang baru']);
             }else{
                 return redirect()->back()->withInput()->withErrors(['password_lama' => 'Pastikan password lamanya sesuai!']);
@@ -117,7 +113,7 @@ class UserController extends Controller
         if($request->ajax()){
             $user = User::query();
 
-            return DataTables::of($user)  
+            return DataTables::of($user)
             ->addColumn('aksi', function($u){
                 return view('partials.tombolAksiUser', ['id'=> $u->id]);
             })
@@ -132,12 +128,12 @@ class UserController extends Controller
 
 
     public function create(){
-        
+
         return view('pages.user.create', ['halaman' => 'User']);
     }
 
     public function store(Request $request){
-        
+
         $data_valid = $request->validate([
             'username' => 'required',
             'nama' => 'required',
@@ -154,7 +150,7 @@ class UserController extends Controller
     }
 
     public function edit($id){
-        
+
         $user = User::find($id);
 
         return view('pages.user.edit', ['halaman' => 'User', 'user' => $user]);
@@ -162,7 +158,7 @@ class UserController extends Controller
 
 
     public function update(Request $request){
-        
+
         $data_valid = $request->validate([
             'id' => 'required|numeric',
             'username' => 'required',
@@ -176,7 +172,7 @@ class UserController extends Controller
     }
 
     public function delete(Request $request){
-        
+
         $data_valid = $request->validate([
             'id' => 'required|numeric',
         ]);

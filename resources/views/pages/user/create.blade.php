@@ -39,9 +39,7 @@
     <label for="level" class="form-label @error('level') is-invalid @enderror">Level / Role</label>
     <select id="level" value="{{ old('level') }}" name="level" class="form-select">
         <option value="" selected> --- Pilih Role --- </option>
-        <!-- <option value="Teknisi">Teknisi</option> -->
-        <option value="Mahasiswa">Mahasiswa</option>
-        <!-- <option value="Manager">Manager</option> -->
+
         <option value="Admin">Admin</option>
       </select>
       @error('level')
@@ -50,7 +48,7 @@
       </div>
       @enderror
     </div>
-    
+
 
     <div class="my-9 text-end">
     <button type="submit" class="btn btn-lg btn-primary d-inline text-end">
@@ -64,7 +62,7 @@
             Simpan Perubahan
         </button>
     </div>
-        
+
 
 </form>
 

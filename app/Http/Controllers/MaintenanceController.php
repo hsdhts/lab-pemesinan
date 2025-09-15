@@ -88,18 +88,13 @@ class MaintenanceController extends Controller
             'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-
-
-        // Cek apakah ada error validasi sebelum menyimpan
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Jika validasi berhasil, lanjutkan proses pembuatan maintenance
         try {
             $fotoKerusakanPath = null;
 
-            // Handle file upload untuk foto_kerusakan
             if ($request->hasFile('foto_kerusakan')) {
                 $file = $request->file('foto_kerusakan');
                 $fileName = time() . '_' . $file->getClientOriginalName();
@@ -130,7 +125,6 @@ class MaintenanceController extends Controller
             'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Cek apakah ada error validasi sebelum menyimpan
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -142,11 +136,9 @@ class MaintenanceController extends Controller
                 return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
             }
 
-            $fotoKerusakanPath = $maintenance->foto_kerusakan; // Keep existing photo
+            $fotoKerusakanPath = $maintenance->foto_kerusakan;
 
-            // Handle file upload untuk foto_kerusakan baru
             if ($request->hasFile('foto_kerusakan')) {
-                // Delete old photo if exists
                 if ($maintenance->foto_kerusakan && \Storage::disk('public')->exists($maintenance->foto_kerusakan)) {
                     \Storage::disk('public')->delete($maintenance->foto_kerusakan);
                 }
@@ -176,7 +168,6 @@ class MaintenanceController extends Controller
                 return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
             }
 
-            // Delete photo if exists
             if ($maintenance->foto_kerusakan && \Storage::disk('public')->exists($maintenance->foto_kerusakan)) {
                 \Storage::disk('public')->delete($maintenance->foto_kerusakan);
             }

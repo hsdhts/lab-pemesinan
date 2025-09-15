@@ -9,11 +9,9 @@ use Illuminate\Http\Request;
 
 class JadwalApproveController extends Controller
 {
-    //
 
     public function index(Request $request){
 
-        // Set default date range
         if($request->tanggal_awal||$request->tanggal_akhir){
 
             if($request->tanggal_awal && $request->tanggal_akhir){
@@ -37,14 +35,11 @@ class JadwalApproveController extends Controller
             $tglakhir = now();
         }
 
-        // Query untuk menampilkan hanya jadwal yang sudah selesai (memiliki tanggal_realisasi)
-        // Logika sederhana: jika sudah selesai maka akan muncul, jika belum selesai maka tidak akan muncul
         $query = Jadwal::with(['maintenance', 'maintenance.mesin'])
             ->whereNotNull('tanggal_realisasi') // Hanya tampilkan yang sudah selesai
             ->whereDate('tanggal_realisasi', '>=', $tglawal->format('Y-m-d'))
             ->whereDate('tanggal_realisasi', '<=', $tglakhir->format('Y-m-d'));
 
-        // Tambahkan filter mesin jika ada
         if($request->mesin_filter && $request->mesin_filter != ''){
             $query = $query->whereHas('maintenance.mesin', function($q) use ($request) {
                 $q->where('nama_mesin', 'like', '%' . $request->mesin_filter . '%');
@@ -57,8 +52,6 @@ class JadwalApproveController extends Controller
 
     }
 
-    // Fungsi approve dihapus karena sekarang hanya menampilkan history laporan pekerjaan yang sudah selesai
-
     private function buat_jadwal($id_maintenance, $start_date){
 
 
@@ -68,7 +61,6 @@ class JadwalApproveController extends Controller
     $jadwalObj = new JadwalController();
 
     $waktu = Carbon::parse($start_date);
-    //echo "Awalnya adalah " . $waktu->format('d-m-Y') . "<br>";
 
     $periode = $maintenance->periode;
     $satuan_periode = $maintenance->satuan_periode;
@@ -79,7 +71,6 @@ class JadwalApproveController extends Controller
                 $waktu->addHour($periode);
 
                 while($waktu->year === $tahun){
-                    //echo $waktu->format('d-m-Y') . "<br>";
 
                     $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
 
@@ -90,11 +81,8 @@ class JadwalApproveController extends Controller
                 $waktu->addDays($periode);
 
                 while($waktu->year === $tahun){
-                    //echo $waktu->format('d-m-Y') . "<br>";
 
-                    //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                     $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-
 
                     $waktu->addDays($periode);
                 }
@@ -104,11 +92,7 @@ class JadwalApproveController extends Controller
                     $waktu->addWeeks($periode);
 
                     while($waktu->year === $tahun){
-                        //echo $waktu->format('d-m-Y') . "<br>";
-
-                        //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                         $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
-
 
                         $waktu->addWeeks($periode);
                     }
@@ -118,9 +102,6 @@ class JadwalApproveController extends Controller
                     $waktu->addMonths($periode);
 
                     while($waktu->year === $tahun){
-                        //echo $waktu->format('d-m-Y') . "<br>";
-
-                        //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                         $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
 
                         $waktu->addMonths($periode);
@@ -131,9 +112,6 @@ class JadwalApproveController extends Controller
                 $waktu->addYears($periode);
 
                 while($waktu->year === $tahun){
-                    //echo $waktu->format('d-m-Y') . "<br>";
-
-                    //Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
                     $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
 
                     $waktu->addYears($periode);
@@ -141,7 +119,6 @@ class JadwalApproveController extends Controller
                 break;
 
             default:
-                # code...
                 break;
         }
 

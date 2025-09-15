@@ -87,15 +87,15 @@
         @if($index > 0)
             <div class="page-break"></div>
         @endif
-        
+
         <div class="laporan-item">
             <div class="laporan-header">
                 <h4 style="margin: 0;">LAPORAN {{ $index + 1 }} - {{ $jadwal->maintenance->mesin->nama_mesin }}</h4>
             </div>
-            
+
             <table class="tabel1">
                 <tr>
-                    <td>Tanggal Realisasi</td>
+                    <td>Tanggal Selesai</td>
                     <td>@if($jadwal->tanggal_realisasi){{ \Illuminate\Support\Carbon::parse($jadwal->tanggal_realisasi)->formatLocalized('%d %B %Y') }} @else - @endif</td>
                     <td>Internal Servis</td>
                     <td>{{ $jadwal->maintenance->periode }} {{ $jadwal->maintenance->satuan_periode }}</td>

@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Services\ImageOptimizationService;
 
 class UpdateMaintenanceController extends Controller
 {
@@ -19,14 +20,34 @@ class UpdateMaintenanceController extends Controller
             'mesin_id' => 'required|numeric',
             'nama_maintenance' => 'required|string|max:255',
             'warna' => 'required|string',
-            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan' => 'nullable|array',
+            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Handle file upload if exists
-        $foto_kerusakan = null;
+        // Handle multiple file uploads with optimization
+        $foto_kerusakan_paths = [];
         if ($request->hasFile('foto_kerusakan')) {
-            $foto_kerusakan = $request->file('foto_kerusakan')->store('maintenance_photos', 'public');
+            $imageService = new ImageOptimizationService();
+            
+            foreach ($request->file('foto_kerusakan') as $file) {
+                $foto_path = $imageService->optimizeAndStore(
+                    $file,
+                    'maintenance_photos',
+                    1200, // max width
+                    800,  // max height
+                    85    // quality
+                );
+                
+                if ($foto_path) {
+                    $foto_kerusakan_paths[] = $foto_path;
+                    // Create thumbnail for faster loading
+                    $imageService->createThumbnail($foto_path);
+                }
+            }
         }
+        
+        // Convert array to JSON string for database storage
+        $foto_kerusakan = !empty($foto_kerusakan_paths) ? json_encode($foto_kerusakan_paths) : null;
 
         // Create maintenance record
         $maintenance = Maintenance::create([
@@ -191,7 +212,8 @@ class UpdateMaintenanceController extends Controller
             'mesin_id' => 'required|numeric',
             'nama_maintenance' => 'required|string|max:255',
             'warna' => 'required|string',
-            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan' => 'nullable|array',
+            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -207,16 +229,42 @@ class UpdateMaintenanceController extends Controller
 
             $fotoKerusakanPath = $maintenance->foto_kerusakan; // Keep existing photo
 
-            // Handle file upload untuk foto_kerusakan baru
+            // Handle multiple file uploads untuk foto_kerusakan baru
             if ($request->hasFile('foto_kerusakan')) {
-                // Delete old photo if exists
-                if ($maintenance->foto_kerusakan && Storage::disk('public')->exists($maintenance->foto_kerusakan)) {
-                    Storage::disk('public')->delete($maintenance->foto_kerusakan);
+                // Delete old photos if exists
+                if ($maintenance->foto_kerusakan) {
+                    $oldPhotos = json_decode($maintenance->foto_kerusakan, true);
+                    if (is_array($oldPhotos)) {
+                        foreach ($oldPhotos as $oldPhoto) {
+                            if (Storage::disk('public')->exists($oldPhoto)) {
+                                Storage::disk('public')->delete($oldPhoto);
+                            }
+                        }
+                    } elseif (Storage::disk('public')->exists($maintenance->foto_kerusakan)) {
+                        Storage::disk('public')->delete($maintenance->foto_kerusakan);
+                    }
                 }
 
-                $file = $request->file('foto_kerusakan');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $fotoKerusakanPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+                $imageService = new ImageOptimizationService();
+                $foto_kerusakan_paths = [];
+                
+                foreach ($request->file('foto_kerusakan') as $file) {
+                    $foto_path = $imageService->optimizeAndStore(
+                        $file,
+                        'maintenance_photos',
+                        1200, // max width
+                        800,  // max height
+                        85    // quality
+                    );
+                    
+                    if ($foto_path) {
+                        $foto_kerusakan_paths[] = $foto_path;
+                        // Create thumbnail for faster loading
+                        $imageService->createThumbnail($foto_path);
+                    }
+                }
+                
+                $fotoKerusakanPath = !empty($foto_kerusakan_paths) ? json_encode($foto_kerusakan_paths) : null;
             }
 
             $maintenance->update([
