@@ -193,19 +193,6 @@
     @endif
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="container-fluid text-end">
 
     <a href="/mesin">
