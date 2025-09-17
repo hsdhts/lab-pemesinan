@@ -113,7 +113,7 @@
   @endif
 
 @canany(['admin'])
-<form action="/laporan/maintenance" class="text-center" method="POST">
+<form action="{{ url('/laporan/maintenance') }}" class="text-center" method="POST">
 @csrf
 
 <input type="hidden" name="jadwal_id" value="{{ $jadwal->id }}">

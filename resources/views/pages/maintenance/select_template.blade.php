@@ -74,7 +74,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="{{ route('mesin.maintenance.create') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ url('/mesin/maintenance/create/') }}" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="mesin_id" value="{{ $mesin['id'] }}">
                 <div class="modal-body">
@@ -254,7 +254,7 @@ function showImageModal(src, title) {
 
 // Handle form submission to transfer files from array to input
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form[action="/mesin/maintenance/create/"]');
+    const form = document.querySelector('form[action="{{ url('/mesin/maintenance/create/') }}"]');
     if (form) {
         form.addEventListener('submit', function(e) {
             console.log('Form submitted, selected files:', selectedFiles.length);

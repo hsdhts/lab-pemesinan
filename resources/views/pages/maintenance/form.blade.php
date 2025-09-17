@@ -75,7 +75,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/maintenance/create/" method="post" enctype="multipart/form-data">
+            <form action="{{ url('/maintenance/create/') }}" method="post" enctype="multipart/form-data">
             @csrf
                 <div class="modal-body">
 
@@ -159,7 +159,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/maintenance/edit/" method="POST" enctype="multipart/form-data">
+            <form action="{{ url('/maintenance/edit/') }}" method="POST" enctype="multipart/form-data">
 
                 @csrf
             <div class="modal-body">
@@ -263,7 +263,7 @@
     @endif
 
 
-          <form action="@if($attach->isEmpty()) /maintenance/submit/ @elseif($attach->get('aksi') == 'tambah') /mesin/maintenance/create/submit @else /mesin/maintenance/edit/submit @endif" method="post">
+          <form action="@if($attach->isEmpty()) {{ url('/maintenance/submit/') }} @elseif($attach->get('aksi') == 'tambah') {{ url('/mesin/maintenance/create/submit') }} @else {{ url('/mesin/maintenance/edit/submit') }} @endif" method="post">
             @method('put')
             @csrf
             <button class="btn btn-warning mb-3 text-dark container-fluid" type="submit">
@@ -322,7 +322,7 @@
 
         <td class="text-end">
 
-            <form action="/maintenance/delete/" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
+            <form action="{{ url('/maintenance/delete/') }}" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
 
                 @csrf
                 <input type="hidden" name="index" value="{{ $loop->index }}">
@@ -614,8 +614,8 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            const createForm = document.querySelector('form[action="/maintenance/create/"]');
-            const editForm = document.querySelector('form[action="/maintenance/edit/"]');
+            const createForm = document.querySelector('form[action="{{ url('/maintenance/create/') }}"]');
+            const editForm = document.querySelector('form[action="{{ url('/maintenance/edit/') }}"]');
 
             if (createForm) {
                 createForm.addEventListener('submit', function(e) {

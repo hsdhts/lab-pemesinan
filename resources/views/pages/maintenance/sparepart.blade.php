@@ -3,7 +3,7 @@
 @section('before_content')
 <div class="modal fade" tabindex="-1" id="kt_modal_1">
     <div class="modal-dialog">
-        <form action="/sparepart/maintenance/" method="post">
+        <form action="{{ url('/sparepart/maintenance/') }}" method="post">
         @csrf
         <div class="modal-content">
                 <div class="modal-header">
@@ -163,7 +163,7 @@
                 <td>{{ $s->harga }}</td>
                 <td>{{ $s->pivot->jumlah }}</td>
                 <td>{{ $s->satuan }}</td>
-                <td><form action="/sparepart/maintenance/delete/" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
+                <td><form action="{{ url('/sparepart/maintenance/delete/') }}" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
                     @method('delete')
                     @csrf
                     <input type="hidden" name="maintenance_id" value="{{ $m->id }}">

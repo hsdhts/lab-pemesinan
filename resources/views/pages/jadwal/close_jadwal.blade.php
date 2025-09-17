@@ -587,7 +587,7 @@
 
             <div class="modal-footer">
                 <a class="btn btn-warning" id="link_detail" target="_blank">Lihat Detail</a>
-                <form action="/laporan/maintenance" method="POST" style="display: inline;">
+                <form action="{{ url('/laporan/maintenance') }}" method="POST" style="display: inline;">
                     @csrf
                     <input type="hidden" name="jadwal_id" id="download_jadwal_id">
                     <button type="submit" class="btn btn-success">

@@ -16,14 +16,22 @@ class LaporanController extends Controller
 
         if($request->ajax()){
 
-            $maintenance = Maintenance::with(['mesin']);
+            $jadwal = Jadwal::with(['maintenance', 'maintenance.mesin'])
+                ->whereNotNull('tanggal_realisasi')
+                ->orderBy('tanggal_realisasi', 'desc');
 
-            return DataTables::of($maintenance)
-            ->addColumn('nama_mesin', function($m){
-                return $m->mesin->nama_mesin;
+            return DataTables::of($jadwal)
+            ->addColumn('nama_maintenance', function($j){
+                return $j->maintenance->nama_maintenance ?? '-';
             })
-            ->addColumn('aksi', function($m){
-                return view('partials.tombolDownloadLaporan', ['id' => $m->id]);
+            ->addColumn('nama_mesin', function($j){
+                return $j->maintenance->mesin->nama_mesin ?? '-';
+            })
+            ->addColumn('tanggal_selesai', function($j){
+                return $j->tanggal_realisasi ? \Carbon\Carbon::parse($j->tanggal_realisasi)->format('d-m-Y') : '-';
+            })
+            ->addColumn('aksi', function($j){
+                return view('partials.tombolDownloadLaporanMaintenance', ['jadwal_id' => $j->id, 'maintenance_id' => $j->maintenance_id]);
             })
             ->rawColumns(['aksi'])
             ->addIndexColumn()
@@ -91,10 +99,29 @@ class LaporanController extends Controller
             $query->withTrashed();
         }, 'maintenance.mesin' => function($query){
             $query->withTrashed();
-        }, 'maintenance.mesin' => function($query){
+        }, 'isi_form.form' => function($query){
             $query->withTrashed();
         }])->withTrashed()->find($data_valid['jadwal_id']);
 
+        // Check if jadwal exists
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Jadwal tidak ditemukan. ID: ' . $data_valid['jadwal_id']);
+        }
+
+        // Check if maintenance exists
+        if (!$jadwal->maintenance) {
+            return redirect()->back()->with('error', 'Data maintenance tidak ditemukan untuk jadwal ID: ' . $data_valid['jadwal_id']);
+        }
+
+        // Check if mesin exists
+        if (!$jadwal->maintenance->mesin) {
+            return redirect()->back()->with('error', 'Data mesin tidak ditemukan. Silakan coba lagi.');
+        }
+
+        // Check if jadwal is completed (has tanggal_realisasi)
+        if (!$jadwal->tanggal_realisasi) {
+            return redirect()->back()->with('error', 'Laporan hanya dapat dibuat untuk pekerjaan yang sudah selesai. Jadwal ID: ' . $data_valid['jadwal_id']);
+        }
 
         $data = [
             'jadwal' => $jadwal,

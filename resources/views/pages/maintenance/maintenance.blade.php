@@ -194,7 +194,7 @@
         <td class="text-end">
             @canany(['superadmin', 'admin'])
 
-            <form action="/mesin/maintenance/delete/" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
+            <form action="{{ url('/mesin/maintenance/delete/') }}" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
                 @method('delete')
                 @csrf
                 <input type="hidden" name="maintenance_id" value="{{ $m->id }}">
@@ -299,7 +299,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/mesin/maintenance/create/" method="post" enctype="multipart/form-data">
+            <form action="{{ url('/mesin/maintenance/create/') }}" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="mesin_id" value="{{ $mesin->id }}">
                 <div class="modal-body">
@@ -386,7 +386,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/mesin/maintenance/edit/direct" method="post" enctype="multipart/form-data">
+            <form action="{{ url('/mesin/maintenance/edit/direct') }}" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="mesin_id" value="{{ $mesin->id }}">
             <input type="hidden" name="maintenance_id" id="edit_index" value="">
@@ -784,7 +784,7 @@ $('.input-group.date').datepicker({
 // Handle form submission to include selected files
 document.addEventListener('DOMContentLoaded', function() {
     // Handle create form submission
-    const createForm = document.querySelector('form[action="/mesin/maintenance/create/"]');
+    const createForm = document.querySelector('form[action="{{ url('/mesin/maintenance/create/') }}"]');
     if (createForm) {
         createForm.addEventListener('submit', function(e) {
             console.log('Create form submitted, selected files:', createSelectedFiles.length);
@@ -803,7 +803,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Handle edit form submission
-    const editForm = document.querySelector('form[action="/mesin/maintenance/edit/direct"]');
+    const editForm = document.querySelector('form[action="{{ url('/mesin/maintenance/edit/direct') }}"]');
     if (editForm) {
         editForm.addEventListener('submit', function(e) {
             console.log('Edit form submitted, selected files:', editSelectedFiles.length);

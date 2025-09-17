@@ -79,6 +79,28 @@
         {!! $jadwal->keterangan !!}
     </div>
 
+    @if($jadwal->isi_form && $jadwal->isi_form->isNotEmpty())
+    <h5 style="margin-bottom: 2px;">Hasil Pemeriksaan Form : </h5>
+    <table class="table2">
+        <tr>
+            <th>No</th>
+            <th>Nama Form</th>
+            <th>Syarat</th>
+            <th>Hasil</th>
+        </tr>
+        @foreach($jadwal->isi_form as $isi)
+            @if($isi->form)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $isi->form->nama_form }}</td>
+                <td>{{ $isi->form->syarat }}</td>
+                <td>{{ $isi->nilai ?? '-' }}</td>
+            </tr>
+            @endif
+        @endforeach
+    </table>
+    @endif
+
     @php
         $sparepart = $jadwal->sparepart;
     @endphp
