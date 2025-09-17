@@ -24,6 +24,28 @@ class UpdateMaintenanceController extends Controller
             'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
+        // Verify that the mesin exists with detailed debugging
+        $mesin = Mesin::find($data_valid['mesin_id']);
+        if (!$mesin) {
+            // Add debugging information for hosting environment
+            \Log::error('Mesin not found', [
+                'mesin_id' => $data_valid['mesin_id'],
+                'request_data' => $request->all(),
+                'database_connection' => config('database.default'),
+                'environment' => app()->environment()
+            ]);
+            
+            // Check if any mesin exists at all
+            $totalMesin = Mesin::count();
+            $allMesinIds = Mesin::pluck('id')->toArray();
+            
+            return redirect()->back()->with('error', 
+                'Mesin tidak ditemukan. ID: ' . $data_valid['mesin_id'] . 
+                '. Total mesin di database: ' . $totalMesin . 
+                '. ID mesin yang tersedia: ' . implode(', ', $allMesinIds)
+            );
+        }
+
         // Handle multiple file uploads with optimization
         $foto_kerusakan_paths = [];
         if ($request->hasFile('foto_kerusakan')) {

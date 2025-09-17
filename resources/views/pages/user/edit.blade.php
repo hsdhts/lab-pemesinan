@@ -3,7 +3,7 @@
 @section('konten')
 <div class="container px-10">
 
-    <form method="post" action="/user/update/">
+    <form method="post" action="{{ route('user.update') }}">
         @csrf
         @method('PUT')
     <input type="hidden" name="id" value="{{ old('id', $user->id) }}">

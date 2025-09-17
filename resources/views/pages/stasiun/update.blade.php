@@ -2,7 +2,7 @@
 
 @section('konten')
 
-<form action="/stasiun/update/" method="post">
+<form action="{{ route('stasiun.update') }}" method="post">
     @method('put')
     @csrf
     <div class="container-lg mt-5">

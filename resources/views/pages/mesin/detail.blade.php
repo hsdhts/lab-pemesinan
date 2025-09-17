@@ -69,7 +69,7 @@
                 </button>
                 </a>
 
-                <form action="/mesin/destroy" method="post" style ='display:inline-block;'>
+                <form action="{{ route('mesin.destroy') }}" method="post" style ='display:inline-block;'>
                     @method('delete')
                     @csrf
                     <input type="hidden" name="id" value="{{ $mesin->id }}">

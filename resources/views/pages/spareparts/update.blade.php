@@ -2,7 +2,7 @@
 
 @section('konten')
 
-<form action="/sparepart/update/" method="post" enctype="multipart/form-data">
+<form action="{{ route('sparepart.update') }}" method="post" enctype="multipart/form-data">
     @method('put')
     @csrf
     <div class="container-lg mt-5">

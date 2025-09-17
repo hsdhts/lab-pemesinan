@@ -44,7 +44,7 @@
 </button>
 </a>
 
-<form action="{{ $deletePath }}" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
+<form action="/mesin/destroy" method="post" onSubmit="return hapus(this);" style ="display:inline-block;">
     @method("delete")
     @csrf
     <input type="hidden" name="id" value="{{ $id }}">

@@ -39,7 +39,7 @@
 
 
 						<!--begin::Form-->
-						<form class="form w-100" action="/masuk" method="POST">
+						<form class="form w-100" action="{{ route('masuk') }}" method="POST">
 							<!--begin::Heading-->
 							@csrf
 							<div class="text-center mb-10">

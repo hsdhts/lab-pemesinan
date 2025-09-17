@@ -3,7 +3,7 @@
 
 @section('konten')
 
-<form action="/stasiun/create" method="post">
+<form action="{{ route('stasiun.store') }}" method="post">
 
 @csrf
 <div class="container-lg mt-5">

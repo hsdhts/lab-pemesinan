@@ -16,7 +16,7 @@
           </div>
 
           <div class="modal-body">
-<form action="/laporan/inspeksi/" method="POST">
+<form action="{{ route('laporan.inspeksi') }}" method="POST">
   @csrf       
             <div class="input-group my-4">
         
@@ -69,7 +69,7 @@
   </div>
 </div>
 
-<form action="/laporan/rencana_realisasi" method="POST">
+<form action="{{ route('laporan.rencana_realisasi') }}" method="POST">
     @csrf
     <button type="submit" class="btn btn-primary">
         <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil009.svg-->

@@ -3,7 +3,7 @@
 
 @section('konten')
 
-<form action="/sparepart/create" method="post" enctype="multipart/form-data">
+<form action="{{ route('sparepart.store') }}" method="post" enctype="multipart/form-data">
 
 @csrf
 <div class="container-lg mt-5">

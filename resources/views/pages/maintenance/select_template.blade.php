@@ -74,7 +74,7 @@
                 <!--end::Close-->
             </div>
 
-            <form action="/mesin/maintenance/create/" method="post" enctype="multipart/form-data">
+            <form action="{{ route('mesin.maintenance.create') }}" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="mesin_id" value="{{ $mesin['id'] }}">
                 <div class="modal-body">

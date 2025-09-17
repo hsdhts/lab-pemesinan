@@ -48,7 +48,7 @@
     <!--end::Alert-->
     @endif
 
-    <form action="/mesin/update" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('mesin.update') }}" method="POST" enctype="multipart/form-data">
         @method('put')
         @csrf
 

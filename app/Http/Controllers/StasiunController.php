@@ -16,11 +16,10 @@ class StasiunController extends Controller
             
             return DataTables::of($stasiuns)
                 ->addColumn('aksi', function ($stasiun) {
-                    return view('partials.tombolAksi', [
-                        'editPath' => '/stasiun/edit/', 
-                        'id' => $stasiun->id, 
-                        'deletePath' => '/stasiun/destroy/'
-                    ]);
+                    return view('partials.tombolAksiStasiun', [
+            'editPath' => '/stasiun/edit/',
+            'id' => $stasiun->id
+        ]);
                 })
                 ->rawColumns(['aksi'])
                 ->addIndexColumn()
@@ -53,7 +52,7 @@ class StasiunController extends Controller
 
         Stasiun::create($dataValid);
 
-        return redirect('/stasiun')->with('tambah', 'p');
+        return redirect()->route('stasiun.index')->with('tambah', 'p');
     }
 
     public function edit($id)
@@ -77,18 +76,18 @@ class StasiunController extends Controller
         $stasiun = Stasiun::find($request->id_old);
         $stasiun->update($dataValid);
 
-        return redirect('/stasiun')->with('edit', 'p');
+        return redirect()->route('stasiun.index')->with('edit', 'p');
     }
 
     public function destroy(Request $request)
     {
-        $dataValid = $request->validate([
-            'id' => 'required|numeric',
+        $id = $request->validate([
+            'id' => 'required|numeric'
         ]);
 
-        Stasiun::destroy($dataValid);
+        Stasiun::destroy($id);
 
-        return redirect('/stasiun')->with('hapus', 'p');
+        return redirect()->route('stasiun.index')->with('hapus', 'p');
     }
 
     public function detail($id)

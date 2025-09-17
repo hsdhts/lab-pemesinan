@@ -26,7 +26,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ url('/preventive/' . $jadwalPreventive->id) }}" method="POST">
+                    <form action="{{ route('preventive.update', $jadwalPreventive->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 

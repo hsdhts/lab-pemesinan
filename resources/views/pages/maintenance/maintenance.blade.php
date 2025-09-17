@@ -156,25 +156,6 @@
         <!--end::Svg Icon-->
                 <span>Tambah Breakdown</span>
             </button>
-<!--
-          <form action="/maintenance/submit/" method="post">
-            @method('put')
-            @csrf
-            <button class="btn btn-warning mb-3 text-dark container-fluid" type="submit">
-            <span class="svg-icon-dark svg-icon-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="black"/>
-                <path d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L10.2929 15.2929C10.6834 15.6834 11.3166 15.6834 11.7071 15.2929L17.25 9.75C17.6642 9.33579 17.6642 8.66421 17.25 8.25C16.8358 7.83579 16.1642 7.83579 15.75 8.25L11.5657 12.4343C11.2533 12.7467 10.7467 12.7467 10.4343 12.4343Z" fill="black"/>
-                </svg>
-            </span>
-
-            <span>Simpan Perubahan</span>
-            </button>
-        </form>
-    -->
-
-
-
 
         @endcanany
 
@@ -194,15 +175,10 @@
 
 @endsection
 
-
-
-
 @section('content_right')
 
-@if($maintenance && $maintenance->count() > 0)
+@if(isset($maintenance) && $maintenance && $maintenance->count() > 0)
 <table class="table gs-7 align-middle">
-
-
     @foreach ($maintenance as $m)
 
     <tr class="table-primary">
@@ -559,7 +535,7 @@ function setEdit(index, nama_maintenance, warna, foto_kerusakan = null){
     // Clear new image previews
     document.getElementById('edit_image_preview_container').style.display = 'none';
     document.getElementById('edit_image_previews').innerHTML = '';
-    
+
     // Reset selected files array for edit
     editSelectedFiles = [];
 
@@ -627,13 +603,13 @@ function previewCreateMultipleImages(input) {
 function renderCreatePreviews() {
     const previewContainer = document.getElementById('create_image_previews');
     const containerDisplay = document.getElementById('create_image_preview_container');
-    
+
     // Clear previous previews
     previewContainer.innerHTML = '';
-    
+
     if (createSelectedFiles.length > 0) {
         containerDisplay.style.display = 'block';
-        
+
         createSelectedFiles.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -685,13 +661,13 @@ function previewEditMultipleImages(input) {
 function renderEditPreviews() {
     const previewContainer = document.getElementById('edit_image_previews');
     const containerDisplay = document.getElementById('edit_image_preview_container');
-    
+
     // Clear previous previews
     previewContainer.innerHTML = '';
-    
+
     if (editSelectedFiles.length > 0) {
         containerDisplay.style.display = 'block';
-        
+
         editSelectedFiles.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -724,7 +700,7 @@ function renderEditPreviews() {
 function removeCreatePreviewImage(button, fileIndex) {
     // Remove file from array
     createSelectedFiles.splice(fileIndex, 1);
-    
+
     // Re-render previews
     renderCreatePreviews();
 }
@@ -733,7 +709,7 @@ function removeCreatePreviewImage(button, fileIndex) {
 function removeEditPreviewImage(button, fileIndex) {
     // Remove file from array
     editSelectedFiles.splice(fileIndex, 1);
-    
+
     // Re-render previews
     renderEditPreviews();
 }
@@ -825,7 +801,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Handle edit form submission
     const editForm = document.querySelector('form[action="/mesin/maintenance/edit/direct"]');
     if (editForm) {

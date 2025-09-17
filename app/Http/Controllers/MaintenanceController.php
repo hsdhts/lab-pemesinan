@@ -60,20 +60,16 @@ class MaintenanceController extends Controller
 
 
 
-    public function maintenance_mesin($id){
-
+    public function maintenance_mesin($id)
+    {
+        // Find the mesin with its relationships
         $mesin = Mesin::with(['maintenance', 'form'])->find($id);
 
-        $maintenance = $mesin->maintenance;
-        $form = $mesin->form;
+        if (!$mesin) {
+            return redirect()->back()->with('error', 'Mesin tidak ditemukan');
+        }
 
-
-        return view('pages.maintenance.maintenance', [
-            'halaman' => 'Breakdown',
-            'mesin' => $mesin,
-            'maintenance' => $maintenance,
-            'form' => $form
-           ]);
+        return view('pages.maintenance.maintenance', compact('mesin'));
     }
 
 

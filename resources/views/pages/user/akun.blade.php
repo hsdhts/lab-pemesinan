@@ -10,7 +10,7 @@
         </div>
 
         <!--begin::Form-->
-            <form id="kt_account_profile_details_form" class="form" action="/user/akun/update/" method="POST" enctype="multipart/form-data">
+            <form id="kt_account_profile_details_form" class="form" action="{{ route('user.akun.update') }}" method="POST" enctype="multipart/form-data">
 				@csrf
 				@method('put')
 											<!--begin::Card body-->
@@ -155,7 +155,7 @@
 										</div>
 								
 										<!--begin::Form-->
-											<form id="kt_account_profile_details_form_2" class="form" action="/user/akun/update/password/" method="POST">
+											<form id="kt_account_profile_details_form_2" class="form" action="{{ route('user.akun.update.password') }}" method="POST">
 												@csrf
 												@method('put')
 																			<!--begin::Card body-->

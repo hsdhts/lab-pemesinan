@@ -64,7 +64,7 @@ class SparepartController extends Controller
     
         Sparepart::create($dataValid);
     
-        return redirect('/sparepart')->with('tambah', 'p');
+        return redirect()->route('sparepart.index')->with('tambah', 'p');
     }
     
     public function update(Request $request)
@@ -89,7 +89,7 @@ class SparepartController extends Controller
     
         $sparepart->update($dataValid);
     
-        return redirect('/sparepart')->with('edit', 'p');
+        return redirect()->route('sparepart.index')->with('edit', 'p');
     }
     
    
@@ -114,7 +114,7 @@ class SparepartController extends Controller
 
         Sparepart::destroy($dataValid);
 
-        return redirect('/sparepart')->with('hapus', 'p');
+        return redirect()->route('sparepart.index')->with('hapus', 'p');
     }
 
 }

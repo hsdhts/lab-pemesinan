@@ -38,37 +38,46 @@ Route::get('/home', [HomeController::class, 'index'])->middleware('auth');
 
 Route::get('/login', [UserController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/logout', [UserController::class, 'logout'])->middleware('auth');
-Route::post('/masuk', [UserController::class, 'masuk'])->middleware('guest');
+Route::post('/masuk', [UserController::class, 'masuk'])->name('masuk')->middleware('guest');
 
-Route::get('/akun', [UserController::class, 'akun'])->middleware('auth');
-Route::put('/user/akun/update/', [UserController::class, 'update_akun'])->middleware('auth');
-Route::put('/user/akun/update/password/', [UserController::class, 'ganti_password'])->middleware('auth');
+Route::get('/akun', [UserController::class, 'akun'])->name('user.akun')->middleware('auth');
+Route::put('/user/akun/update/', [UserController::class, 'update_akun'])->name('user.akun.update')->middleware('auth');
+Route::put('/user/akun/update/password/', [UserController::class, 'ganti_password'])->name('user.akun.update.password')->middleware('auth');
 
 
-Route::get('/user/all/', [UserController::class, 'index'])->middleware('auth')->middleware('superadmin');
+Route::get('/user/all/', [UserController::class, 'index'])->name('user.all')->middleware('auth')->middleware('superadmin');
 Route::get('/user/create/', [UserController::class, 'create'])->middleware('auth')->middleware('superadmin');
 Route::post('/user/store/', [UserController::class, 'store'])->middleware('superadmin');
 Route::get('/user/edit/{id}', [UserController::class, 'edit'])->middleware('superadmin');
-Route::put('/user/update/', [UserController::class, 'update'])->middleware('superadmin');
-Route::delete('/user/delete/', [UserController::class, 'delete'])->middleware('superadmin');
+Route::put('/user/update/', [UserController::class, 'update'])->name('user.update')->middleware('superadmin');
+Route::delete('/user/destroy', [UserController::class, 'destroy'])->name('user.destroy')->middleware('superadmin');
+Route::get('/user/destroy', function() {
+    return redirect()->route('user.all')->with('error', 'Akses tidak diizinkan. Gunakan tombol hapus yang tersedia.');
+})->name('user.destroy.get')->middleware('superadmin');
 
-Route::get('/mesin', [MesinController::class, 'index'])->middleware('auth')->middleware('admin');
-Route::get('/mesin/create', [MesinController::class, 'create'])->middleware('auth')->middleware('admin');
-Route::post('/mesin/create', [MesinController::class, 'tambah'])->middleware('admin');
-Route::get('/mesin/detail/{id}', [MesinController::class, 'detail'])->middleware('auth')->middleware('admin');
-Route::get('/mesin/edit/{id}', [MesinController::class, 'edit'])->middleware('auth')->middleware('admin');
+// Mesin Routes
+Route::get('/mesin', [MesinController::class, 'index'])->name('mesin.index')->middleware('auth')->middleware('admin');
+Route::get('/mesin/create', [MesinController::class, 'create'])->name('mesin.create')->middleware('auth')->middleware('admin');
+Route::post('/mesin/create', [MesinController::class, 'tambah'])->name('mesin.store')->middleware('admin');
+Route::get('/mesin/detail/{id}', [MesinController::class, 'detail'])->name('mesin.detail')->middleware('auth')->middleware('admin');
+Route::get('/mesin/edit/{id}', [MesinController::class, 'edit'])->name('mesin.edit')->middleware('auth')->middleware('admin');
+Route::put('/mesin/update', [MesinController::class, 'update'])->name('mesin.update')->middleware('admin');
+Route::delete('/mesin/destroy', [MesinController::class, 'destroy'])->name('mesin.destroy')->middleware('admin');
+Route::get('/mesin/destroy', function() {
+    return redirect()->route('mesin.index')->with('error', 'Akses tidak diizinkan. Gunakan tombol hapus yang tersedia.');
+})->name('mesin.destroy.get')->middleware('admin');
 
-Route::put('/mesin/update', [MesinController::class, 'update'])->middleware('admin');
-Route::delete('/mesin/destroy', [MesinController::class, 'destroy'])->middleware('admin');
 
-
-Route::get('/mesin/maintenance/{id}', [MaintenanceController::class, 'maintenance_mesin'])->middleware('auth')->middleware('admin');
+// Specific maintenance routes must come BEFORE parameterized routes
 Route::post('/mesin/maintenance/create/', [UpdateMaintenanceController::class, 'create'])->middleware('admin');
 Route::put('/mesin/maintenance/create/submit/', [UpdateMaintenanceController::class, 'submit_create'])->middleware('admin');
 Route::put('/mesin/maintenance/edit/', [UpdateMaintenanceController::class, 'edit'])->middleware('admin');
 Route::put('/mesin/maintenance/edit/submit', [UpdateMaintenanceController::class, 'submit_edit'])->middleware('admin');
 Route::post('/mesin/maintenance/edit/direct', [UpdateMaintenanceController::class, 'edit_direct'])->middleware('admin');
 Route::delete('/mesin/maintenance/delete/', [UpdateMaintenanceController::class, 'delete'])->middleware('admin');
+
+// Parameterized route must come AFTER specific routes
+Route::get('/mesin/maintenance/{id}', [MaintenanceController::class, 'maintenance_mesin'])->middleware('auth')->middleware('admin');
 
 Route::get('/setupMaintenance/{id}', [SetupMaintenanceController::class, 'setup'])->middleware('auth')->middleware('admin');
 Route::post('/setupMaintenance/create', [SetupMaintenanceController::class, 'createPadaSetup'])->middleware('admin');
@@ -103,20 +112,22 @@ Route::post('/maintenance/form/create/', [SetupMesinController::class, 'create_m
 Route::post('/maintenance/form/update/', [SetupMesinController::class, 'update_maintenance_form'])->middleware('admin');
 Route::post('/maintenance/form/delete/', [SetupMesinController::class, 'delete_maintenance_form'])->middleware('admin');
 
-Route::get('/sparepart', [SparepartController::class, 'index'])->middleware('auth')->middleware('admin');
-Route::get('/sparepart/create', [SparepartController::class, 'create'])->middleware('auth')->middleware('admin');
-Route::post('/sparepart/create', [SparepartController::class, 'tambah'])->middleware('admin');
-Route::get('/sparepart/edit/{id}', [SparepartController::class, 'edit'])->middleware('auth')->middleware('admin');
-Route::put('/sparepart/update', [SparepartController::class, 'update'])->middleware('admin');
-Route::delete('/sparepart/destroy', [SparepartController::class, 'destroy'])->middleware('admin');
+// Sparepart Routes
+Route::get('/sparepart', [SparepartController::class, 'index'])->name('sparepart.index')->middleware('auth')->middleware('admin');
+Route::get('/sparepart/create', [SparepartController::class, 'create'])->name('sparepart.create')->middleware('auth')->middleware('admin');
+Route::post('/sparepart/create', [SparepartController::class, 'tambah'])->name('sparepart.store')->middleware('admin');
+Route::get('/sparepart/edit/{id}', [SparepartController::class, 'edit'])->name('sparepart.edit')->middleware('auth')->middleware('admin');
+Route::put('/sparepart/update', [SparepartController::class, 'update'])->name('sparepart.update')->middleware('admin');
+Route::delete('/sparepart/destroy', [SparepartController::class, 'destroy'])->name('sparepart.destroy')->middleware('admin');
 
-Route::get('/stasiun', [StasiunController::class, 'index'])->middleware('auth')->middleware('admin');
-Route::get('/stasiun/create', [StasiunController::class, 'create'])->middleware('auth')->middleware('admin');
-Route::post('/stasiun/create', [StasiunController::class, 'tambah'])->middleware('admin');
-Route::get('/stasiun/detail/{id}', [StasiunController::class, 'detail'])->middleware('auth')->middleware('admin');
-Route::get('/stasiun/edit/{id}', [StasiunController::class, 'edit'])->middleware('auth')->middleware('admin');
-Route::put('/stasiun/update', [StasiunController::class, 'update'])->middleware('admin');
-Route::delete('/stasiun/destroy', [StasiunController::class, 'destroy'])->middleware('admin');
+// Stasiun Routes
+Route::get('/stasiun', [StasiunController::class, 'index'])->name('stasiun.index')->middleware('auth')->middleware('admin');
+Route::get('/stasiun/create', [StasiunController::class, 'create'])->name('stasiun.create')->middleware('auth')->middleware('admin');
+Route::post('/stasiun/create', [StasiunController::class, 'tambah'])->name('stasiun.store')->middleware('admin');
+Route::get('/stasiun/detail/{id}', [StasiunController::class, 'detail'])->name('stasiun.detail')->middleware('auth')->middleware('admin');
+Route::get('/stasiun/edit/{id}', [StasiunController::class, 'edit'])->name('stasiun.edit')->middleware('auth')->middleware('admin');
+Route::put('/stasiun/update', [StasiunController::class, 'update'])->name('stasiun.update')->middleware('admin');
+Route::delete('/stasiun/destroy', [StasiunController::class, 'destroy'])->name('stasiun.destroy')->middleware('admin');
 
 
 Route::post('/sparepart/jadwal/', [JadwalSparepartController::class, 'tambah_sparepart'])->middleware('admin');
@@ -155,7 +166,7 @@ Route::post('/preventive/generate-jadwal', [PreventiveMaintenanceController::cla
 Route::get('/preventive/jatuh-tempo', [PreventiveMaintenanceController::class, 'getJatuhTempo'])->name('preventive.jatuh-tempo')->middleware('auth')->middleware('admin');
 
 
-Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
-Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
-Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
-Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+Route::get('forget-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::post('forget-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+Route::get('reset-password/{token}', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password', [\App\Http\Controllers\Auth\ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');

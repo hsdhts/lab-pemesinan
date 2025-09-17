@@ -28,6 +28,9 @@ class MesinController extends Controller
                 ->addColumn('stasiun', function (Mesin $mesin) {
                     return $mesin->stasiun ? $mesin->stasiun->nama_stasiun : 'Belum Ditentukan';
                 })
+                ->addColumn('mesin_image', function (Mesin $mesin) {
+                    return $mesin->mesin_image;
+                })
                 ->addColumn('aksi', function ($mesin) {
                     return view('partials.tombolAksiMesin', ['editPath' => '/mesin/edit/', 'id' => $mesin->id, 'deletePath' => '/mesin/destroy/']);
                 })
@@ -78,7 +81,7 @@ class MesinController extends Controller
 
         $mesin = Mesin::with(['maintenance'])->find($m->id);
 
-        return redirect('/mesin')->with('tambah', 'p');
+        return redirect()->route('mesin.index')->with('tambah', 'p');
     }
 
 
@@ -122,7 +125,7 @@ class MesinController extends Controller
 
     $mesin->update($dataValid);
 
-    return redirect('/mesin')->with('edit', 'p');
+    return redirect()->route('mesin.index')->with('edit', 'p');
     }
 
 
@@ -134,7 +137,7 @@ class MesinController extends Controller
 
         Mesin::destroy($id);
 
-        return redirect('/mesin')->with('hapus', 'p');
+        return redirect()->route('mesin.index')->with('hapus', 'p');
     }
 
 }

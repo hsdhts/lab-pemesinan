@@ -25,7 +25,7 @@ class UserController extends Controller
 
     $request->session()->regenerateToken();
 
-    return redirect('/login');
+    return redirect()->route('login');
 
     }
 
@@ -82,7 +82,7 @@ class UserController extends Controller
 
         User::find($data_valid['id'])->update($data_valid);
 
-        return redirect('/akun');
+        return redirect()->route('user.akun');
     }
 
 
@@ -146,7 +146,7 @@ class UserController extends Controller
 
         User::create($data_valid);
 
-        return redirect('/user/all')->with('tambah', 'p');
+        return redirect()->route('user.all')->with('tambah', 'p');
     }
 
     public function edit($id){
@@ -168,10 +168,10 @@ class UserController extends Controller
 
         User::find($data_valid['id'])->update($data_valid);
 
-        return redirect('/user/all')->with('edit', 'p');
+        return redirect()->route('user.all')->with('edit', 'p');
     }
 
-    public function delete(Request $request){
+    public function destroy(Request $request){
 
         $data_valid = $request->validate([
             'id' => 'required|numeric',
@@ -179,7 +179,7 @@ class UserController extends Controller
 
         User::destroy($data_valid['id']);
 
-        return redirect('/user/all')->with('hapus', 'p');
+        return redirect()->route('user.all')->with('hapus', 'p');
 
     }
 
