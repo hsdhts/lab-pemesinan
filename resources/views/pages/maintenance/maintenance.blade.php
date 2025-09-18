@@ -140,7 +140,7 @@
             <td><b>Kode Mesin</b></td>
             <td>{{ $mesin->kode_mesin }}</td>
         </tr>
-
+ 
     </table>
 
     @canany(['superadmin', 'admin'])
@@ -177,9 +177,9 @@
 
 @section('content_right')
 
-@if(isset($maintenance) && $maintenance && $maintenance->count() > 0)
+@if(isset($mesin->maintenance) && $mesin->maintenance && $mesin->maintenance->count() > 0)
 <table class="table gs-7 align-middle">
-    @foreach ($maintenance as $m)
+    @foreach ($mesin->maintenance as $m)
 
     <tr class="table-primary">
         <td class="fw-bold fs-6">
