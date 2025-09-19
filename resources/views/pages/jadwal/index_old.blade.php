@@ -14,7 +14,7 @@
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-              <h4 class="modal-title">Maintenance</h4>
+              <h4 class="modal-title">Breakdown</h4>
 
                <!--begin::Close-->
                <div class="btn btn-icon btn-sm btn-active-light-danger ms-2" data-bs-dismiss="modal" aria-label="Close">
@@ -43,7 +43,7 @@
           </div>
 
 
-          
+
           <div class="modal-footer">
               <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
           </div>
@@ -52,8 +52,8 @@
 </div>
 
 <!--End Modal-->
- 
- 
+
+
   <div id="calendar"></div>
 @endsection
 
@@ -72,18 +72,20 @@ new Calendar('#calendar', {
   dataSource: [
 
     @foreach($maintenance as $m)
-        @foreach($m->jadwal as $j)
-             {
-              @php
-               $tanggal_rencana = Illuminate\Support\Carbon::parse($j->tanggal_rencana);
-              @endphp
-              startDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}), 
-              endDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}),
-              nama: '{{ $m->nama_maintenance }}',
-              color: '{{ $m->warna }}',
-              id: {{ $j->id }},
-            }, 
-        @endforeach
+        @if($m->jadwal && $m->jadwal->count() > 0)
+            @foreach($m->jadwal as $j)
+                 {
+                  @php
+                   $tanggal_rencana = Illuminate\Support\Carbon::parse($j->tanggal_rencana);
+                  @endphp
+                  startDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}),
+                  endDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}),
+                  nama: '{{ addslashes($m->nama_maintenance) }}',
+                  color: '{{ $m->warna ?? "#007bff" }}',
+                  id: {{ $j->id }},
+                },
+            @endforeach
+        @endif
     @endforeach
 
   ],
@@ -92,13 +94,13 @@ new Calendar('#calendar', {
 
 // Register events
 document.querySelector('#calendar').addEventListener('clickDay', function(e) {
-  
+
 
   var bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ];
 
   $('#tampil_jadwal').modal('show');
 
-  
+
   //appendLog("Click on day: " + e.date.toLocaleDateString() + " (" + e.events.length + " events)")
   var a = e.events;
   var tanggal = e.date.getDate()+' '+bulan[e.date.getMonth()]+' '+e.date.getFullYear();
@@ -106,7 +108,7 @@ document.querySelector('#calendar').addEventListener('clickDay', function(e) {
 
   a.forEach(element => {
 
-    maintenance += '<tr><td><a style="color:'+ element.color +';" href="/jadwal/detail/'+ element.id +'">'+ element.nama +'</a><td></tr>';
+    maintenance += '<tr><td><a style="color:'+ element.color +';" href="{{ route('jadwal.detail', '') }}/'+ element.id +'">'+ element.nama +'</a><td></tr>';
   });
 
   document.getElementById('tabel_jadwal_maintenance').innerHTML = maintenance;

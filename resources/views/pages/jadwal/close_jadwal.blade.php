@@ -293,7 +293,7 @@
     <div class="card-body">
         <div class="filter-section">
             <h5><i class="fas fa-search me-2"></i>Pencarian & Filter</h5>
-            <form action="/approve" method="get" id="filterForm">
+            <form action="{{ route('approve.index') }}" method="get" id="filterForm">
     <div class="row g-4 mb-4">
         <!-- Search Bar -->
         <div class="col-md-12">
@@ -587,7 +587,7 @@
 
             <div class="modal-footer">
                 <a class="btn btn-warning" id="link_detail" target="_blank">Lihat Detail</a>
-                <form action="{{ url('/laporan/maintenance') }}" method="POST" style="display: inline;">
+                <form action="{{ route('laporan.maintenance') }}" method="POST" style="display: inline;">
                     @csrf
                     <input type="hidden" name="jadwal_id" id="download_jadwal_id">
                     <button type="submit" class="btn btn-success">
@@ -978,7 +978,7 @@ Swal.fire({
                                     <small class="text-muted">{{ $laporanHarian->count() }} laporan tersedia</small>
                                 </div>
                             </div>
-                            <a href="/laporan/harian?tanggal={{ $tanggal }}" target="_blank"
+                            <a href="{{ route('laporan.harian', ['tanggal' => $tanggal]) }}" target="_blank"
                                class="btn btn-primary btn-sm px-3" style="border-radius: 8px;">
                                 <i class="fas fa-download me-1"></i>Download
                             </a>

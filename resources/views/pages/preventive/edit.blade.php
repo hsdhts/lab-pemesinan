@@ -10,7 +10,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Edit Preventive Maintenance</h3>
                     <div class="card-tools">
-                        <a href="{{ url('/preventive') }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('preventive.index') }}" class="btn btn-secondary btn-sm">
                             <i class="fas fa-arrow-left"></i> Kembali
                         </a>
                     </div>
@@ -145,7 +145,7 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Update Preventive Maintenance
                             </button>
-                            <a href="{{ url('/preventive') }}" class="btn btn-secondary">
+                            <a href="{{ route('preventive.index') }}" class="btn btn-secondary">
                                 <i class="fas fa-times"></i> Batal
                             </a>
                         </div>

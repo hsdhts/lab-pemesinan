@@ -33,7 +33,7 @@ License: For each use you must have a valid license purchased only from above li
 		<meta property="og:url" content="https://keenthemes.com/metronic" />
 		<meta property="og:site_name" content="Keenthemes | Metronic" />
 		<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-		<link rel="shortcut icon" href="/assets/default/icon.ico" />
+		<link rel="shortcut icon" href="{{ asset('assets/default/icon.ico') }}" />
 		<!--begin::Fonts-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 		<!--end::Fonts-->
@@ -41,14 +41,14 @@ License: For each use you must have a valid license purchased only from above li
 		@yield('customCss')
 		<!--end::Page Vendor Stylesheets-->
 		<!--begin::Global Stylesheets Bundle(used by all pages)-->
-		<link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
-		<link rel="stylesheet" href="\assets\bootstrap-datepicker-1.9.0\css\bootstrap-datepicker.standalone.min.css">
+		<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="{{ asset('assets/bootstrap-datepicker-1.9.0/css/bootstrap-datepicker.standalone.min.css') }}">
 		 <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
 		<!--end::Global Stylesheets Bundle-->
 
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-		<script src="\assets\sweetAlert\sweetalert2.all.min.js"></script>
+		<script src="{{ asset('assets/sweetAlert/sweetalert2.all.min.js') }}"></script>
 		@include('partials.customJs')
 	</head>
 	<!--end::Head-->
@@ -189,25 +189,25 @@ License: For each use you must have a valid license purchased only from above li
 		</div>
 		<!--end::Scrolltop-->
 		<!--end::Main-->
-		<script>var hostUrl = "assets/";</script>
+		<script>var hostUrl = "{{ asset('assets/') }}";</script>
 		<!--begin::Javascript-->
 		<!--begin::Global Javascript Bundle(used by all pages)-->
-		<script src="/assets/plugins/global/plugins.bundle.js"></script>
-		<script src="/assets/js/scripts.bundle.js"></script>
+		<script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
+		<script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
 		<!--end::Global Javascript Bundle-->
 		<!--begin::Page Vendors Javascript(used by this page)-->
-		<script src="/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
+		<script src="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
 		<!--end::Page Vendors Javascript-->
 		<!--begin::Page Custom Javascript(used by this page)-->
 
 
-		<script src="/assets/js/custom/widgets.js"></script>
-		<script src="/assets/js/custom/apps/chat/chat.js"></script>
-		<script src="/assets/js/custom/modals/create-app.js"></script>
-		<script src="/assets/js/custom/modals/upgrade-plan.js"></script>
-		<script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
-		<script src="\assets\bootstrap-datepicker-1.9.0\js\bootstrap-datepicker.min.js"></script>
-		<script src="\assets\bootstrap-datepicker-1.9.0\locales\bootstrap-datepicker.id.min.js"></script>
+		<script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
+		<script src="{{ asset('assets/js/custom/apps/chat/chat.js') }}"></script>
+		<script src="{{ asset('assets/js/custom/modals/create-app.js') }}"></script>
+		<script src="{{ asset('assets/js/custom/modals/upgrade-plan.js') }}"></script>
+		<script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+		<script src="{{ asset('assets/bootstrap-datepicker-1.9.0/js/bootstrap-datepicker.min.js') }}"></script>
+		<script src="{{ asset('assets/bootstrap-datepicker-1.9.0/locales/bootstrap-datepicker.id.min.js') }}"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 		<!-- Mengko tambahi yield ng kene gawe custom-->
 

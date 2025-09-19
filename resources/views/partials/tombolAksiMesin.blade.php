@@ -12,7 +12,7 @@
 </button>
 </a>
 
-<a href="/jadwal/{{ $id }}">
+<a href="{{ route('jadwal.index', $id) }}">
     <button class="btn btn-sm btn-dark py-0 text-nowrap d-inline">
         <!--begin::Svg Icon | path: assets/media/icons/duotune/files/fil002.svg-->
     <span class="svg-icon svg-icon-muted svg-icon-3">

@@ -109,7 +109,7 @@ document.querySelector('#calendar').addEventListener('clickDay', function(e) {
 
   a.forEach(element => {
 
-    maintenance += '<tr><td><a style="color:'+ element.color +';" href="/jadwal/detail/'+ element.id +'">'+ element.nama +'</a><td></tr>';
+    maintenance += '<tr><td><a style="color:'+ element.color +';" href="{{ route('jadwal.detail', '') }}/'+ element.id +'">'+ element.nama +'</a><td></tr>';
   });
 
   document.getElementById('tabel_jadwal_maintenance').innerHTML = maintenance;

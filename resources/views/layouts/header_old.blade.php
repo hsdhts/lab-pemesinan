@@ -42,7 +42,7 @@
                   <a class="nav-link @if($halaman == 'Home') active @endif" aria-current="page" href="/home">Home</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link @if($halaman == 'Jadwal') active @endif" href="/jadwal">Jadwal</a>
+                  <a class="nav-link @if($halaman == 'Jadwal') active @endif" href="{{ route('jadwal.all') }}">Jadwal</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link @if($halaman == 'Mesin') active @endif" href="/mesin">Mesin</a>

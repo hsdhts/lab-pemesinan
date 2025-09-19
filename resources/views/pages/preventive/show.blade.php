@@ -10,11 +10,11 @@
                 <div class="card-header">
                     <h3 class="card-title">Detail Preventive Maintenance</h3>
                     <div class="card-tools">
-                        <a href="{{ url('/preventive') }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ route('preventive.index') }}" class="btn btn-secondary btn-sm">
                             <i class="fas fa-arrow-left"></i> Kembali
                         </a>
                         @if(auth()->user()->role == 'admin')
-                            <a href="{{ url('/preventive/' . $jadwalPreventive->id . '/edit') }}" class="btn btn-warning btn-sm">
+                            <a href="{{ route('preventive.edit', $jadwalPreventive->id) }}" class="btn btn-warning btn-sm">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
                         @endif
@@ -143,7 +143,7 @@
                                                     <td>{{ $jadwal->tanggal_realisasi ? $jadwal->tanggal_realisasi->format('d/m/Y') : '-' }}</td>
                                                     <td>{{ $jadwal->keterangan ?: '-' }}</td>
                                                     <td>
-                                                        <a href="{{ url('/jadwal/detail/' . $jadwal->id) }}" class="btn btn-info btn-sm">
+                                                        <a href="{{ route('jadwal.detail', $jadwal->id) }}" class="btn btn-info btn-sm">
                                                             <i class="fas fa-eye"></i> Detail
                                                         </a>
                                                     </td>

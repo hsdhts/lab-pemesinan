@@ -272,7 +272,7 @@
     <div class="row g-3 g-md-4 g-xl-5">
         <div class="col-12 col-sm-6 col-lg-3">
             <!--begin::Modern Statistics Widget-->
-            <a href="{{ url('/mesin') }}" class="modern-card card-breakdown text-decoration-none">
+            <a href="{{ route('mesin.index') }}" class="modern-card card-breakdown text-decoration-none">
                 <div class="modern-card-body">
 
                     <div class="modern-icon-container">
@@ -321,7 +321,7 @@
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
             <!--begin::Modern Statistics Widget-->
-            <a href="{{ url('/preventive') }}" class="modern-card card-machine text-decoration-none">
+            <a href="{{ route('jadwal.all') }}" class="modern-card card-maintenance text-decoration-none">
                 <div class="modern-card-body">
 
                     <div class="modern-icon-container">

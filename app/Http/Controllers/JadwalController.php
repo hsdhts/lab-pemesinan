@@ -23,6 +23,11 @@ class JadwalController extends Controller
 
         //id mesin
         $mesin = Mesin::find($id);
+        
+        // Check if mesin exists
+        if (!$mesin) {
+            return redirect()->route('mesin.index')->with('error', 'Mesin tidak ditemukan. ID: ' . $id);
+        }
         ///ddd($mesin);
         /*
         $maintenance = Maintenance::with(['jadwal' => function($query) {
@@ -30,7 +35,9 @@ class JadwalController extends Controller
         }])->where('mesin_id', $id)->withTrashed()->get();
         */
 
-        $maintenance = Maintenance::with(['jadwal'])->where('mesin_id', $id)->withTrashed()->get();
+        $maintenance = Maintenance::with(['jadwal' => function($query) {
+            $query->where('status', '<', 3); // Only show incomplete tasks (status < 3)
+        }])->where('mesin_id', $id)->withTrashed()->get();
 
         $maintenance2 = Maintenance::with(['jadwal' => function($query) {
             $query->withTrashed()->where('status', '>', 20);
@@ -153,7 +160,8 @@ class JadwalController extends Controller
 
         $jadwal = Jadwal::find($data_valid['id']);
 
-        unset($data_valid['tanggal_realisasi']);
+        // Don't unset tanggal_realisasi if it's provided
+        // unset($data_valid['tanggal_realisasi']);
         if (isset($data_valid['foto_perbaikan'])) {
             unset($data_valid['foto_perbaikan']);
         }
@@ -179,26 +187,31 @@ class JadwalController extends Controller
             }
         }
 
-        $jadwal->update($data_valid);
-
-        if($jadwal->status == 1){
-            $jadwal->increment('status');
-        }
-
+        // Handle status and tanggal_realisasi logic properly
         if($request->has('auto_verify') && $request->auto_verify == '1'){
             $jadwal->status = 3; // Set to verified by superadmin
             $jadwal->tanggal_realisasi = Carbon::now();
-            $jadwal->save();
         } elseif($request->has('status') && $request->status == '3'){
             $jadwal->status = 3; // Set to verified by superadmin
             $jadwal->tanggal_realisasi = Carbon::now();
-            $jadwal->save();
         } elseif(isset($request->validasi)){
-            $jadwal->increment('status');
+            $jadwal->status = $jadwal->status + 1; // Increment status
             // Auto-set tanggal_realisasi when task is validated/completed
-            $jadwal->tanggal_realisasi = Carbon::now();
-            $jadwal->save();
+            if($jadwal->status >= 3) {
+                $jadwal->tanggal_realisasi = Carbon::now();
+            }
+        } else {
+            // Normal update - if tanggal_realisasi is provided, set status to completed
+            if(isset($data_valid['tanggal_realisasi']) && $data_valid['tanggal_realisasi']) {
+                $jadwal->status = 3; // Mark as completed
+            } elseif($jadwal->status == 1) {
+                $jadwal->status = 2; // Mark as in progress
+            }
         }
+
+        // Update all other fields
+        $jadwal->update($data_valid);
+        $jadwal->save();
 
 
         if($request->has('isi_form')){
@@ -207,7 +220,7 @@ class JadwalController extends Controller
             }
         }
 
-        return redirect('/jadwal/detail/' . $jadwal->id);
+        return redirect()->route('jadwal.detail', $jadwal->id);
     }
 
     public function indexAll() {

@@ -8,7 +8,7 @@
 @section('before_content')
 <div class="modal fade" tabindex="-1" id="kt_modal_2">
     <div class="modal-dialog">
-        <form action="/sparepart/jadwal/" method="post">
+        <form action="{{ route('sparepart.jadwal.tambah') }}" method="post">
         @csrf
         <div class="modal-content">
                 <div class="modal-header">
@@ -113,7 +113,7 @@
   @endif
 
 @canany(['admin'])
-<form action="{{ url('/laporan/maintenance') }}" class="text-center" method="POST">
+<form action="{{ route('laporan.maintenance') }}" class="text-center" method="POST">
 @csrf
 
 <input type="hidden" name="jadwal_id" value="{{ $jadwal->id }}">
@@ -138,7 +138,7 @@
 @section('content_right')
 
 
-<form action="/jadwal/update/" method="POST" enctype="multipart/form-data">
+<form action="{{ route('jadwal.update') }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="my-4">
@@ -195,7 +195,7 @@
 
 <div class="container-fluid text-end">
 
-    <a href="/mesin">
+    <a href="{{ route('mesin.index') }}">
         <button type="button" class="btn btn-lg btn-secondary d-inline">
 
             <!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr046.svg-->
@@ -274,7 +274,7 @@
                     <td>{{ $s->satuan }}</td>
                     <td>
                         @if($jadwal->status < 3)
-                        <form action="/sparepart/jadwal/delete" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
+                        <form action="{{ route('sparepart.jadwal.delete') }}" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
                         @method('delete')
                         @csrf
                         <input type="hidden" name="jadwal_id" value="{{ $jadwal->id }}">
@@ -329,7 +329,7 @@ tinymce.init(options);
 
 // Handle form submission with AJAX to prevent page refresh
 $(document).ready(function() {
-    $('form[action="/jadwal/update/"]').on('submit', function(e) {
+    $('form[action="{{ route('jadwal.update') }}"]').on('submit', function(e) {
         e.preventDefault(); // Prevent default form submission
 
         const form = $(this);

@@ -90,10 +90,17 @@ Route::put('/setupForm/edit/', [SetupFormController::class, 'editPadaSetup'])->m
 Route::delete('/setupForm/delete/', [SetupFormController::class, 'deletePadaSetup'])->middleware('admin');
 
 
-Route::get('/approve', [JadwalApproveController::class, 'index'])->middleware('auth')->middleware('admin');
-Route::post('/approve/jadwal', [JadwalApproveController::class, 'approve'])->middleware('admin');
-Route::put('/approve/jadwal/tetap', [JadwalApproveController::class, 'approve_tetap'])->middleware('admin');
-Route::put('/approve/jadwal/ubah', [JadwalApproveController::class, 'approve_ubah'])->middleware('admin');
+// Test route to verify routing system
+Route::get('/test-route', function() {
+    return 'Route system is working!';
+})->name('test.route');
+
+Route::get('/approve', [JadwalApproveController::class, 'index'])->name('approve.index')->middleware('auth')->middleware('admin');
+Route::get('/close_jadwal', [JadwalApproveController::class, 'index'])->name('close_jadwal.index')->middleware('auth')->middleware('admin');
+Route::post('/close_jadwal', [JadwalApproveController::class, 'index'])->name('close_jadwal.store')->middleware('auth')->middleware('admin');
+Route::post('/approve/jadwal', [JadwalApproveController::class, 'approve'])->name('approve.jadwal')->middleware('admin');
+Route::put('/approve/jadwal/tetap', [JadwalApproveController::class, 'approve_tetap'])->name('approve.jadwal.tetap')->middleware('admin');
+Route::put('/approve/jadwal/ubah', [JadwalApproveController::class, 'approve_ubah'])->name('approve.jadwal.ubah')->middleware('admin');
 
 
 Route::post('/maintenance/form/pilih/', [SetupMesinController::class, 'pilih_template'])->middleware('admin');
@@ -130,28 +137,28 @@ Route::put('/stasiun/update', [StasiunController::class, 'update'])->name('stasi
 Route::delete('/stasiun/destroy', [StasiunController::class, 'destroy'])->name('stasiun.destroy')->middleware('admin');
 
 
-Route::post('/sparepart/jadwal/', [JadwalSparepartController::class, 'tambah_sparepart'])->middleware('admin');
-Route::delete('/sparepart/jadwal/delete/', [JadwalSparepartController::class, 'hapus_sparepart'])->middleware('admin');
+Route::post('/sparepart/jadwal/', [JadwalSparepartController::class, 'tambah_sparepart'])->name('sparepart.jadwal.tambah')->middleware('admin');
+Route::delete('/sparepart/jadwal/delete/', [JadwalSparepartController::class, 'hapus_sparepart'])->name('sparepart.jadwal.hapus')->middleware('admin');
 
 
-Route::get('/jadwal/all', [JadwalController::class, 'indexAll'])->middleware('auth');
-Route::get('/jadwal/{id}', [JadwalController::class, 'index'])->middleware('auth');
-Route::get('/jadwal/detail/{id}', [JadwalController::class, 'detail'])->middleware('auth');
-Route::put('/jadwal/update/', [JadwalController::class, 'update'])->middleware('auth');
-Route::put('/jadwal/update_alasan/', [JadwalController::class, 'update_with_alasan'])->middleware('auth');
-Route::post('/jadwal/update_alasan_batal/', [JadwalController::class, 'update_with_alasan_batal'])->middleware('auth');
-Route::put('/jadwal/update-status/{id}', [JadwalController::class, 'updateStatus'])->middleware('auth');
+Route::get('/jadwal/all', [JadwalController::class, 'indexAll'])->name('jadwal.all')->middleware('auth');
+Route::get('/jadwal/{id}', [JadwalController::class, 'index'])->name('jadwal.index')->middleware('auth');
+Route::get('/jadwal/detail/{id}', [JadwalController::class, 'detail'])->name('jadwal.detail')->middleware('auth');
+Route::put('/jadwal/update/', [JadwalController::class, 'update'])->name('jadwal.update')->middleware('auth');
+Route::put('/jadwal/update_alasan/', [JadwalController::class, 'update_with_alasan'])->name('jadwal.update.alasan')->middleware('auth');
+Route::post('/jadwal/update_alasan_batal/', [JadwalController::class, 'update_with_alasan_batal'])->name('jadwal.update.alasan.batal')->middleware('auth');
+Route::put('/jadwal/update-status/{id}', [JadwalController::class, 'updateStatus'])->name('jadwal.update.status')->middleware('auth');
 
 
 Route::get('/update_tahunan', [UpdateDbController::class, 'index'])->middleware('auth')->middleware('admin');
 Route::post('/update_tahunan', [UpdateDbController::class, 'update_jadwal'])->middleware('admin');
 
 
-Route::get('/laporan', [LaporanController::class, 'index'])->middleware('auth')->middleware('admin');
-Route::post('/laporan/inspeksi', [LaporanController::class, 'laporan_general_inspection'])->middleware('admin');
-Route::post('/laporan/maintenance', [LaporanController::class, 'laporan_maintenance'])->middleware('admin');
-Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_rencana_realisasi'])->middleware('admin');
-Route::get('/laporan/harian', [LaporanController::class, 'laporan_harian'])->middleware('admin');
+Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index')->middleware('auth')->middleware('admin');
+Route::post('/laporan/inspeksi', [LaporanController::class, 'laporan_general_inspection'])->name('laporan.inspeksi')->middleware('admin');
+Route::post('/laporan/maintenance', [LaporanController::class, 'laporan_maintenance'])->name('laporan.maintenance')->middleware('admin');
+Route::post('/laporan/rencana_realisasi', [LaporanController::class, 'laporan_rencana_realisasi'])->name('laporan.rencana_realisasi')->middleware('admin');
+Route::get('/laporan/harian', [LaporanController::class, 'laporan_harian'])->name('laporan.harian')->middleware('admin');
 
 
 // Preventive Maintenance Routes

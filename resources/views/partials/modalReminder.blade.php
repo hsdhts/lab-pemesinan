@@ -37,7 +37,7 @@
                                 @foreach($hari_ini as $h)
                                 <tr>
                                     <td>
-                                        <a href="/jadwal/detail/{{ $h->id }}" class="text-dark fw-bolder text-hover-primary fs-6">{{ $h->maintenance->nama_maintenance }}</a>
+                                        <a href="{{ route('jadwal.detail', $h->id) }}" class="text-dark fw-bolder text-hover-primary fs-6">{{ $h->maintenance->nama_maintenance }}</a>
                                     </td>
                                     <td>
                                         <span class="text-dark fw-bolder d-block mb-1 fs-6">{{ $h->maintenance->mesin ? $h->maintenance->mesin->nama_mesin : 'Mesin tidak ditemukan' }}</span>
@@ -61,7 +61,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <a href="/jadwal/detail/{{ $h->id }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                        <a href="{{ route('jadwal.detail', $h->id) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                                             <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen037.svg-->
                                             <span class="svg-icon svg-icon-muted svg-icon-1">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
