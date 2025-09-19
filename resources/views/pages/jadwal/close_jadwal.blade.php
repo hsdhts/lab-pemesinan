@@ -293,7 +293,7 @@
     <div class="card-body">
         <div class="filter-section">
             <h5><i class="fas fa-search me-2"></i>Pencarian & Filter</h5>
-            <form action="{{ route('approve.index') }}" method="get" id="filterForm">
+            <form action="/approve" method="get" id="filterForm">
     <div class="row g-4 mb-4">
         <!-- Search Bar -->
         <div class="col-md-12">
@@ -587,7 +587,7 @@
 
             <div class="modal-footer">
                 <a class="btn btn-warning" id="link_detail" target="_blank">Lihat Detail</a>
-                <form action="{{ route('laporan.maintenance') }}" method="POST" style="display: inline;">
+                <form action="/laporan/maintenance" method="POST" style="display: inline;">
                     @csrf
                     <input type="hidden" name="jadwal_id" id="download_jadwal_id">
                     <button type="submit" class="btn btn-success">
@@ -735,13 +735,17 @@ function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, t
             }
         });
 
+        // Update counter total records
         updateRecordCounter(visibleItems);
 
+        // Tampilkan pesan jika tidak ada data yang ditemukan
         updateNoDataMessage(visibleItems);
 
+        // Update load more button visibility
         updateLoadMoreButton(visibleItems);
     }
 
+// Fungsi untuk update counter total records
     function updateRecordCounter(visibleItems) {
         const totalRecordsElement = document.getElementById('totalRecords');
         if (totalRecordsElement) {
@@ -749,14 +753,17 @@ function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, t
         }
     }
 
+    // Fungsi untuk menampilkan pesan "tidak ada data"
     function updateNoDataMessage(visibleItems) {
         const listContainer = document.getElementById('historyList');
 
+        // Hapus pesan "tidak ada data" yang sudah ada
         const existingMessage = document.getElementById('noDataMessage');
         if (existingMessage) {
             existingMessage.remove();
         }
 
+        // Tambahkan pesan jika tidak ada data yang terlihat
         if (visibleItems === 0) {
             const noDataDiv = document.createElement('div');
             noDataDiv.id = 'noDataMessage';
@@ -774,6 +781,7 @@ function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, t
         }
     }
 
+    // Fungsi untuk update visibility load more button
     function updateLoadMoreButton(visibleItems) {
         const loadMoreContainer = document.getElementById('loadMoreContainer');
         if (loadMoreContainer) {
@@ -785,7 +793,10 @@ function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, t
         }
     }
 
+    // Fungsi untuk load more items (pagination simulation)
     function loadMoreItems() {
+        // This is a placeholder for pagination functionality
+        // In a real implementation, you would load more data from the server
         const loadMoreBtn = document.getElementById('loadMoreBtn');
         loadMoreBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Loading...';
 
@@ -795,24 +806,27 @@ function modal_history(jadwal_id, mesin, maintenance, tgl_rencana, keterangan, t
         }, 1000);
     }
 
+// Fungsi untuk reset filter
 function resetFilter() {
     document.getElementById('searchInput').value = '';
     document.querySelector('select[name="mesin_filter"]').value = '';
     document.getElementById('sortSelect').value = 'tanggal_desc';
     document.getElementById('itemsPerPageSelect').value = '12';
 
+    // Reset global variables
     currentSort = 'tanggal_desc';
     itemsPerPage = 12;
     currentPage = 1;
 
-    filterTable();
+    applyFiltersAndSort();
 }
 
+// Enhanced search function with debouncing
 let searchTimeout;
 function handleSearch() {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
-        filterTable();
+        applyFiltersAndSort();
     }, 300); // 300ms delay for better performance
 }
 
@@ -864,7 +878,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (mesinSelect) {
         // Filter saat mengubah pilihan mesin
-        mesinSelect.addEventListener('change', filterTable);
+        mesinSelect.addEventListener('change', applyFiltersAndSort);
     }
 
     // Add reset button functionality
@@ -915,6 +929,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }, index * 100);
     });
 
+    // Initialize data and pagination
+    initializeData();
+
+    // Add event listeners for sorting and pagination controls
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            changeSort(this.value);
+        });
+    }
+
+    const itemsPerPageSelect = document.getElementById('itemsPerPageSelect');
+    if (itemsPerPageSelect) {
+        itemsPerPageSelect.addEventListener('change', function() {
+            changeItemsPerPage(this.value);
+        });
+    }
+
+    // Inisialisasi filter saat halaman dimuat
     filterTable();
 });
 
@@ -978,7 +1011,7 @@ Swal.fire({
                                     <small class="text-muted">{{ $laporanHarian->count() }} laporan tersedia</small>
                                 </div>
                             </div>
-                            <a href="{{ route('laporan.harian', ['tanggal' => $tanggal]) }}" target="_blank"
+                            <a href="/laporan/harian?tanggal={{ $tanggal }}" target="_blank"
                                class="btn btn-primary btn-sm px-3" style="border-radius: 8px;">
                                 <i class="fas fa-download me-1"></i>Download
                             </a>

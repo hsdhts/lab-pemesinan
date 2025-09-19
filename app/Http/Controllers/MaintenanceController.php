@@ -54,7 +54,7 @@ class MaintenanceController extends Controller
             $objectJadwal->create_jadwal($maintenance->id);
         }
 
-        return redirect()->route('jadwal.index', $mesin->get('id'));
+        return redirect('/jadwal/' . $mesin->get('id'));
     }
 
 
@@ -106,7 +106,7 @@ class MaintenanceController extends Controller
 
             $objectJadwal->create_jadwal($maintenance->id);
 
-            return redirect()->route('jadwal.index', $request->mesin_id);
+            return redirect('/jadwal/' . $request->mesin_id);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data maintenance. Silakan coba lagi.');
         }
@@ -150,7 +150,7 @@ class MaintenanceController extends Controller
                 'foto_kerusakan' => $fotoKerusakanPath,
             ]);
 
-            return redirect()->route('jadwal.index', $request->mesin_id)->with('success', 'Data berhasil diupdate.');
+            return redirect('/jadwal/' . $request->mesin_id)->with('success', 'Data berhasil diupdate.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengupdate data maintenance. Silakan coba lagi.');
         }
@@ -170,7 +170,7 @@ class MaintenanceController extends Controller
 
             $maintenance->delete();
 
-            return redirect()->route('jadwal.index', $request->mesin_id)->with('success', 'Data maintenance berhasil dihapus.');
+            return redirect('/jadwal/' . $request->mesin_id)->with('success', 'Data maintenance berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data maintenance. Silakan coba lagi.');
         }

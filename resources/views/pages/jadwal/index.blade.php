@@ -1,22 +1,21 @@
 @extends('layouts.tray_layout')
 
 @section('customCss')
-<link href="{{ asset('assets/js-year-calendar/dist/js-year-calendar.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="/assets/js-year-calendar/dist/js-year-calendar.min.css" rel="stylesheet" type="text/css" />
 
 
 @endsection
 
 
 @section('content_left')
-@if($mesin)
 <table class="table table-row-dashed table-row-gray-400 gs-1">
   <<tr>
         <td><b>Nama Mesin</b></td>
-        <td>{{ $mesin->nama_mesin ?? 'N/A' }}</td>
+        <td>{{ $mesin->nama_mesin }}</td>
     </tr>
     <tr>
       <td><b>Kode Mesin</b></td>
-      <td>{{ $mesin->kode_mesin ?? 'N/A' }}</td>
+      <td>{{ $mesin->kode_mesin }}</td>
     </tr>
     <tr>
       <td><b>Stasiun </b></td>
@@ -34,15 +33,10 @@
     <tr>
       <td colspan="2">
         <b>Spesifikasi</b><br>
-        {!! $mesin->spesifikasi ?? 'Tidak ada spesifikasi' !!}
+        {!! $mesin->spesifikasi !!}
       </td>
     </tr>
 </table>
-@else
-<div class="alert alert-warning">
-    <strong>Peringatan!</strong> Data mesin tidak ditemukan.
-</div>
-@endif
 @endsection
 
 
@@ -97,95 +91,61 @@
 @endsection
 
 @section('customJs')
-<script src="{{ asset('assets/js-year-calendar/dist/js-year-calendar.min.js') }}"></script>
-<script src="{{ asset('assets/js-year-calendar/locales/js-year-calendar.id.js') }}"></script>
+<script src="\assets\js-year-calendar\dist\js-year-calendar.min.js"></script>
+<script src="\assets\js-year-calendar\locales\js-year-calendar.id.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if Calendar library is loaded
-            if (typeof Calendar === 'undefined') {
-                console.error('Calendar library not loaded!');
-                alert('Error: Calendar library tidak dapat dimuat. Silakan refresh halaman.');
-                return;
-            }
 
-            // Check if calendar element exists
-            const calendarElement = document.querySelector('#calendar');
-            if (!calendarElement) {
-                console.error('Calendar element not found!');
-                alert('Error: Element calendar tidak ditemukan.');
-                return;
-            }
+        const currentYear = {{ now(7)->year }};
+        //const currentYear = new Date().getFullYear();
 
-            // Debug: Log maintenance data
-            console.log('Maintenance data:', @json($maintenance));
-            console.log('Maintenance count:', {{ $maintenance->count() }});
-            
-            // Prepare calendar data
-            const calendarData = [
-                @foreach($maintenance as $m)
-                    @if($m->jadwal && $m->jadwal->count() > 0)
-                        @foreach($m->jadwal as $j)
-                             {
-                              @php
-                               $tanggal_rencana = Illuminate\Support\Carbon::parse($j->tanggal_rencana);
-                              @endphp
-                              startDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}),
-                              endDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}),
-                              nama: '{{ addslashes($m->nama_maintenance) }}',
-                              color: '{{ $m->warna ?? "#007bff" }}',
-                              id: {{ $j->id }},
-                            },
-                        @endforeach
-                    @endif
-                @endforeach
-            ];
+// Initialize calendar
+new Calendar('#calendar', {
+  language: 'id',
+  dataSource: [
 
-            console.log('Calendar data prepared:', calendarData);
+    @foreach($maintenance as $m)
+        @foreach($m->jadwal as $j)
+             {
+              @php
+               $tanggal_rencana = Illuminate\Support\Carbon::parse($j->tanggal_rencana);
+              @endphp
+              startDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}),
+              endDate: new Date({{ $tanggal_rencana->year }}, {{ ($tanggal_rencana->month) - 1 }}, {{ $tanggal_rencana->day }}),
+              nama: '{{ $m->nama_maintenance }}',
+              color: '{{ $m->warna }}',
+              id: {{ $j->id }},
+            },
+        @endforeach
+    @endforeach
 
-            try {
-                // Initialize calendar
-                const calendar = new Calendar('#calendar', {
-                  language: 'id',
-                  dataSource: calendarData,
-                  enableRangeSelection: false,
-                  startYear: {{ now()->year }},
-                  minDate: new Date({{ now()->year }}, 0, 1),
-                  maxDate: new Date({{ now()->year }}, 11, 31)
-                });
+  ],
+  enableRangeSelection: false
+})
 
-                console.log('Calendar initialized successfully');
+// Register events
+document.querySelector('#calendar').addEventListener('clickDay', function(e) {
 
-                // Register events
-                calendarElement.addEventListener('clickDay', function(e) {
-                  console.log('Day clicked:', e.date, 'Events:', e.events);
-                  
-                  if (!e.events || e.events.length === 0) {
-                    console.log('No events for this day');
-                    return;
-                  }
 
-                  var bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+  var bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ];
 
-                  $('#tampil_jadwal').modal('show');
+  $('#tampil_jadwal').modal('show');
 
-                  var a = e.events;
-                  var tanggal = e.date.getDate() + ' ' + bulan[e.date.getMonth()] + ' ' + e.date.getFullYear();
-                  var maintenance = '';
 
-                  a.forEach(element => {
-                    // Use proper route generation with route() helper
-                    var detailUrl = '{{ route("jadwal.detail", ":id") }}'.replace(':id', element.id);
-                    maintenance += '<tr><td><a style="color:' + element.color + ';" href="' + detailUrl + '">' + element.nama + '</a></td></tr>';
-                  });
+  //appendLog("Click on day: " + e.date.toLocaleDateString() + " (" + e.events.length + " events)")
+  var a = e.events;
+  var tanggal = e.date.getDate()+' '+bulan[e.date.getMonth()]+' '+e.date.getFullYear();
+  var maintenance = '';
 
-                  document.getElementById('tabel_jadwal_maintenance').innerHTML = maintenance;
-                  document.getElementById('tanggal_jadwal').innerHTML = tanggal;
-                });
+  a.forEach(element => {
 
-            } catch (error) {
-                console.error('Error initializing calendar:', error);
-                alert('Error: Gagal menginisialisasi calendar - ' + error.message);
-            }
-        });
+    maintenance += '<tr><td><a style="color:'+ element.color +';" href="/jadwal/detail/'+ element.id +'">'+ element.nama +'</a><td></tr>';
+  });
+
+  document.getElementById('tabel_jadwal_maintenance').innerHTML = maintenance;
+  document.getElementById('tanggal_jadwal').innerHTML = tanggal;
+
+})
+
+
     </script>
 @endsection

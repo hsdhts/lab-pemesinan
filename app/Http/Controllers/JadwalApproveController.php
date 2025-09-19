@@ -31,7 +31,7 @@ class JadwalApproveController extends Controller
 
 
         }else{
-            $tglawal = now()->subMonths(6);
+            $tglawal = now()->subDays(90);
             $tglakhir = now();
         }
 
@@ -46,7 +46,6 @@ class JadwalApproveController extends Controller
             });
         }
 
-        // Get all data without pagination for client-side filtering
         $jadwal = $query->orderBy('tanggal_realisasi', 'desc')->get();
 
         return view('pages.jadwal.close_jadwal', compact('jadwal'));
@@ -96,7 +95,7 @@ class JadwalApproveController extends Controller
                         $jadwalObj->buat_jadwal_dan_isi_form($waktu, $id_maintenance);
 
                         $waktu->addWeeks($periode);
-                                }
+                    }
                 break;
 
             case 'Bulan':

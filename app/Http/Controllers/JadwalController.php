@@ -23,31 +23,23 @@ class JadwalController extends Controller
 
         //id mesin
         $mesin = Mesin::find($id);
-        
-        // Check if mesin exists
-        if (!$mesin) {
-            return redirect()->route('mesin.index')->with('error', 'Mesin tidak ditemukan. ID: ' . $id);
+
+        // Optimized query to get maintenance with their jadwal, avoiding excessive data
+        $maintenance = Maintenance::with(['jadwal' => function($query) {
+            $query->withTrashed()
+                  ->orderBy('tanggal_rencana', 'desc')
+                  ->limit(50); // Limit jadwal per maintenance to prevent excessive loading
+        }])
+        ->where('mesin_id', $id)
+        ->withTrashed()
+        ->get();
+
+        // Remove debug logging to prevent performance issues
+        // Only log if there are issues
+        if($maintenance->isEmpty()) {
+            \Log::info('No maintenance found for mesin_id: ' . $id);
         }
-        ///ddd($mesin);
-        /*
-        $maintenance = Maintenance::with(['jadwal' => function($query) {
-            $query->withTrashed();
-        }])->where('mesin_id', $id)->withTrashed()->get();
-        */
 
-        $maintenance = Maintenance::with(['jadwal' => function($query) {
-            $query->where('status', '<', 3); // Only show incomplete tasks (status < 3)
-        }])->where('mesin_id', $id)->withTrashed()->get();
-
-        $maintenance2 = Maintenance::with(['jadwal' => function($query) {
-            $query->withTrashed()->where('status', '>', 20);
-        }])->where('mesin_id', $id)->withTrashed()->get();
-
-        $maintenance = $maintenance->concat($maintenance2);
-
-
-        //ddd($maintenance);
-        //return view('pages.jadwal.index');
         return view('pages.jadwal.index', ['halaman' => 'Jadwal', 'maintenance' => $maintenance, 'mesin' => $mesin]);
     }
 
@@ -69,17 +61,34 @@ class JadwalController extends Controller
                                 ->first();
 
         if ($existingJadwal) {
+            \Log::info('Jadwal already exists for maintenance_id: ' . $id_maintenance . ' on date: ' . $waktu->format('Y-m-d H:i:s'));
             return; // Skip if schedule already exists
         }
 
-        $jadwal = Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
+        // Additional check to prevent excessive jadwal creation
+        $recentJadwalCount = Jadwal::where('maintenance_id', $id_maintenance)
+                                  ->where('tanggal_rencana', '>=', Carbon::now()->subDays(7))
+                                  ->count();
 
-        $form = Form::where('maintenance_id', $id_maintenance)->get();
-        foreach ($form as $f) {
-            IsiForm::create([
-                'jadwal_id' => $jadwal->id,
-                'form_id' => $f->id,
-            ]);
+        if ($recentJadwalCount > 10) {
+            \Log::warning('Too many recent jadwal for maintenance_id: ' . $id_maintenance . '. Skipping creation.');
+            return;
+        }
+
+        try {
+            $jadwal = Jadwal::create(['tanggal_rencana' => $waktu, 'maintenance_id' => $id_maintenance]);
+
+            $form = Form::where('maintenance_id', $id_maintenance)->get();
+            foreach ($form as $f) {
+                IsiForm::create([
+                    'jadwal_id' => $jadwal->id,
+                    'form_id' => $f->id,
+                ]);
+            }
+            
+            \Log::info('Created jadwal for maintenance_id: ' . $id_maintenance . ' on date: ' . $waktu->format('Y-m-d H:i:s'));
+        } catch (\Exception $e) {
+            \Log::error('Error creating jadwal: ' . $e->getMessage());
         }
     }
 
@@ -160,8 +169,7 @@ class JadwalController extends Controller
 
         $jadwal = Jadwal::find($data_valid['id']);
 
-        // Don't unset tanggal_realisasi if it's provided
-        // unset($data_valid['tanggal_realisasi']);
+        unset($data_valid['tanggal_realisasi']);
         if (isset($data_valid['foto_perbaikan'])) {
             unset($data_valid['foto_perbaikan']);
         }
@@ -187,31 +195,26 @@ class JadwalController extends Controller
             }
         }
 
-        // Handle status and tanggal_realisasi logic properly
+        $jadwal->update($data_valid);
+
+        if($jadwal->status == 1){
+            $jadwal->increment('status');
+        }
+
         if($request->has('auto_verify') && $request->auto_verify == '1'){
             $jadwal->status = 3; // Set to verified by superadmin
             $jadwal->tanggal_realisasi = Carbon::now();
+            $jadwal->save();
         } elseif($request->has('status') && $request->status == '3'){
             $jadwal->status = 3; // Set to verified by superadmin
             $jadwal->tanggal_realisasi = Carbon::now();
+            $jadwal->save();
         } elseif(isset($request->validasi)){
-            $jadwal->status = $jadwal->status + 1; // Increment status
+            $jadwal->increment('status');
             // Auto-set tanggal_realisasi when task is validated/completed
-            if($jadwal->status >= 3) {
-                $jadwal->tanggal_realisasi = Carbon::now();
-            }
-        } else {
-            // Normal update - if tanggal_realisasi is provided, set status to completed
-            if(isset($data_valid['tanggal_realisasi']) && $data_valid['tanggal_realisasi']) {
-                $jadwal->status = 3; // Mark as completed
-            } elseif($jadwal->status == 1) {
-                $jadwal->status = 2; // Mark as in progress
-            }
+            $jadwal->tanggal_realisasi = Carbon::now();
+            $jadwal->save();
         }
-
-        // Update all other fields
-        $jadwal->update($data_valid);
-        $jadwal->save();
 
 
         if($request->has('isi_form')){
@@ -220,7 +223,7 @@ class JadwalController extends Controller
             }
         }
 
-        return redirect()->route('jadwal.detail', $jadwal->id);
+        return redirect('/jadwal/detail/' . $jadwal->id);
     }
 
     public function indexAll() {

@@ -24,28 +24,6 @@ class UpdateMaintenanceController extends Controller
             'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        // Verify that the mesin exists with detailed debugging
-        $mesin = Mesin::find($data_valid['mesin_id']);
-        if (!$mesin) {
-            // Add debugging information for hosting environment
-            \Log::error('Mesin not found', [
-                'mesin_id' => $data_valid['mesin_id'],
-                'request_data' => $request->all(),
-                'database_connection' => config('database.default'),
-                'environment' => app()->environment()
-            ]);
-            
-            // Check if any mesin exists at all
-            $totalMesin = Mesin::count();
-            $allMesinIds = Mesin::pluck('id')->toArray();
-            
-            return redirect()->back()->with('error', 
-                'Mesin tidak ditemukan. ID: ' . $data_valid['mesin_id'] . 
-                '. Total mesin di database: ' . $totalMesin . 
-                '. ID mesin yang tersedia: ' . implode(', ', $allMesinIds)
-            );
-        }
-
         // Handle multiple file uploads with optimization
         $foto_kerusakan_paths = [];
         if ($request->hasFile('foto_kerusakan')) {
@@ -79,10 +57,11 @@ class UpdateMaintenanceController extends Controller
             'foto_kerusakan' => $foto_kerusakan
         ]);
 
+        // Create jadwal for this maintenance
         $objectJadwal = new JadwalController();
         $objectJadwal->create_jadwal($maintenance->id);
 
-        return redirect('/mesin/maintenance/' . $request->mesin_id)->with('success', 'Breakdown berhasil ditambahkan!');
+        return redirect('/mesin/maintenance/' . $request->mesin_id)->with('success', 'Maintenance berhasil ditambahkan!');
     }
 
     public function edit(Request $request){
@@ -111,6 +90,7 @@ class UpdateMaintenanceController extends Controller
                    })
            ]);
            });
+           //ddd('aku rapopo');
            $attach = collect(['aksi' => 'edit', 'maintenance_id' => $data_valid['maintenance_id']]);
 
            Cache::put('attach', $attach, now()->addMinutes(30));
@@ -180,7 +160,7 @@ class UpdateMaintenanceController extends Controller
 
             }
 
-
+            // Remove all future scheduled maintenance for this maintenance_id
             Jadwal::where('maintenance_id', $attach['maintenance_id'])->where('tanggal_rencana', '>=', now())->forceDelete();
 
             // Update past scheduled maintenance status
@@ -188,6 +168,12 @@ class UpdateMaintenanceController extends Controller
             $jadwal->increment('status', 20);
 
             Maintenance::destroy($attach['maintenance_id']);
+            // DATA YANG SEBELUMNYA DILAKUKAN SOFT DELETE, TARUH LOGIKANNYA DISINI
+            // SILAHKAN DITENTUKAN APAKAH DATA YANG SEBELUMNYA PERLU DITAMPILKAN ATAU TIDAK.
+
+            //$maintenance->forceDelete();
+
+
             return redirect('/jadwal/'.$mesin['id']);
 
 
@@ -207,6 +193,7 @@ class UpdateMaintenanceController extends Controller
                 return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
             }
 
+            // Delete photo if exists
             if ($maintenance->foto_kerusakan && Storage::disk('public')->exists($maintenance->foto_kerusakan)) {
                 Storage::disk('public')->delete($maintenance->foto_kerusakan);
             }
@@ -240,9 +227,11 @@ class UpdateMaintenanceController extends Controller
                 return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
             }
 
-            $fotoKerusakanPath = $maintenance->foto_kerusakan;
+            $fotoKerusakanPath = $maintenance->foto_kerusakan; // Keep existing photo
 
+            // Handle multiple file uploads untuk foto_kerusakan baru
             if ($request->hasFile('foto_kerusakan')) {
+                // Delete old photos if exists
                 if ($maintenance->foto_kerusakan) {
                     $oldPhotos = json_decode($maintenance->foto_kerusakan, true);
                     if (is_array($oldPhotos)) {
@@ -270,6 +259,7 @@ class UpdateMaintenanceController extends Controller
 
                     if ($foto_path) {
                         $foto_kerusakan_paths[] = $foto_path;
+                        // Create thumbnail for faster loading
                         $imageService->createThumbnail($foto_path);
                     }
                 }
