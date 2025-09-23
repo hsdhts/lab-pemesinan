@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\JadwalController;
 use App\Models\Sparepart;
+use App\Services\ImageOptimizationService;
 
 class MaintenanceController extends Controller
 {
@@ -81,7 +82,7 @@ class MaintenanceController extends Controller
             'mesin_id' => 'required|numeric',
             'nama_maintenance' => 'required',
             'warna' => 'required',
-            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240'
         ]);
 
         if ($validator->fails()) {
@@ -93,8 +94,9 @@ class MaintenanceController extends Controller
 
             if ($request->hasFile('foto_kerusakan')) {
                 $file = $request->file('foto_kerusakan');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $fotoKerusakanPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+                $imageService = new ImageOptimizationService();
+                // Use image optimization service to compress and store
+                $fotoKerusakanPath = $imageService->optimizeAndStore($file, 'foto_kerusakan', 1200, 800, 80);
             }
 
             $maintenance = Maintenance::create([
@@ -118,7 +120,7 @@ class MaintenanceController extends Controller
             'mesin_id' => 'required|numeric',
             'nama_maintenance' => 'required',
             'warna' => 'required',
-            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240'
         ]);
 
         if ($validator->fails()) {
@@ -129,7 +131,7 @@ class MaintenanceController extends Controller
             $maintenance = Maintenance::find($request->maintenance_id);
 
             if (!$maintenance) {
-                return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
+                return redirect()->back()->with('error', 'Data breakdown tidak ditemukan.');
             }
 
             $fotoKerusakanPath = $maintenance->foto_kerusakan;
@@ -140,8 +142,9 @@ class MaintenanceController extends Controller
                 }
 
                 $file = $request->file('foto_kerusakan');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $fotoKerusakanPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+                $imageService = new ImageOptimizationService();
+                // Use image optimization service to compress and store
+                $fotoKerusakanPath = $imageService->optimizeAndStore($file, 'foto_kerusakan', 1200, 800, 80);
             }
 
             $maintenance->update([
@@ -161,7 +164,7 @@ class MaintenanceController extends Controller
             $maintenance = Maintenance::find($request->maintenance_id);
 
             if (!$maintenance) {
-                return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
+                return redirect()->back()->with('error', 'Data breakdown tidak ditemukan.');
             }
 
             if ($maintenance->foto_kerusakan && \Storage::disk('public')->exists($maintenance->foto_kerusakan)) {

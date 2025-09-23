@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Mesin;
 use Illuminate\Http\Request;
+use App\Models\Mesin;
+use App\Models\Maintenance;
+use App\Models\SetupMaintenance;
 use Illuminate\Support\Facades\Cache;
+use App\Services\ImageOptimizationService;
 
 
 
@@ -70,15 +73,16 @@ class SetupMesinController extends Controller
             'nama_maintenance' => 'required',
             'warna' => 'required',
             'foto_kerusakan' => 'nullable|array',
-            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240'
         ]);
 
         $fotoKerusakanPaths = [];
 
         if ($request->hasFile('foto_kerusakan')) {
+            $imageService = new ImageOptimizationService();
             foreach ($request->file('foto_kerusakan') as $file) {
-                $fileName = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
-                $fotoPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+                // Use image optimization service to compress and store
+                $fotoPath = $imageService->optimizeAndStore($file, 'foto_kerusakan', 1200, 800, 80);
                 if ($fotoPath) {
                     $fotoKerusakanPaths[] = $fotoPath;
                 }
@@ -112,7 +116,7 @@ class SetupMesinController extends Controller
             'nama_maintenance' => 'required',
             'warna' => 'required',
             'foto_kerusakan' => 'nullable|array',
-            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240'
         ]));
 
         $index_maintenance = $data_valid['index'];
@@ -123,9 +127,10 @@ class SetupMesinController extends Controller
 
         if ($request->hasFile('foto_kerusakan')) {
             $fotoKerusakanPaths = [];
+            $imageService = new ImageOptimizationService();
             foreach ($request->file('foto_kerusakan') as $file) {
-                $fileName = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
-                $fotoPath = $file->storeAs('foto_kerusakan', $fileName, 'public');
+                // Use image optimization service to compress and store
+                $fotoPath = $imageService->optimizeAndStore($file, 'foto_kerusakan', 1200, 800, 80);
                 if ($fotoPath) {
                     $fotoKerusakanPaths[] = $fotoPath;
                 }

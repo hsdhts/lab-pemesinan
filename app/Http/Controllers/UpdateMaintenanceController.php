@@ -21,7 +21,7 @@ class UpdateMaintenanceController extends Controller
             'nama_maintenance' => 'required|string|max:255',
             'warna' => 'required|string',
             'foto_kerusakan' => 'nullable|array',
-            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240'
         ]);
 
         // Handle multiple file uploads with optimization
@@ -61,7 +61,7 @@ class UpdateMaintenanceController extends Controller
         $objectJadwal = new JadwalController();
         $objectJadwal->create_jadwal($maintenance->id);
 
-        return redirect('/mesin/maintenance/' . $request->mesin_id)->with('success', 'Maintenance berhasil ditambahkan!');
+        return redirect('/mesin/maintenance/' . $request->mesin_id)->with('success', 'Breakdown berhasil ditambahkan!');
     }
 
     public function edit(Request $request){
@@ -190,7 +190,7 @@ class UpdateMaintenanceController extends Controller
             $maintenance = Maintenance::find($data_valid['maintenance_id']);
 
             if (!$maintenance) {
-                return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
+                return redirect()->back()->with('error', 'Data breakdown tidak ditemukan.');
             }
 
             // Delete photo if exists
@@ -213,7 +213,7 @@ class UpdateMaintenanceController extends Controller
             'nama_maintenance' => 'required|string|max:255',
             'warna' => 'required|string',
             'foto_kerusakan' => 'nullable|array',
-            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            'foto_kerusakan.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240'
         ]);
 
         if ($validator->fails()) {
@@ -224,7 +224,7 @@ class UpdateMaintenanceController extends Controller
             $maintenance = Maintenance::find($request->maintenance_id);
 
             if (!$maintenance) {
-                return redirect()->back()->with('error', 'Data maintenance tidak ditemukan.');
+                return redirect()->back()->with('error', 'Data breakdown tidak ditemukan.');
             }
 
             $fotoKerusakanPath = $maintenance->foto_kerusakan; // Keep existing photo

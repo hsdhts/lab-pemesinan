@@ -110,7 +110,7 @@ class LaporanController extends Controller
 
         // Check if maintenance exists
         if (!$jadwal->maintenance) {
-            return redirect()->back()->with('error', 'Data maintenance tidak ditemukan untuk jadwal ID: ' . $data_valid['jadwal_id']);
+            return redirect()->back()->with('error', 'Data breakdown tidak ditemukan untuk jadwal ID: ' . $data_valid['jadwal_id']);
         }
 
         // Check if mesin exists
