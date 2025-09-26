@@ -180,6 +180,33 @@ var KTUsersUpdatePassword = function () {
         });
     }
 
+    // Password input validation
+    var validatePassword = function() {
+        var password = form.querySelector('input[name="new_password"]').value;
+        
+        // Check minimum length (8 characters)
+        if (password.length < 8) {
+            return false;
+        }
+        
+        // Check for uppercase letter
+        if (!/[A-Z]/.test(password)) {
+            return false;
+        }
+        
+        // Check for number
+        if (!/[0-9]/.test(password)) {
+            return false;
+        }
+        
+        // Check for special character
+        if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+            return false;
+        }
+        
+        return true;
+    }
+
     return {
         // Public functions
         init: function () {

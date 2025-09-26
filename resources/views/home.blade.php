@@ -374,7 +374,7 @@
     <div class="card card-bordered">
         <div class="card-header border-0 pt-5">
             <h1 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-1 mb-1">RENCANA & REALISASI</span>
+                <span class="card-label fw-bolder fs-1 mb-1">REALISASI</span>
                 <span class="text-muted fw-bold fs-7">Tahun : {{ now(7)->year }}</span>
             </h1>
         </div>
@@ -400,9 +400,6 @@
 
             var options = {
                 series: [{
-                    name: 'Rencana',
-                    data: [ @for($i = 1; $i <= 12; $i++)@if($chart_rencana->get($i)){{$chart_rencana->get($i)}},@else 0,@endif @endfor ]
-                }, {
                     name: 'Realisasi',
                     data: [@for($i = 1; $i <= 12; $i++)@if($chart_realisasi->get($i)){{$chart_realisasi->get($i)}},@else 0,@endif @endfor ]
                 },
@@ -515,10 +512,10 @@
             const newStatus = $(this).val();
             const originalStatus = $(this).data('original-status');
             const dropdown = $(this);
-            
+
             // Show loading state
             dropdown.prop('disabled', true);
-            
+
             $.ajax({
                 url: `/jadwal/update-status/${jadwalId}`,
                 method: 'PUT',
@@ -533,10 +530,10 @@
                     if (response.success) {
                         // Update the original status
                         dropdown.data('original-status', newStatus);
-                        
+
                         // Update CSS class for visual feedback
                         dropdown.removeClass('status-1 status-2').addClass('status-' + newStatus);
-                        
+
                         // Show success message
                         Swal.fire({
                             icon: 'success',
@@ -548,7 +545,7 @@
                     } else {
                         // Revert to original status
                         dropdown.val(originalStatus);
-                        
+
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal!',
@@ -559,12 +556,12 @@
                 error: function(xhr) {
                     // Revert to original status
                     dropdown.val(originalStatus);
-                    
+
                     let errorMessage = 'Terjadi kesalahan saat memperbarui status';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage = xhr.responseJSON.message;
                     }
-                    
+
                     Swal.fire({
                         icon: 'error',
                         title: 'Gagal!',

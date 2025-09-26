@@ -48,6 +48,7 @@ class HomeController extends Controller
         $jadwal_chart_rencana = Cache::remember('chart_rencana_' . $user->id . '_' . now()->year, 600, function() {
             $chartQuery = Jadwal::selectRaw('MONTH(tanggal_rencana) as month, COUNT(*) as count')
                 ->whereYear('tanggal_rencana', now()->year)
+                ->where('status', '<', 3) // Only show planned breakdown/maintenance (not yet verified by superadmin)
                 ->groupBy('month')
                 ->orderBy('month');
 
@@ -58,7 +59,8 @@ class HomeController extends Controller
         $jadwal_chart_realisasi = Cache::remember('chart_realisasi_' . $user->id . '_' . now()->year, 600, function() {
             $chartRealisasiQuery = Jadwal::selectRaw('MONTH(tanggal_realisasi) as month, COUNT(*) as count')
                 ->whereYear('tanggal_realisasi', now()->year)
-                ->where('status', '=', 4)
+                ->where('status', '>=', 3) // Only show completed and verified maintenance
+                ->whereNotNull('tanggal_realisasi') // Ensure it has completion date
                 ->groupBy('month')
                 ->orderBy('month');
 

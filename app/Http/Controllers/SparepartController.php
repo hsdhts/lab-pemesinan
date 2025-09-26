@@ -51,16 +51,9 @@ class SparepartController extends Controller
 
     public function tambah(Request $request){
         $dataValid = $request->validate([
-            'sparepart_image' => 'image|file|max:3072',
             'nama_sparepart' => 'required',
-            'jumlah' => 'required|numeric',
-            'estimasi' => 'nullable',
             'deskripsi' => 'required|string',
         ]);
-    
-        if($request->hasFile('sparepart_image')) {
-            $dataValid['sparepart_image'] = $request->file('sparepart_image')->storePublicly('sparepart_images', 'public');
-        }
     
         Sparepart::create($dataValid);
     
@@ -70,23 +63,12 @@ class SparepartController extends Controller
     public function update(Request $request)
     {
         $dataValid = $request->validate([
-            'sparepart_image' => 'image|file|max:1024',
             'nama_sparepart' => 'required',
-            'jumlah' => 'required|numeric',
-            'estimasi' => 'nullable',
             'deskripsi' => 'required|string',
         ]);
-    
+
         $sparepart = Sparepart::find($request->id_old);
-    
-        if ($request->hasFile('sparepart_image')) {
-            // Hapus gambar lama (jika ada) sebelum menyimpan yang baru
-            Storage::disk('public')->delete($sparepart->sparepart_image);
-    
-            // Simpan gambar baru
-            $dataValid['sparepart_image'] = $request->file('sparepart_image')->storePublicly('sparepart_images', 'public');
-        }
-    
+
         $sparepart->update($dataValid);
     
         return redirect()->route('sparepart.index')->with('edit', 'p');

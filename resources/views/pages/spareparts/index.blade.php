@@ -2,10 +2,7 @@
 
 @section('tableHead')
     <th>No</th>
-    <th>Gambar Sparepart</th>
-    <th>Sparepart</th>
-    <th>Jumlah</th>
-    <th>Estimasi</th>
+    <th>Nama Sparepart</th>
     <th>Deskripsi</th>
     <th>Aksi</th>
 @endsection
@@ -16,9 +13,9 @@
 <style>
     tr.red-row td {
         background-color: red;
-        vertical-align: middle; 
-        padding-top: 1px; 
-        padding-bottom: 1px; 
+        vertical-align: middle;
+        padding-top: 1px;
+        padding-bottom: 1px;
     }
 </style>
 
@@ -37,7 +34,7 @@
             },
             {
                 targets: 2,
-                className: 'dt-right'  
+                className: 'dt-right'
             },
             {
                 targets: 3,
@@ -52,34 +49,11 @@
         ajax: "/sparepart",
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            {
-                data: 'sparepart_image',
-                name: 'sparepart_image',
-                render: function(data, type, full, meta) {
-                    return '<img src="{{ asset('storage') }}/'+data+'" alt="Gambar Sparepart" style="max-width: 100px; max-height: 100px; cursor: pointer;" onclick="setModalImage(\'' + data + '\')">';
-                }
-            },
             { data: 'nama_sparepart', name: 'nama_sparepart' },
-            { data: 'jumlah', name: 'jumlah' },
-            { data: 'estimasi', name: 'estimasi' },
             { data: 'deskripsi', name: 'deskripsi' },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false },
-        ],
-        createdRow: function(row, data, dataIndex) {
-            if (data.jumlah == 0) {
-                $(row).children('td:not(:last-child)').css({
-                    'background-color': 'red', 
-                    'padding-top': '5px', 
-                    'padding-bottom': '5px' 
-                });
-            }
-        }
+        ]
     });
-
-    function setModalImage(src) {
-        document.getElementById('gambarSparepartModalImage').src = '{{ asset('storage') }}/' + src;
-        $('#gambarSparepartModal').modal('show');
-    }
 </script>
 
 

@@ -274,7 +274,7 @@
                     <td>{{ $s->satuan }}</td>
                     <td>
                         @if($jadwal->status < 3)
-                        <form action="{{ route('sparepart.jadwal.delete') }}" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
+                        <form action="{{ route('sparepart.jadwal.hapus') }}" method="post" onSubmit="return hapusSetup(this);" style ="display:inline-block;">
                         @method('delete')
                         @csrf
                         <input type="hidden" name="jadwal_id" value="{{ $jadwal->id }}">

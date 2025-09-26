@@ -7,43 +7,23 @@
     @csrf
     <div class="container-lg mt-5">
         <input type="hidden" name="id_old" value="{{ $sparepart->id }}">
-        <div class="mb-3">
-            <label for="sparepart_image" class="form-label">Gambar Sparepart</label>
-            <input type="file" class="form-control @error('sparepart_image') is-invalid @enderror" id="sparepart_image" name="sparepart_image">
-            @error('sparepart_image')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="sparepart" class="form-label">Nama Sparepart</label>
-            <input type="text" class="form-control @error('nama_sparepart') is-invalid @enderror" id="sparepart" placeholder="Nama Sparepart" value="{{ old('nama_sparepart', $sparepart->nama_sparepart) }}" name="nama_sparepart">
+        <div class="col-md-6">
+            <label for="nama_sparepart" class="form-label">Nama Sparepart</label>
+            <input type="text" class="form-control @error('nama_sparepart') is-invalid @enderror" id="nama_sparepart" placeholder="Nama Sparepart" value="{{ old('nama_sparepart', $sparepart->nama_sparepart) }}" name="nama_sparepart">
             @error('nama_sparepart')
-                <div class="invalid-feedback">{{ $message }}</div>
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label for="jumlah" class="form-label">Jumlah</label>
-            <input type="number" class="form-control @error('jumlah') is-invalid @enderror" id="jumlah" placeholder="Jumlah" value="{{ old('jumlah', $sparepart->jumlah) }}" name="jumlah">
-            @error('jumlah')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="estimasi" class="form-label">Estimasi</label>
-            <input type="date" class="form-control @error('estimasi') is-invalid @enderror" id="estimasi" placeholder="Estimasi" value="{{ old('estimasi', $sparepart->estimasi) }}" name="estimasi">
-            @error('estimasi')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
+        <div class="col-md-12">
             <label for="deskripsi" class="form-label">Deskripsi</label>
-            <input type="textr" class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" placeholder="Deskripsi" value="{{ old('deskripsi', $sparepart->deskripsi) }}" name="deskripsi">
+            <textarea class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" placeholder="Deskripsi" name="deskripsi">{{ old('deskripsi', $sparepart->deskripsi) }}</textarea>
             @error('deskripsi')
-                <div class="invalid-feedback">{{ $message }}</div>
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
             @enderror
         </div>
 

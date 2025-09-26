@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
+use App\Rules\StrongPassword;
 
 class UserController extends Controller
 {
@@ -91,7 +92,8 @@ class UserController extends Controller
     public function ganti_password(Request $request){
 
         $data_valid = $request->validate([
-            'id' => 'required|numeric'
+            'id' => 'required|numeric',
+            'password_baru' => ['required', new StrongPassword()]
         ]);
 
         if($request->password_baru){
@@ -138,7 +140,7 @@ class UserController extends Controller
             'username' => 'required',
             'nama' => 'required',
             'level' => 'required',
-            'password' => 'required'
+            'password' => ['required', new StrongPassword()]
 
         ]);
 

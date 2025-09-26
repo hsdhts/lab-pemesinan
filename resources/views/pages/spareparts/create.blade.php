@@ -8,15 +8,6 @@
 @csrf
 <div class="container-lg mt-5">
 
-
-<div class="mb-3">
-        <label for="sparepart_image" class="form-label">Gambar Sparepart</label>
-        <input type="file" class="form-control @error('sparepart_image') is-invalid @enderror" id="sparepart_image" name="sparepart_image">
-        @error('sparepart_image')
-        <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-</div>
-
 <div class="mb-3">
     <label for="sparepart" class="form-label">Nama Sparepart</label>
     <input type="text" class="form-control @error('nama_sparepart') is-invalid @enderror" id="sparepart" placeholder="Nama Sparepart" value="{{ old('nama_sparepart') }}" name="nama_sparepart">
@@ -25,35 +16,13 @@
     @enderror
 </div>
 
-
-<div class="mb-3">
-    <label for="jumlah" class="form-label">Jumlah</label>
-    <input type="number" class="form-control @error('jumlah') is-invalid @enderror" id="jumlah" placeholder="Jumlah" value="{{ old('jumlah') }}" name="jumlah">
-    @error('jumlah')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>
-
-<div class="mb-3">
-    <label for="estimasi" class="form-label">Estimasi</label>
-    <input type="date" class="form-control @error('estimasi') is-invalid @enderror" id="estimasi" placeholder="Estimasi" value="{{ old('estimasi') }}" name="estimasi">
-    @error('estimasi')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>
-
-
 <div class="mb-3">
     <label for="deskripsi" class="form-label">Deskripsi</label>
-    <input type="text" class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" placeholder="Deskripsi" value="{{ old('deskripsi') }}" name="deskripsi">
-    @error('jumlah')
+    <textarea class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" placeholder="Deskripsi" name="deskripsi">{{ old('deskripsi') }}</textarea>
+    @error('deskripsi')
     <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>
-
-
-
-
         <a href="/sparepart">
             <button type="button" class="btn btn-lg btn-secondary d-inline">
 
@@ -80,7 +49,7 @@
     <!--end::Svg Icon-->
     Simpan Perubahan
     </button>
-    
+
 </form>
 
 </div>
@@ -90,7 +59,6 @@
 function setSatuan(satuan) {
     document.getElementById('satuan').value = satuan;
 }
-
 
 </script>
 

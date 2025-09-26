@@ -154,7 +154,29 @@ var KTSignupGeneral = function() {
 
     // Password input validation
     var validatePassword = function() {
-        return  (passwordMeter.getScore() === 100);
+        var password = form.querySelector('input[name="password"]').value;
+        
+        // Check minimum length (8 characters)
+        if (password.length < 8) {
+            return false;
+        }
+        
+        // Check for uppercase letter
+        if (!/[A-Z]/.test(password)) {
+            return false;
+        }
+        
+        // Check for number
+        if (!/[0-9]/.test(password)) {
+            return false;
+        }
+        
+        // Check for special character
+        if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+            return false;
+        }
+        
+        return true;
     }
 
     // Public functions
