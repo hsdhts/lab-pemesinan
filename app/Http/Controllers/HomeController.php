@@ -67,7 +67,6 @@ class HomeController extends Controller
             return $chartRealisasiQuery->pluck('count', 'month');
         });
 
-
         return view('home', ['halaman' => 'Home',
          'chart_rencana' => $jadwal_chart_rencana,
          'chart_realisasi' => $jadwal_chart_realisasi,

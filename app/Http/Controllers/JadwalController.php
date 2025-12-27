@@ -34,8 +34,6 @@ class JadwalController extends Controller
         ->withTrashed()
         ->get();
 
-        // Remove debug logging to prevent performance issues
-        // Only log if there are issues
         if($maintenance->isEmpty()) {
             \Log::info('No maintenance found for mesin_id: ' . $id);
         }
@@ -85,7 +83,7 @@ class JadwalController extends Controller
                     'form_id' => $f->id,
                 ]);
             }
-            
+
             \Log::info('Created jadwal for maintenance_id: ' . $id_maintenance . ' on date: ' . $waktu->format('Y-m-d H:i:s'));
         } catch (\Exception $e) {
             \Log::error('Error creating jadwal: ' . $e->getMessage());

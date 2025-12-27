@@ -107,7 +107,7 @@
   </div>
   @elseif($jadwal->status == 3)
   <div class="p-4 bg-success text-white h5 fw-bolder text-center rounded">
-    Sudah selesai, <br> dan verifikasi oleh Superadmin
+    Sudah Selesai dan Verifikasi Oleh Superadmin
   </div>
 
   @endif

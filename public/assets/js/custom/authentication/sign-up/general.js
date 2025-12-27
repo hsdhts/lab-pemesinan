@@ -79,7 +79,7 @@ var KTSignupGeneral = function() {
 					trigger: new FormValidation.plugins.Trigger({
                         event: {
                             password: false
-                        }  
+                        }
                     }),
 					bootstrap: new FormValidation.plugins.Bootstrap5({
                         rowSelector: '.fv-row',
@@ -101,7 +101,7 @@ var KTSignupGeneral = function() {
                     // Show loading indication
                     submitButton.setAttribute('data-kt-indicator', 'on');
 
-                    // Disable button to avoid multiple click 
+                    // Disable button to avoid multiple click
                     submitButton.disabled = true;
 
                     // Simulate ajax request
@@ -122,13 +122,13 @@ var KTSignupGeneral = function() {
                                 confirmButton: "btn btn-primary"
                             }
                         }).then(function (result) {
-                            if (result.isConfirmed) { 
-                                form.reset();  // reset form                    
+                            if (result.isConfirmed) {
+                                form.reset();  // reset form
                                 passwordMeter.reset();  // reset password meter
                                 //form.submit();
                             }
                         });
-                    }, 1500);   						
+                    }, 1500);
                 } else {
                     // Show error popup. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                     Swal.fire({
@@ -155,27 +155,27 @@ var KTSignupGeneral = function() {
     // Password input validation
     var validatePassword = function() {
         var password = form.querySelector('input[name="password"]').value;
-        
+
         // Check minimum length (8 characters)
         if (password.length < 8) {
             return false;
         }
-        
+
         // Check for uppercase letter
         if (!/[A-Z]/.test(password)) {
             return false;
         }
-        
+
         // Check for number
         if (!/[0-9]/.test(password)) {
             return false;
         }
-        
+
         // Check for special character
         if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
             return false;
         }
-        
+
         return true;
     }
 
